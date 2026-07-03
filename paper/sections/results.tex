@@ -49,13 +49,16 @@ holds even at the level of geometry's most outlier-sensitive metric: Hausdorff-9
 is \emph{lower} (better) for the wrong candidate in cases i and ii.
 % src(40x, 35x, "Hausdorff prefers wrong"): D:\Project\CG-Soup-Topology\figures\summary.md
 
-\begin{figure}[h]
+% [p]: at full text width the three stacked rows are ~a full page tall, which an
+% inline [h] float cannot place (it deferred itself + every later figure past the
+% references). A dedicated float page keeps it near its Section 5.1 reference.
+\begin{figure}[p]
 \centering
-\includegraphics[width=0.32\linewidth]{pd_i_genus.png}\hfill
-\includegraphics[width=0.32\linewidth]{pd_ii_components.png}\hfill
-\includegraphics[width=0.32\linewidth]{pd_iii_void.png}
-\caption{Persistence diagrams (GT / A / B) for the three blindness cases:
-(i) genus, (ii) components, (iii) void.}
+\includegraphics[width=\linewidth]{pd_i_genus.png}\\[3pt]
+\includegraphics[width=\linewidth]{pd_ii_components.png}\\[3pt]
+\includegraphics[width=\linewidth]{pd_iii_void.png}
+\caption{Persistence diagrams (GT / A / B) for the three blindness cases,
+top to bottom: (i) genus, (ii) components, (iii) void.}
 \label{fig:pd}
 \end{figure}
 
@@ -250,11 +253,11 @@ support, and flag a higher-resolution re-run as future work.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.6\linewidth]{phantom.png}
+\includegraphics[width=0.75\linewidth]{phantom.png}
 \caption{Significant-feature count vs.\ true Betti (low-dimensional shapes):
 concentrate (B2) inflates the torus H1 count (phantom handles), while spread (B4)
 \emph{and} both non-topological priors (narrow B3, wide B5; Table~\ref{tab:torus2x2})
 hold the true value---so the inflation is specific to the narrow-\emph{topological}
-prior; the H0 shapes are unaffected.}
+prior; the H0 shapes are unaffected. (B5 was run on the torus only.)}
 \label{fig:phantom2}
 \end{figure}

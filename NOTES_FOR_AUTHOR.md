@@ -5,11 +5,107 @@
 method as study vehicle → width-primary voids & loops → explicit prescription). Judged a
 dramatic restructure UNNECESSARY (below) and finished the framing with a crisp prescription;
 title kept.** Grounded; no `\TODO{}`. Remaining: venue document class, voice pass
-(abstract + related-work prose), optional 2c items.
+(abstract + related-work prose), optional 2c items, and **confirm the tojo2026diffsoup
+bib entry** (your verbatim-paste block arrived empty — see the mechanical-pass log).
 
 Grounding contract held throughout: every number carries a `% src:` comment naming
 the results file it came from; citations are now REAL (filled + verified 2026-07-03,
 below); author-only spots are `% TODO(human)` (R4).
+
+---
+
+## Mechanical pass (2026-07-03, your five-item list) — log + bib checklist
+
+**Item 1 (DiffSoup cites): DONE — with ONE deviation you must check.** The
+`<<<PASTE FULL BIBTEX ENTRY ...>>>` block in your instructions arrived **EMPTY**. Rather
+than guess or stall, the entry was sourced from **arxiv.org/abs/2603.27151 + the authors'
+GitHub (kenji-tojo/diffsoup, "(CVPR 2026)") + the ETH CDL publications page** — all agree:
+Tojo, Bickel, Umetani, *DiffSoup: Direct Differentiable Rasterization of Triangle Soup for
+Extreme Radiance Field Simplification*, CVPR 2026, arXiv:2603.27151. **Compare this against
+the entry you meant to paste** (a `% NOTE(author, VERIFY)` sits on the entry in refs.bib);
+CVPR-2026 proceedings pages are not yet assigned. Cites wired at:
+(a) intro — placed directly on "an attractive such representation~[tojo]" (on the claim
+itself, not merged into the pipelines bracket at the sentence end; zero rewording);
+(b) related work — "The triangle-soup pipeline we build on~[tojo]";
+(c) §3.2 opening — "The baseline resampler~[tojo]".
+Provenance sentence added in **§3.2** (the ONE place), right after the lambda=0 reduction
+sentence: our own implementation; bit-identical baseline at lambda_topo=0; all numbers are
+w.r.t. it. No other new citations anywhere.
+
+**Item 4 (abstract): DONE — 249 words** (mechanically counted after stripping LaTeX
+markup; was ~450). Kept, in your priority order: blindness -> in-loop guidance +
+persistence metric; method + concentrate<->spread scale + exact baseline reduction;
+no-crossover + spread>=concentrate + width-carried (control recovers most; shape-dependent
+void residual; small loop cost; H0 null); death-simplex-as-witness principle; compressed
+prescription+caveat close. Dropped to the body: per-shape percentages (one 33--53%
+headline kept), sigmas, phantom-handle numerics, B1 washout mechanics. No claim
+strengthened.
+
+**Item 3 (Figure 5): PREFERRED path — figure regenerated,** not caption-softened. New
+`paper/figures/phantom.png` adds the B3 bars (all four low-dim shapes) and the B5 bar
+(torus). Every plotted value read from disk, none invented:
+`crossover/crossover_report/results.json` (B0/B2/B3/B4 nsig) + `crossover/report/
+results.json` (torus B5 final_nsig). Drawn values: torus 2.0/4.4/2.0/2.0/2.0
+(B0/B2/B3/B4/B5, true 2); double_torus all 2.0 (true 4); two_spheres all 2.0 (true 2);
+three_spheres all 3.0 (true 3) — matches Tables 4/5. Script: session scratchpad
+`regen_phantom.py`, style mirrors `crossover_report.py::fig_phantom` (B3 green / B5 purple
+to match the other figures' palette). Caption: appended "(B5 was run on the torus only.)";
+figure width 0.6->0.75\linewidth. The original run artifact in the dentistry repo is
+untouched.
+
+**Item 5 (Figure 1): PREFERRED path — enlarged to full text width** (pure LaTeX layout
+change; no plotting script touched, no data altered). The three case images are now
+stacked as three full-width rows (was 3 x 0.32\linewidth in one row), so each of the nine
+persistence-diagram panels is ~3x larger. Caption gained "top to bottom:".
+
+**Item 2 — bibliography verification checklist.** One correction to your premise: this
+session DID have web access, and 9 entries were verified against publisher/arXiv/PMLR
+pages (2026-07-03) — marked **[W]** with source. **[M]** = from model knowledge: verify
+title/authors/venue/year fields against DBLP/DOI, page numbers listed are the ones to
+check. **[O]** = pages intentionally omitted (not guessed) — add from DBLP if you want
+them. Internal-consistency scan across all 28 entries: **no swapped volume/number, no
+impossible page ranges, venue-naming and author-name ("Last, First") style uniform** —
+nothing unambiguous left to normalize, so no bib content was changed by this item.
+
+| # | key | status | what to verify |
+|---|-----|--------|----------------|
+| 1 | alliez2003anisotropic | [M] | pages 485-493; TOG 22(3) 2003 |
+| 2 | attene2010repair | [W: DOI 10.1007/s00371-010-0416-3] | — |
+| 3 | botsch2004remeshing | [M][O] | add pages (SGP 2004) |
+| 4 | bruel2020toporecon | [W: DOI 10.1111/cgf.14079] | — |
+| 5 | gabrielsson2020topologylayer | [W: proceedings.mlr.press/v108] | note: PMLR lists 4 authors (arXiv version has 6) — kept the published 4 |
+| 6 | carriere2021optimizing | [M][O] | add pages (PMLR 139) |
+| 7 | clough2022topoloss | [W: DOI 10.1109/TPAMI.2020.3013679] | — |
+| 8 | cohensteiner2007stability | [M] | pages 103-120; DCG 37(1) 2007 |
+| 9 | dunyach2013adaptive | [M][O] | add pages (Eurographics 2013 Short Papers) |
+| 10 | edelsbrunner2010book | [M] | AMS 2010 (book) |
+| 11 | edelsbrunner2002persistence | [M] | pages 511-533; DCG 28(4) 2002 |
+| 12 | edelsbrunner1994alphashapes | [M] | pages 43-72; TOG 13(1) 1994 |
+| 13 | garland1997qem | [M] | pages 209-216 (SIGGRAPH 97) |
+| **14** | **held2025trianglesplatting** | **[W: arxiv.org/abs/2505.19175]** | **FLAG (as you asked): arXiv ID 2505.19175 + the 10-author list — human-verify** |
+| 15 | hoppe1996progressive | [M] | pages 99-108 (SIGGRAPH 96) |
+| 16 | hu2019topopreserving | [M][O] | NeurIPS 32 (2019) |
+| 17 | ju2004repair | [M] | pages 888-895; TOG 23(3) 2004 |
+| 18 | kato2018neural | [M] | pages 3907-3916 (CVPR 2018) |
+| 19 | kerbl2023gaussians | [M] | pages 139:1-139:14; TOG 42(4) 2023 |
+| 20 | laine2020nvdiffrast | [M] | pages 194:1-194:14; TOG 39(6) 2020 |
+| 21 | liu2019softras | [M] | pages 7708-7717 (ICCV 2019) |
+| 22 | loper2014opendr | [M] | pages 154-169 (ECCV 2014) |
+| 23 | maria2014gudhi | [M] | LNCS 8592, pages 167-174 (ICMS 2014) |
+| 24 | nicolet2021largesteps | [M][O] | TOG 40(6) 2021; add article number |
+| 25 | palfinger2022remeshing | [W: DOI 10.1002/cav.2101] | — |
+| 26 | poulenard2018shapematching | [W: DOI 10.1111/cgf.13487] | — |
+| 27 | sharf2007topologyaware | [W: DOI 10.1145/1276377.1276431] | — |
+| **28** | **tojo2026diffsoup** | **[W: arXiv 2603.27151 + GitHub + ETH CDL]** | **FLAG: your paste was EMPTY — confirm all fields vs your intended entry; CVPR-2026 pages TBD** |
+
+No venue/year combination looked doubtful (TOG volumes match their years; CGF/DCG/TPAMI/
+CAVW/TVC volume-year pairs consistent).
+
+**Build:** `latexmk` is NOT on this machine (long-standing; see build-tools note) —
+compiled with **tectonic: exit 0, no warnings**. Abstract word count verified 249.
+Previews refreshed. DO-NOT-TOUCH respected: no table/number changed; §5-§6 prose untouched
+except the Figure-5 caption sentence Item 3 authorizes; [4] positioning, peakedness
+caveat, Limitations untouched.
 
 ---
 

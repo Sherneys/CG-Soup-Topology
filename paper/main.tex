@@ -49,58 +49,39 @@
 \maketitle
 
 % ----------------------------------------------------------------------------
-% ABSTRACT --- REVISED to the data-supported thesis per author instruction
-% ("finish the paper with your recommendation" = reconciliation option A). The
-% original author abstract framed a concentrate<->spread CROSSOVER as "indicated,
-% pending"; the B4 + double_torus runs are on disk and REFUTE it (a spread prior
-% dominates at every dimension). Every claim below is grounded:
-%   blindness -> figures/summary.md ; H2 29--40%% -> topo2/ + h2_generalize/ ;
-%   spread > concentrate -> crossover/crossover_report/results.json ;
-%   torus backfire -> tight_N400|700/ . double_torus is flagged inconclusive (body).
+% ABSTRACT --- data-supported thesis (reconciliation option A), CUT to <=250
+% words in the 2026-07-03 mechanical pass: same claims, fewer words. Dropped to
+% the body: per-shape percentages, sigma values, phantom-handle numerics, B1
+% washout mechanics; one headline range (33--53%%) kept. Grounding unchanged:
+%   blindness -> figures/summary.md ; 33--53%% + width-primary -> h2_unified/ ;
+%   spread >= concentrate everywhere, loop cost -> crossover/ (+ report B5 arm).
 % TODO(human): review the wording in your own voice; this is my draft, not yours.
 % ----------------------------------------------------------------------------
 \begin{abstract}
 Differentiable rasterization reconstructs a 3D triangle soup from images by
-following photometric gradients while periodically resampling triangles to
-redistribute geometric detail. We first show this pipeline is topologically
-blind: Chamfer and Hausdorff distances cannot separate reconstructions that
-differ in genus, connectivity, or enclosed-void structure, and any topological
-bias supplied at initialization is erased by the first resampling step. Correct
-topology therefore requires guidance applied in the loop, together with a
-persistence-based metric able to detect it.
-We introduce topology-aware adaptive resampling: a precomputed importance field
-that localizes the target's persistent features and biases where new triangles
-respawn and which triangles are protected from pruning. It is budget-neutral and
-reduces exactly to the baseline when disabled. A single mass-preserving scale on
-the field interpolates between a \emph{concentrated} prior (importance piled on
-each feature's localized death-simplex) and a \emph{spread} prior (the same mass
-distributed over the feature's support), letting us ask not whether topological
-guidance helps but what spatial form it should take.
-Our central finding is that a spread prior is at least as good as concentrating at
-every feature dimension, and strictly better for voids and loops; the natural
-hypothesis of a dimensional crossover---concentrate for high-dimensional features,
-spread for low-dimensional ones---does \emph{not} hold. For enclosed voids (H2) a
-\emph{spread} prior cuts bottleneck distance to the target by 33--53\% below the
-baseline across spheres, cubes, and capped cylinders, at comparable or better
-geometry; but a width-matched \emph{non-topological} control recovers most of this,
-so the void gain is chiefly a \emph{width} (spread) effect rather than topological
-placement---at matched width, placing the prior at the topological locus adds only a
-small, shape-dependent residual (significant for cylinder and sphere, absent for the
-cube). For loops (H1) concentrating
-backfires, over-tessellating the loop into phantom handles and underperforming the
-baseline, while a \emph{wide} prior recovers the correct topology---driven by width, not
-topological placement, since a width-matched non-topological prior does at least as
-well. For
-components (H0) neither prior beats generic densification (a null). One principle
-accounts for all three: a feature's death-simplex is a localized witness, not its
-full support, so spreading importance over that support is the right bias (for a void
-the support fills the surface, so width alone realizes it); the \emph{harm} from being
-\emph{narrow} is what depends on dimension---catastrophic for one-dimensional loops,
-mild for two-dimensional voids, and immaterial for zero-dimensional components. These results replace the question ``does topological
-guidance help reconstruction?'' with a prescription for \emph{how} to shape
-it---\emph{spread}, do not concentrate---and a caveat: the benefit is carried by
-width, not topological targeting per se, since a width-matched non-topological prior
-does as well or better.
+following photometric gradients while periodically resampling triangles. We
+first show this pipeline is topologically blind: Chamfer and Hausdorff
+distances cannot separate reconstructions that differ in genus, connectivity,
+or enclosed-void structure, while the bottleneck distance between persistence
+diagrams can; a topological bias supplied at initialization is erased by the
+first resampling step. Correct topology therefore requires in-loop guidance
+and a persistence-based metric to detect it. We introduce topology-aware
+adaptive resampling: a precomputed importance field that localizes the
+target's persistent features and biases where new triangles respawn and which
+are protected from pruning; budget-neutral, it reduces exactly to the baseline
+when disabled. A single mass-preserving scale interpolates between a
+\emph{concentrated} prior (importance piled on each feature's localized
+death-simplex) and a \emph{spread} prior (the same mass over the feature's
+support). We find no dimensional crossover: a spread prior is at least as good
+as concentrating at every dimension and strictly better for voids and
+loops---for enclosed voids it cuts bottleneck distance 33--53\% below the
+baseline. The gain is carried by \emph{width} rather than topological
+placement: a width-matched non-topological control recovers most of it,
+leaving a small, shape-dependent residual for voids, a small cost on the loop,
+and a null for components. The reason is that a feature's death-simplex is a
+localized witness, not its full support, so the right bias spreads importance
+over that support. The prescription: \emph{spread}, do not concentrate---the
+caveat: the benefit comes from width, not topological targeting per se.
 \end{abstract}
 
 \input{sections/intro}

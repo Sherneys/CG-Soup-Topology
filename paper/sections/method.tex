@@ -55,7 +55,7 @@ identical to the field used without the knob.
 \subsection{The resampling policy}
 \label{sec:method-policy}
 % src(design): methods/topo_resampling.py (TopoResamplePolicy: keep_map, densify_and_rebalance)
-The baseline resampler periodically (i) \emph{prunes} the least screen-visible
+The baseline resampler~\cite{tojo2026diffsoup} periodically (i) \emph{prunes} the least screen-visible
 triangles and (ii) \emph{respawns} triangles by subdividing large screen-space
 edges. Our policy biases both with the field via one strength knob
 $\lambda_{\text{topo}}$, and keeps the triangle count $N$ fixed:
@@ -75,7 +75,10 @@ $\lambda_{\text{topo}}$, and keeps the triangle count $N$ fixed:
 
 When $\lambda_{\text{topo}}=0$ both levers are bypassed and the policy reduces
 \emph{exactly} to the baseline resampler (bit-identical resampling decisions);
-this is condition B0 below. The policy is field-agnostic: swapping which field it
+this is condition B0 below. We use our own implementation of this
+pipeline~\cite{tojo2026diffsoup}; since the $\lambda_{\text{topo}}{=}0$ policy
+reproduces its baseline resampler bit-identically, all reported numbers are with
+respect to this implementation. The policy is field-agnostic: swapping which field it
 reads (concentrated topological, spread topological, or a non-topological control)
 gives the different experimental conditions of Section~\ref{sec:setup} without any
 other change.

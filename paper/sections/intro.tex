@@ -6,15 +6,16 @@ Differentiable rasterization optimizes an explicit 3D representation directly
 against multi-view images by backpropagating a photometric loss through the
 rasterizer~\cite{loper2014opendr,kato2018neural,liu2019softras,laine2020nvdiffrast}.
 A \emph{triangle soup}---an unstructured collection of triangles
-with no shared connectivity---is an attractive such representation: it is cheap
+with no shared connectivity---is an attractive such
+representation~\cite{tojo2026diffsoup}: it is cheap
 to render, places no manifold constraint on the geometry, and supports
 \emph{adaptive resampling}, a periodic in-loop step that prunes
 poorly-contributing triangles and respawns new ones to redistribute resolution
 where the image residual demands it, in the spirit of the adaptive
 densify-and-prune loops of explicit-primitive and mesh-evolution
 pipelines~\cite{kerbl2023gaussians,held2025trianglesplatting,nicolet2021largesteps,palfinger2022remeshing}.
-% NOTE: the DiffSoup renderer/trainer this instantiates is our own (unpublished)
-% system; add its citation here once it is public.
+% DiffSoup (Tojo et al.) = the triangle-soup pipeline this work builds on; our
+% implementation of it is our own (provenance sentence in Section 3.2).
 
 Such pipelines are tuned to minimize geometric error, and geometric error is
 exactly what they reduce. But geometry and \emph{topology} are different: a

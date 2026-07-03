@@ -217,50 +217,31 @@ Chulalongkorn University, Bangkok, Thailand</p>
 <div class="abstract-title">Abstract</div>
 <p>Differentiable rasterization reconstructs a 3D triangle soup from
 images by following photometric gradients while periodically resampling
-triangles to redistribute geometric detail. We first show this pipeline
-is topologically blind: Chamfer and Hausdorff distances cannot separate
-reconstructions that differ in genus, connectivity, or enclosed-void
-structure, and any topological bias supplied at initialization is erased
-by the first resampling step. Correct topology therefore requires
-guidance applied in the loop, together with a persistence-based metric
-able to detect it. We introduce topology-aware adaptive resampling: a
+triangles. We first show this pipeline is topologically blind: Chamfer
+and Hausdorff distances cannot separate reconstructions that differ in
+genus, connectivity, or enclosed-void structure, while the bottleneck
+distance between persistence diagrams can; a topological bias supplied
+at initialization is erased by the first resampling step. Correct
+topology therefore requires in-loop guidance and a persistence-based
+metric to detect it. We introduce topology-aware adaptive resampling: a
 precomputed importance field that localizes the target’s persistent
-features and biases where new triangles respawn and which triangles are
-protected from pruning. It is budget-neutral and reduces exactly to the
-baseline when disabled. A single mass-preserving scale on the field
-interpolates between a <em>concentrated</em> prior (importance piled on
-each feature’s localized death-simplex) and a <em>spread</em> prior (the
-same mass distributed over the feature’s support), letting us ask not
-whether topological guidance helps but what spatial form it should take.
-Our central finding is that a spread prior is at least as good as
-concentrating at every feature dimension, and strictly better for voids
-and loops; the natural hypothesis of a dimensional crossover—concentrate
-for high-dimensional features, spread for low-dimensional ones—does
-<em>not</em> hold. For enclosed voids (H2) a <em>spread</em> prior cuts
-bottleneck distance to the target by 33–53% below the baseline across
-spheres, cubes, and capped cylinders, at comparable or better geometry;
-but a width-matched <em>non-topological</em> control recovers most of
-this, so the void gain is chiefly a <em>width</em> (spread) effect
-rather than topological placement—at matched width, placing the prior at
-the topological locus adds only a small, shape-dependent residual
-(significant for cylinder and sphere, absent for the cube). For loops
-(H1) concentrating backfires, over-tessellating the loop into phantom
-handles and underperforming the baseline, while a <em>wide</em> prior
-recovers the correct topology—driven by width, not topological
-placement, since a width-matched non-topological prior does at least as
-well. For components (H0) neither prior beats generic densification (a
-null). One principle accounts for all three: a feature’s death-simplex
-is a localized witness, not its full support, so spreading importance
-over that support is the right bias (for a void the support fills the
-surface, so width alone realizes it); the <em>harm</em> from being
-<em>narrow</em> is what depends on dimension—catastrophic for
-one-dimensional loops, mild for two-dimensional voids, and immaterial
-for zero-dimensional components. These results replace the question
-“does topological guidance help reconstruction?” with a prescription for
-<em>how</em> to shape it—<em>spread</em>, do not concentrate—and a
-caveat: the benefit is carried by width, not topological targeting per
-se, since a width-matched non-topological prior does as well or
-better.</p>
+features and biases where new triangles respawn and which are protected
+from pruning; budget-neutral, it reduces exactly to the baseline when
+disabled. A single mass-preserving scale interpolates between a
+<em>concentrated</em> prior (importance piled on each feature’s
+localized death-simplex) and a <em>spread</em> prior (the same mass over
+the feature’s support). We find no dimensional crossover: a spread prior
+is at least as good as concentrating at every dimension and strictly
+better for voids and loops—for enclosed voids it cuts bottleneck
+distance 33–53% below the baseline. The gain is carried by
+<em>width</em> rather than topological placement: a width-matched
+non-topological control recovers most of it, leaving a small,
+shape-dependent residual for voids, a small cost on the loop, and a null
+for components. The reason is that a feature’s death-simplex is a
+localized witness, not its full support, so the right bias spreads
+importance over that support. The prescription: <em>spread</em>, do not
+concentrate—the caveat: the benefit comes from width, not topological
+targeting per se.</p>
 </div>
 </header>
 <h1 id="sec:intro">Introduction</h1>
@@ -271,12 +252,14 @@ data-cites="loper2014opendr kato2018neural liu2019softras laine2020nvdiffrast">(
 and Black 2014; Kato et al. 2018; Liu et al. 2019; Laine et al.
 2020)</span>. A <em>triangle soup</em>—an unstructured collection of
 triangles with no shared connectivity—is an attractive such
-representation: it is cheap to render, places no manifold constraint on
-the geometry, and supports <em>adaptive resampling</em>, a periodic
-in-loop step that prunes poorly-contributing triangles and respawns new
-ones to redistribute resolution where the image residual demands it, in
-the spirit of the adaptive densify-and-prune loops of explicit-primitive
-and mesh-evolution pipelines <span class="citation"
+representation <span class="citation"
+data-cites="tojo2026diffsoup">(Tojo et al. 2026)</span>: it is cheap to
+render, places no manifold constraint on the geometry, and supports
+<em>adaptive resampling</em>, a periodic in-loop step that prunes
+poorly-contributing triangles and respawns new ones to redistribute
+resolution where the image residual demands it, in the spirit of the
+adaptive densify-and-prune loops of explicit-primitive and
+mesh-evolution pipelines <span class="citation"
 data-cites="kerbl2023gaussians held2025trianglesplatting nicolet2021largesteps palfinger2022remeshing">(Kerbl
 et al. 2023; Held et al. 2025; Nicolet et al. 2021; Palfinger
 2022)</span>.</p>
@@ -409,9 +392,10 @@ data-cites="nicolet2021largesteps palfinger2022remeshing">(Nicolet et
 al. 2021; Palfinger 2022)</span>. In every case the densification
 heuristic is photometric or geometric—screen-space error, gradient
 magnitude, edge length—and none targets topology. The triangle-soup
-pipeline we build on inherits exactly this heuristic, which is what
-makes it topologically blind (Section <a href="#sec:results-blindness"
-data-reference-type="ref"
+pipeline we build on <span class="citation"
+data-cites="tojo2026diffsoup">(Tojo et al. 2026)</span> inherits exactly
+this heuristic, which is what makes it topologically blind (Section <a
+href="#sec:results-blindness" data-reference-type="ref"
 data-reference="sec:results-blindness">5.1</a>).</p>
 <h4 id="remeshing-and-adaptive-sampling.">Remeshing and adaptive
 sampling.</h4>
@@ -496,10 +480,11 @@ construction <span class="math inline"><em>s</em> = 1</span> is the
 <em>concentrated</em> field and is numerically identical to the field
 used without the knob.</p>
 <h2 id="sec:method-policy">The resampling policy</h2>
-<p>The baseline resampler periodically (i) <em>prunes</em> the least
-screen-visible triangles and (ii) <em>respawns</em> triangles by
-subdividing large screen-space edges. Our policy biases both with the
-field via one strength knob <span
+<p>The baseline resampler <span class="citation"
+data-cites="tojo2026diffsoup">(Tojo et al. 2026)</span> periodically (i)
+<em>prunes</em> the least screen-visible triangles and (ii)
+<em>respawns</em> triangles by subdividing large screen-space edges. Our
+policy biases both with the field via one strength knob <span
 class="math inline"><em>λ</em><sub>topo</sub></span>, and keeps the
 triangle count <span class="math inline"><em>N</em></span> fixed:</p>
 <ul>
@@ -522,11 +507,17 @@ low-importance triangles for high-importance ones.</p></li>
 <p>When <span class="math inline"><em>λ</em><sub>topo</sub> = 0</span>
 both levers are bypassed and the policy reduces <em>exactly</em> to the
 baseline resampler (bit-identical resampling decisions); this is
-condition B0 below. The policy is field-agnostic: swapping which field
-it reads (concentrated topological, spread topological, or a
-non-topological control) gives the different experimental conditions of
-Section <a href="#sec:setup" data-reference-type="ref"
-data-reference="sec:setup">4</a> without any other change.</p>
+condition B0 below. We use our own implementation of this pipeline <span
+class="citation" data-cites="tojo2026diffsoup">(Tojo et al.
+2026)</span>; since the <span
+class="math inline"><em>λ</em><sub>topo</sub> = 0</span> policy
+reproduces its baseline resampler bit-identically, all reported numbers
+are with respect to this implementation. The policy is field-agnostic:
+swapping which field it reads (concentrated topological, spread
+topological, or a non-topological control) gives the different
+experimental conditions of Section <a href="#sec:setup"
+data-reference-type="ref" data-reference="sec:setup">4</a> without any
+other change.</p>
 <h1 id="sec:setup">Experimental setup</h1>
 <h4 id="conditions.">Conditions.</h4>
 <p>All conditions are identical in seed, target scene, triangle budget
@@ -679,12 +670,13 @@ href="#fig:pd" data-reference-type="ref" data-reference="fig:pd">1</a>).
 The blindness holds even at the level of geometry’s most
 outlier-sensitive metric: Hausdorff-95 is <em>lower</em> (better) for
 the wrong candidate in cases i and ii.</p>
-<figure id="fig:pd" data-latex-placement="h">
-<p><img src="pd_i_genus.png" style="width:32.0%" alt="image" /> <img
-src="pd_ii_components.png" style="width:32.0%" alt="image" /> <img
-src="pd_iii_void.png" style="width:32.0%" alt="image" /></p>
+<figure id="fig:pd" data-latex-placement="p">
+<p><img src="pd_i_genus.png" alt="image" /><br />
+<img src="pd_ii_components.png" alt="image" /><br />
+<img src="pd_iii_void.png" alt="image" /></p>
 <figcaption>Persistence diagrams (GT / A / B) for the three blindness
-cases: (i) genus, (ii) components, (iii) void.</figcaption>
+cases, top to bottom: (i) genus, (ii) components, (iii)
+void.</figcaption>
 </figure>
 <p>A topological bias supplied only at initialization does not survive
 training: the first resampling step removes it, so the final topology is
@@ -969,14 +961,14 @@ loops at every budget tried, so this stress test does not discriminate;
 we report it as inconclusive rather than support, and flag a
 higher-resolution re-run as future work.</p>
 <figure id="fig:phantom2" data-latex-placement="h">
-<img src="phantom.png" style="width:60.0%" />
+<img src="phantom.png" style="width:75.0%" />
 <figcaption>Significant-feature count vs. true Betti (low-dimensional
 shapes): concentrate (B2) inflates the torus H1 count (phantom handles),
 while spread (B4) <em>and</em> both non-topological priors (narrow B3,
 wide B5; Table <a href="#tab:torus2x2" data-reference-type="ref"
 data-reference="tab:torus2x2">3</a>) hold the true value—so the
 inflation is specific to the narrow-<em>topological</em> prior; the H0
-shapes are unaffected.</figcaption>
+shapes are unaffected. (B5 was run on the torus only.)</figcaption>
 </figure>
 <h1 id="sec:mechanism">Why spreading wins, and why concentration’s harm
 depends on dimension</h1>
@@ -1307,6 +1299,13 @@ Sharf, Andrei, Thomas Lewiner, Gil Shklarski, Sivan Toledo, and Daniel
 Cohen-Or. 2007. <span>“Interactive Topology-Aware Surface
 Reconstruction.”</span> <em>ACM Transactions on Graphics</em> 26 (3):
 43:1–10.
+</div>
+<div id="ref-tojo2026diffsoup" class="csl-entry" role="listitem">
+Tojo, Kenji, Bernd Bickel, and Nobuyuki Umetani. 2026.
+<span>“<span>DiffSoup</span>: Direct Differentiable Rasterization of
+Triangle Soup for Extreme Radiance Field Simplification.”</span>
+<em>IEEE/CVF Conference on Computer Vision and Pattern Recognition
+(CVPR)</em>.
 </div>
 </div>
 </body>
