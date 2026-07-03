@@ -1,0 +1,242 @@
+{
+  "seed": 0,
+  "n_samples": 40000,
+  "cases": [
+    {
+      "key": "i_genus",
+      "title": "(i) Genus-0 vs genus-1  (a thin handle)",
+      "disc_dim": 1,
+      "param": "blister height=0.339 matched to handle",
+      "betti_gt": [
+        1,
+        0,
+        1
+      ],
+      "candidates": {
+        "A": {
+          "desc": "outward blister \u2014 genus 0 (correct)",
+          "topology_ok": true,
+          "chamfer_pct": 0.916407384149235,
+          "hausdorff95_pct": 0.4807913998139588,
+          "hausdorff_pct": 19.338236058650494,
+          "betti": [
+            1,
+            0,
+            1
+          ],
+          "bottleneck": {
+            "0": 2.225073858506298e-308,
+            "1": 0.0,
+            "2": 0.004033328206304233
+          },
+          "wasserstein": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.005644683931590331
+          },
+          "n_sig": {
+            "0": 1,
+            "1": 0,
+            "2": 1
+          }
+        },
+        "B": {
+          "desc": "thin handle \u2014 genus 1 (WRONG)",
+          "topology_ok": false,
+          "chamfer_pct": 0.916407462417878,
+          "hausdorff95_pct": 0.45598219780574506,
+          "hausdorff_pct": 16.83681701414023,
+          "betti": [
+            1,
+            1,
+            1
+          ],
+          "bottleneck": {
+            "0": 2.225073858506298e-308,
+            "1": 0.030186502542743285,
+            "2": 0.0007380123575812524
+          },
+          "wasserstein": {
+            "0": 0.0,
+            "1": 0.04269016129655748,
+            "2": 0.0007419820945853312
+          },
+          "n_sig": {
+            "0": 1,
+            "1": 1,
+            "2": 1
+          }
+        }
+      }
+    },
+    {
+      "key": "ii_components",
+      "title": "(ii) One vs two components  (a spurious bridge)",
+      "disc_dim": 0,
+      "param": "GT scaled x1.0126 matched to bridge",
+      "betti_gt": [
+        2,
+        0,
+        2
+      ],
+      "candidates": {
+        "A": {
+          "desc": "two components, scaled (correct)",
+          "topology_ok": true,
+          "chamfer_pct": 0.6279784053631652,
+          "hausdorff95_pct": 0.536170126772169,
+          "hausdorff_pct": 0.5583089033598795,
+          "betti": [
+            2,
+            0,
+            2
+          ],
+          "bottleneck": {
+            "0": 0.0014466168982129879,
+            "1": 0.0,
+            "2": 0.0020109875809967426
+          },
+          "wasserstein": {
+            "0": 0.0014466168982129879,
+            "1": 0.0,
+            "2": 0.002843535076557761
+          },
+          "n_sig": {
+            "0": 2,
+            "1": 0,
+            "2": 2
+          }
+        },
+        "B": {
+          "desc": "thin bridge merges them \u2014 one component (WRONG)",
+          "topology_ok": false,
+          "chamfer_pct": 0.6279783463446518,
+          "hausdorff95_pct": 0.35695867512042573,
+          "hausdorff_pct": 11.540638020601678,
+          "betti": [
+            1,
+            0,
+            2
+          ],
+          "bottleneck": {
+            "0": 0.05740323879870307,
+            "1": 0.0,
+            "2": 0.00601689495209945
+          },
+          "wasserstein": {
+            "0": 0.08118043883326734,
+            "1": 0.0,
+            "2": 0.01143550850245615
+          },
+          "n_sig": {
+            "0": 1,
+            "1": 0,
+            "2": 2
+          }
+        }
+      }
+    },
+    {
+      "key": "iii_void",
+      "title": "(iii) Closed surface vs punctured  (a hole)",
+      "disc_dim": 2,
+      "param": "blister height=0.237 matched to hole (half-angle 0.6)",
+      "betti_gt": [
+        1,
+        0,
+        1
+      ],
+      "candidates": {
+        "A": {
+          "desc": "outward blister \u2014 void intact (correct)",
+          "topology_ok": true,
+          "chamfer_pct": 0.9773973224561283,
+          "hausdorff95_pct": 1.8867648957656449,
+          "hausdorff_pct": 13.466732031524478,
+          "betti": [
+            1,
+            0,
+            1
+          ],
+          "bottleneck": {
+            "0": 2.225073858506298e-308,
+            "1": 0.0,
+            "2": 0.003980007924126339
+          },
+          "wasserstein": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.004534016368796357
+          },
+          "n_sig": {
+            "0": 1,
+            "1": 0,
+            "2": 1
+          }
+        },
+        "B": {
+          "desc": "punched hole \u2014 void destroyed (WRONG)",
+          "topology_ok": false,
+          "chamfer_pct": 0.9773975067798535,
+          "hausdorff95_pct": 4.3748341815134495,
+          "hausdorff_pct": 16.678076436408812,
+          "betti": [
+            1,
+            0,
+            1
+          ],
+          "bottleneck": {
+            "0": 2.225073858506298e-308,
+            "1": 0.0,
+            "2": 0.13848090453652961
+          },
+          "wasserstein": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.15526295771094856
+          },
+          "n_sig": {
+            "0": 1,
+            "1": 0,
+            "2": 1
+          }
+        }
+      }
+    }
+  ],
+  "gate": [
+    {
+      "key": "i_genus",
+      "disc": 1,
+      "chamfer_A": 0.916407384149235,
+      "chamfer_B": 0.916407462417878,
+      "bott_A": 0.0,
+      "bott_B": 0.030186502542743285,
+      "chamfer_equal_or_inverted": true,
+      "topo_separates": true,
+      "passes": true
+    },
+    {
+      "key": "ii_components",
+      "disc": 0,
+      "chamfer_A": 0.6279784053631652,
+      "chamfer_B": 0.6279783463446518,
+      "bott_A": 0.0014466168982129879,
+      "bott_B": 0.05740323879870307,
+      "chamfer_equal_or_inverted": true,
+      "topo_separates": true,
+      "passes": true
+    },
+    {
+      "key": "iii_void",
+      "disc": 2,
+      "chamfer_A": 0.9773973224561283,
+      "chamfer_B": 0.9773975067798535,
+      "bott_A": 0.003980007924126339,
+      "bott_B": 0.13848090453652961,
+      "chamfer_equal_or_inverted": true,
+      "topo_separates": true,
+      "passes": true
+    }
+  ]
+}

@@ -1,0 +1,260 @@
+% ===== 5. Results ===========================================================
+\section{Results}
+\label{sec:results}
+
+% ---- 5a Topological blindness (DRAFTABLE) ----------------------------------
+\subsection{Geometric metrics are topologically blind}
+\label{sec:results-blindness}
+
+We build three controlled pairs (A = topologically correct, B = topologically
+wrong). In each pair A's geometry is bisection-matched so its Chamfer distance to
+the ground truth \emph{equals} B's; topology is the only thing that differs.
+Diagrams are computed on 40{,}000 seeded surface samples per shape.
+% src(all numbers in Table~\ref{tab:blindness} and below): D:\Project\CG-Soup-Topology\figures\summary.md
+% (raw: D:\Project\CG-Soup-Topology\figures\blindness_results.json)
+
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccc}
+\toprule
+case & candidate & Chamfer\,\% & Hausd95\,\% & bott$\to$GT (disc) & disc dim \\
+\midrule
+\multirow{2}{*}{i\_genus}
+ & A: blister, genus 0 (correct)   & 0.916 & 0.481 & 0.0000 & H1 \\
+ & B: thin handle, genus 1 (wrong) & 0.916 & 0.456 & 0.0302 & H1 \\
+\midrule
+\multirow{2}{*}{ii\_components}
+ & A: two components (correct)     & 0.628 & 0.536 & 0.0014 & H0 \\
+ & B: bridged, one comp. (wrong)   & 0.628 & 0.357 & 0.0574 & H0 \\
+\midrule
+\multirow{2}{*}{iii\_void}
+ & A: blister, void intact (correct) & 0.977 & 1.887 & 0.0040 & H2 \\
+ & B: punctured, void gone (wrong)   & 0.977 & 4.375 & 0.1385 & H2 \\
+\bottomrule
+\end{tabular}}
+\caption{Geometric metrics cannot separate topologically distinct
+reconstructions, while the discriminating-dimension bottleneck does. Chamfer is
+equal within each pair by construction; in cases i and ii Hausdorff-95 even
+\emph{prefers} the wrong candidate. bottleneck$\to$GT is $\approx$40$\times$
+(H0) and $\approx$35$\times$ (H2) larger for the wrong candidate.}
+% src: D:\Project\CG-Soup-Topology\figures\summary.md
+\label{tab:blindness}
+\end{table}
+% NOTE(\multirow): \usepackage{multirow} is loaded in main.tex preamble.
+
+In all three cases Chamfer ranks the wrong candidate equal-or-better while the
+bottleneck distance separates them cleanly (Figure~\ref{fig:pd}). The blindness
+holds even at the level of geometry's most outlier-sensitive metric: Hausdorff-95
+is \emph{lower} (better) for the wrong candidate in cases i and ii.
+% src(40x, 35x, "Hausdorff prefers wrong"): D:\Project\CG-Soup-Topology\figures\summary.md
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\linewidth]{pd_i_genus.png}\hfill
+\includegraphics[width=0.32\linewidth]{pd_ii_components.png}\hfill
+\includegraphics[width=0.32\linewidth]{pd_iii_void.png}
+\caption{Persistence diagrams (GT / A / B) for the three blindness cases:
+(i) genus, (ii) components, (iii) void.}
+\label{fig:pd}
+\end{figure}
+
+A topological bias supplied only at initialization does not survive training:
+the first resampling step removes it, so the final topology is independent of the
+initial bias. The persistence-based stability series makes the gap
+visible---Chamfer drifts smoothly while the bottleneck jumps when a spurious feature
+becomes significant (Figure~\ref{fig:stability}).
+% src(washout / stability series): D:\Project\CG-Soup-Topology\figures\summary.md,
+% D:\Project\CG-Soup-Topology\figures\stability_series.csv
+% TODO(human): if you want the exact step at which #sig-H1 flips 0->1, read it
+% from stability_series.csv and state it.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{stability_series.png}
+\caption{Topology stability series: Chamfer (smooth) vs bottleneck-H1 (jumps when
+a spurious handle becomes significant).}
+\label{fig:stability}
+\end{figure}
+
+% ---- 5.2 Voids: width vs placement (2x2), one run: h2_unified, 5 seeds -------
+\subsection{Voids (H2): mostly width, with a shape-dependent topological residual}
+\label{sec:results-h2}
+
+For voids, spreading the resampling prior helps substantially---a controlled 2$\times$2
+over \emph{kernel width} (narrow $s{=}1$ vs.\ wide $s{=}3$) and \emph{placement}
+(topological vs.\ non-topological; Table~\ref{tab:h2}) shows the gain is chiefly a
+\emph{width} effect with a smaller, shape-dependent topological component.
+\emph{Width:} at matched placement, widening cuts error by 15--33\% (topological
+B4-vs-B2 by 18--33\%, non-topological B5-vs-B3 by 15--33\%), so both \emph{wide} priors
+land far below both \emph{narrow} ones. (Not every wide-vs-narrow \emph{cross}-pair
+clears 15\%---e.g.\ B5-vs-B2 is $\approx$9\% for the cylinder---so the range is stated
+for matched-placement widening.) \emph{Placement:} the topological-placement benefit is
+real but shape-dependent, clearest for the cylinder, where topology helps at
+\emph{both} widths (narrow B2-vs-B3 by 7.8\%; wide B4-vs-B5 by $\approx$4.6$\sigma$);
+for the sphere it is weak (narrow: a tie; wide: $\approx$2.2$\sigma$), and for the cube
+absent (a tie at both widths). B4 is the best single condition at better-or-equal
+geometry, but a width-matched non-topological control recovers most of its advantage,
+so the void gain is chiefly width with a real but shape-dependent topological residual.
+Init-time bias washes out (B1${\approx}$B0).
+% src(all numbers this subsection): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\h2_unified\report\results.json
+
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{2}{c}{narrow ($s{=}1$)} & \multicolumn{2}{c}{wide ($s{=}3$)} & & \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+target (H2) & B2 topo & B3 non-topo & \textbf{B4 topo} & B5 non-topo & B0 base & $\Delta$(B4$-$B5) \\
+\midrule
+sphere   & 0.0438 & 0.0440 & \textbf{0.0357} & 0.0374 & 0.0535 & $-0.0017$ (2.2$\sigma$) \\
+cube     & 0.0409 & 0.0403 & \textbf{0.0273} & 0.0270 & 0.0579 & $+0.0003$ (tie) \\
+cylinder & 0.0440 & 0.0477 & \textbf{0.0360} & 0.0402 & 0.0545 & $-0.0042$ (4.6$\sigma$) \\
+\bottomrule
+\end{tabular}}
+\caption{Voids, one paired-seed run ($N{=}1200$, 5 seeds): bottleneck-to-target
+(decisive dim, tail mean; lower better) in a width$\times$placement 2$\times$2.
+At matched placement, \emph{widening} cuts error by 15--33\% (B4-vs-B2, B5-vs-B3);
+\emph{placement} is a smaller, shape-dependent residual---the topological column beats
+the non-topological one clearly for the cylinder (both widths), weakly for the sphere
+(wide only), and not for the cube. $B0$ is the baseline; $B1{\approx}B0$ (init washout,
+omitted).}
+% src: h2_unified/report/results.json (bott_tail_mean; B4-B5 z from bott_tail_sd, 5 seeds)
+\label{tab:h2}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\linewidth]{sphere_bottleneck.png}\hfill
+\includegraphics[width=0.32\linewidth]{cube_bottleneck.png}\hfill
+\includegraphics[width=0.32\linewidth]{cylinder_bottleneck.png}
+\caption{Bottleneck-to-target over training for the three voids (conditions B0--B5):
+the two \emph{wide} priors (B4 topological, B5 non-topological) track well below the
+two \emph{narrow} priors (B2, B3), and B4/B5 nearly coincide---width, not topology,
+is the driver. Geometry parity: Figure~\ref{fig:sphere-geom}.}
+\label{fig:h2}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.55\linewidth]{sphere_geometry.png}
+\caption{Sphere geometry (Chamfer): B4 (spread) sits at or below baseline, so the
+topological gain is not bought with geometry.}
+\label{fig:sphere-geom}
+\end{figure}
+
+Whether this ``spread beats concentrate'' ordering is special to voids or holds
+across feature dimensions is the subject of Section~\ref{sec:results-crossover}.
+
+% ---- 5.3 Crossover across dimensions (H2 rows from Table 1; low-dim from crossover) --
+\subsection{Does the optimal prior flip with dimension?}
+\label{sec:results-crossover}
+
+Section~\ref{sec:results-h2} shows spread beats concentrate for voids. Does a
+low-dimensional feature instead prefer concentration---a \emph{dimensional
+crossover}? We compare the concentrated (B2) and spread (B4) priors---identical but
+for the width scale---in each shape's decisive dimension, at a per-class
+\emph{headroom} budget, and track the signed difference
+$\Delta=\text{bottleneck}(\text{B4})-\text{bottleneck}(\text{B2})$
+(Table~\ref{tab:crossover}); a crossover would show $\Delta$ change sign with
+dimension. We add a genus-2 \texttt{double\_torus} ($b_1{=}4$) and
+\texttt{three\_spheres} ($b_0{=}3$).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llcccc}
+\toprule
+target & dim & $N$ & B2 concentrate & B4 spread & $\Delta=$B4$-$B2 \\
+\midrule
+sphere         & H2 & 1200 & 0.0438 & 0.0357 & $-0.0081$ \\
+cube           & H2 & 1200 & 0.0409 & 0.0273 & $-0.0136$ \\
+cylinder       & H2 & 1200 & 0.0440 & 0.0360 & $-0.0080$ \\
+torus          & H1 &  700 & 0.0425 & 0.0316 & $-0.0109$ \\
+two\_spheres   & H0 &  700 & 0.0059 & 0.0057 & $-0.0002$ \\
+three\_spheres & H0 &  700 & 0.0062 & 0.0053 & $-0.0009$ \\
+double\_torus  & H1 & 2000 & \multicolumn{3}{c}{inconclusive (bottleneck pinned; see text)} \\
+\bottomrule
+\end{tabular}
+\caption{Concentrate vs.\ spread across feature dimensions: $\Delta\le 0$
+\emph{everywhere}, so there is no sign flip and no crossover---spread is at least as
+good as concentrating at every dimension, and strictly better for voids and the
+torus. The H2 rows are the paired-seed run of Table~\ref{tab:h2} (h2\_unified, 5
+seeds); the low-dimensional rows are the crossover run (torus 5 seeds, others 3).
+Each row is internally consistent (one run per shape).}
+% src(H2 rows): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\h2_unified\report\results.json
+% src(low-dim rows): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\crossover\crossover_report\results.json
+\label{tab:crossover}
+\end{table}
+
+\paragraph{No crossover; spread wins or ties everywhere.} $\Delta=$B4$-$B2 (spread
+minus concentrate, both \emph{topological}) is clearly negative for voids and the torus
+(spread better) and only marginally negative for the two H0 shapes---within noise of the
+non-topological control, i.e.\ a null. Nowhere does concentrating win, so the optimal
+spatial prior does not flip with dimension. Because this $\Delta$ holds placement fixed
+(both priors topological), it isolates the effect of \emph{width}; whether the loop
+spread-win is \emph{topological} needs the non-topological arm, which we add for the
+torus next (Table~\ref{tab:torus2x2}).
+
+\paragraph{On the loop, width drives the gain; topological placement does not.} A
+width$\times$placement 2$\times$2 on the torus (Table~\ref{tab:torus2x2}), mirroring the
+void analysis, decomposes the spread-win. \emph{Width} helps massively at either
+placement: widening drops the bottleneck $26\%$ for the topological pair (B2$\to$B4) and
+$33\%$ for the non-topological pair (B3$\to$B5), putting both \emph{wide} cells far below
+both \emph{narrow} ones. \emph{Placement}, by contrast, gives no benefit on the
+loop---at both widths the \emph{non-topological} prior is better: narrow B3 $0.0397 <$ B2
+$0.0425$ ($7.6\sigma$) and wide B5 $0.0267 <$ B4 $0.0316$ ($3.25\sigma$), so the best
+torus condition is a \emph{wide non-topological} prior. The only distinctly topological
+effect is a harmful one: at this budget only the narrow-topological prior (B2) inflates
+significant-H1 into phantom handles ($4.4$ vs.\ a true $2$; B3, B4, and B5 all hold
+$2.0$), the concentrate backfire of Section~\ref{sec:mechanism}. So on the torus, as on
+the voids, \emph{width} drives the gain---but here topological placement is a small cost,
+not a small residual.
+% src(torus B0/B2/B3/B4/B5 bottleneck + #sig, N=700, 5 seeds): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\crossover\report\results.json
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{2}{c}{narrow ($s{=}1$)} & \multicolumn{2}{c}{wide ($s{=}3$)} & \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+torus (H1), $N{=}700$ & B2 topo & B3 non-topo & B4 topo & \textbf{B5 non-topo} & B0 \\
+\midrule
+bottleneck (tail mean) & 0.0425 & 0.0397 & 0.0316 & \textbf{0.0267} & 0.0409 \\
+significant-H1 (true $2$) & 4.4 & 2.0 & 2.0 & 2.0 & 2.0 \\
+\bottomrule
+\end{tabular}
+\caption{Torus width$\times$placement 2$\times$2 (5 paired seeds, $N{=}700$), mirroring
+Table~\ref{tab:h2} for a loop. \emph{Width} helps at either placement (both wide cells
+far below both narrow); at matched \emph{placement} the \emph{non-topological} prior is
+better at both widths (narrow $7.6\sigma$, wide $3.25\sigma$), so the loop spread-win is
+a width effect. Topological placement's only distinct effect is harmful: the
+narrow-topological B2 alone inflates significant-H1 into phantom handles.}
+% src: crossover/report/results.json (bott_tail_mean, final_nsig; z from bott_tail_sd, 5 seeds)
+\label{tab:torus2x2}
+\end{table}
+
+\paragraph{Components are a null.} For \texttt{two\_spheres} and
+\texttt{three\_spheres} neither topological prior beats the non-topological control:
+component correctness is governed by the \emph{absence} of geometry in the
+inter-component gap, which a placement prior does not control
+(Section~\ref{sec:mechanism}).
+% src: crossover/crossover_report/results.json
+
+\paragraph{Multi-loop genus-2: inconclusive.} On \texttt{double\_torus} the
+decisive-dimension bottleneck is identical across all conditions (pinned at
+$0.0264$) and the soup recovers only 2 of the 4 loops at every budget tried, so
+this stress test does not discriminate; we report it as inconclusive rather than
+support, and flag a higher-resolution re-run as future work.
+% src(double_torus pinned 0.0264, #sig 2): crossover/crossover_report/results.json
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\linewidth]{phantom.png}
+\caption{Significant-feature count vs.\ true Betti (low-dimensional shapes):
+concentrate (B2) inflates the torus H1 count (phantom handles), while spread (B4)
+\emph{and} both non-topological priors (narrow B3, wide B5; Table~\ref{tab:torus2x2})
+hold the true value---so the inflation is specific to the narrow-\emph{topological}
+prior; the H0 shapes are unaffected.}
+\label{fig:phantom2}
+\end{figure}

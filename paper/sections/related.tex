@@ -1,0 +1,86 @@
+% ===== 2. Related work ======================================================
+% Citations are REAL (refs.bib; metadata verified 2026-07-03). The prose below
+% is a first draft written to each bucket's "Establish:" note (kept in place).
+% TODO(human): revise the wording in your voice.
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Topology in 3D reconstruction.}
+% Establish: prior work that reasons about genus / connectivity / void structure
+% in surface or implicit reconstruction; how topological correctness is usually
+% pursued (mesh repair, topology constraints, persistence-aware losses) and why
+% it is hard for soup / differentiable settings specifically.
+Topological correctness in reconstruction has mainly been pursued along three
+lines. Interactive, constraint-driven reconstruction resolves topological
+ambiguity during fitting, deferring to a user where the data cannot decide
+genus or connectivity~\cite{sharf2007topologyaware}. Mesh repair removes
+topological defects---holes, spurious handles, disconnected shells---from an
+already-built mesh~\cite{ju2004repair,attene2010repair}. Closest to our
+setting, persistence-based priors have been imposed while fitting an implicit
+representation to a point cloud, promoting a prescribed persistence diagram
+during optimization~\cite{bruel2020toporecon}. All of these presuppose either
+explicit connectivity (something to repair or constrain) or a global surface
+fit that can absorb a topological penalty. A triangle soup under differentiable
+rasterization offers neither: there is no connectivity to repair, and we show
+(Section~\ref{sec:results-blindness}) that a topological bias present only at
+initialization is erased by the first resampling step---so guidance has to act
+inside the resampling loop itself.
+
+\paragraph{Persistent-homology-based losses and priors.}
+% Establish: PH as a differentiable or as-a-prior signal (topological loss terms,
+% persistence images, connectivity/void losses), and the distinction from our
+% PRECOMPUTED, non-differentiable importance field (we do not backprop through PH;
+% Phase 3 / future work would).
+Persistent homology can serve as an optimizable objective: differentiable
+persistence layers~\cite{gabrielsson2020topologylayer}, topological loss terms
+for image segmentation~\cite{hu2019topopreserving,clough2022topoloss},
+persistence-driven shape matching~\cite{poulenard2018shapematching}, and a
+general convergence analysis for persistence-based
+objectives~\cite{carriere2021optimizing}. In all of these the topological
+signal reaches the parameters as a \emph{gradient}, at the price of a
+persistence computation in every step. Our importance field is deliberately
+weaker: the target's diagram is computed \emph{once}, offline, and only steers
+where the resampler spends its fixed triangle budget; nothing is
+differentiated through persistent homology. This makes the prior essentially
+free at training time and isolates the question studied here---\emph{where}
+topological guidance should place resolution---from how a differentiable
+topological signal would be constructed (the natural next phase;
+Section~\ref{sec:limitations}).
+
+\paragraph{Differentiable rendering / rasterization.}
+% Establish: differentiable rasterizers and explicit-primitive optimization
+% (triangle soup / point / Gaussian families) this method plugs into; what their
+% adaptive densification/pruning heuristics optimize (photometric/geometric), and
+% that none target topology.
+Differentiable rasterizers obtain image-space gradients for explicit geometry,
+from approximate derivatives~\cite{loper2014opendr,kato2018neural} to smoothed
+coverage~\cite{liu2019softras} and high-performance modular
+primitives~\cite{laine2020nvdiffrast}. On top of them, explicit-primitive
+pipelines evolve their primitive set \emph{in the loop}: 3D Gaussian splatting
+densifies and prunes by view-space gradient
+magnitude~\cite{kerbl2023gaussians}, triangle splatting carries the same
+adaptive-density recipe to triangle primitives~\cite{held2025trianglesplatting},
+and mesh-evolution methods remesh inside the inverse-rendering
+loop~\cite{nicolet2021largesteps,palfinger2022remeshing}. In every case the
+densification heuristic is photometric or geometric---screen-space error,
+gradient magnitude, edge length---and none targets topology. The triangle-soup
+pipeline we build on inherits exactly this heuristic, which is what makes it
+topologically blind (Section~\ref{sec:results-blindness}).
+
+\paragraph{Remeshing and adaptive sampling.}
+% Establish: classical and learning-based adaptive remeshing / sampling
+% (curvature- or error-driven refinement); contrast with a topology-driven
+% spatial prior, and note our non-topological control (B3) is the curvature/random
+% densification analogue.
+Allocating resolution adaptively is classical: progressive meshes and
+quadric-error simplification concentrate triangles where a geometric error
+metric demands~\cite{hoppe1996progressive,garland1997qem}, and remeshing
+methods adapt triangle density to curvature or approximation error,
+interactively or in real time~\cite{alliez2003anisotropic,botsch2004remeshing,dunyach2013adaptive}.
+Our resampling policy keeps this machinery and swaps the \emph{signal}:
+importance derives from the target's persistent features rather than from
+curvature or error. The non-topological controls B3/B5
+(Section~\ref{sec:setup}) are precisely the generic-densification analogue of
+such heuristics at matched kernel width---which is what lets the experiments
+separate ``more resolution, well spread'' from ``resolution placed by
+topology.''

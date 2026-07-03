@@ -1,0 +1,92 @@
+% ===== 6. Mechanism / discussion ============================================
+% Aligned to the paper's thesis: a SPREAD prior wins at every dimension; what
+% depends on dimension is the HARM from concentrating. No spliced numbers here ---
+% H2 magnitudes live in their tables (Sec 5.2 / 5.3); the torus backfire cites the
+% crossover (Sec 5.3) for N=700 and an INDEPENDENT budget sweep (Fig) at N=400.
+% ISSUE-1 (cross-run splice) is a separate, pending data decision.
+\section{Why spreading wins, and why concentration's harm depends on dimension}
+\label{sec:mechanism}
+
+\paragraph{What the importance scale actually varies.}
+A feature's death simplex marks \emph{where} its topology is fragile, but the
+feature's support is larger---the bounding shell of a void, the whole tube of a
+handle. For the compact targets used here the feature's death scale is of order the
+shape size, so even the concentrated field ($s{=}1$) already overlaps most of the
+surface. The scale $s$ therefore varies the \emph{peakedness} of the field---and
+hence the differential protection the keep-map applies to feature geometry---far
+more than its literal spatial coverage. ``Spreading'' here means ``protect the
+feature's whole support evenly,'' not ``reach more of the surface.''
+% src(limited dynamic range / peakedness): PHASE2B_CROSSOVER.md (Caveats)
+
+\paragraph{Voids: spreading (width) helps; topological placement is a small residual.}
+An enclosed void is destroyed by a hole \emph{anywhere} on the 2-manifold shell that
+bounds it, so the void's support---the geometry whose failure collapses it---is the
+\emph{entire} shell, which for a compact shape is essentially the whole surface. As the
+peakedness caveat above notes, even the concentrated field ($s{=}1$) already overlaps
+most of that surface, so \emph{any} wide field---topological or not---approximately
+spreads over the void's support. The single principle ``spread over the support''
+therefore predicts the void effect should look width-driven, with topological placement
+only a residual---and it is: a width-matched non-topological control (B5) recovers most
+of the spread prior's gain (Section~\ref{sec:results-h2}). That residual---placing the
+wide prior at the void locus (B4) rather than at random (B5)---should track how
+\emph{non-uniform} the bounding shell is, and it does: largest for the cylinder (flat
+caps and a curved side; $\approx$4.6$\sigma$), smaller for the near-uniform sphere
+($\approx$2.2$\sigma$), and absent for the cube (a tie).
+% src(B4-B5 residual + sigma): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\h2_unified\report\results.json
+
+\paragraph{The harm of concentrating, and why it scales with dimension.}
+What \emph{does} depend on dimension is the damage a concentrating prior does, and
+it is governed by how readily over-tessellating a \emph{single} locus
+\emph{fabricates a spurious feature of the same dimension}:
+\begin{itemize}
+  \item \textbf{Loops (1-D): catastrophic, and here placement matters.} A loop's
+  support is a thin tube, far smaller than the surface, so a \emph{narrow} prior cannot
+  spread along it and over-tessellates it into phantom handles---the significant-H1
+  count rises above the true value and the bottleneck worsens \emph{below baseline}
+  (Section~\ref{sec:results-crossover}). At the headroom budget this backfire is
+  \emph{narrow-topological}-specific: only the narrow-topological prior inflates the
+  count ($N{=}700$: B2 $4.4$ vs.\ narrow-random B3 $2.0$; Table~\ref{tab:torus2x2}).
+  Only under severe budget starvation does narrowness alone begin to over-tessellate a
+  random prior too ($N{=}400$, 3 seeds: B2 ${\approx}\,7.7$, B3 ${\approx}\,5.7$, true
+  value $2$; Figure~\ref{fig:phantom}). Either way the cure is \emph{width}: a wide
+  prior, topological or not, recovers the true count.
+  % src(N=700 #sig B2 4.4/B3 2.0: crossover/report; N=400 B2 7.67/B3 5.67: tight_N400/report): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\crossover\report\results.json
+  \item \textbf{Voids (2-D): mild.} Over-tessellating one shell patch cannot
+  \emph{create} a second enclosed void, so concentrating fabricates no spurious H2;
+  it merely under-protects the rest of the shell---an incomplete-protection shortfall
+  behind spreading, never worse than baseline.
+  \item \textbf{Components (0-D): none.} A component boundary is defined by the
+  \emph{absence} of geometry between shells; no placement of triangles on the shells
+  adds or removes a component, so a placement prior has no purchase and the result
+  is a null---neither topological prior beats the non-topological control
+  (Section~\ref{sec:results-h2}).
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\linewidth]{torus_betti_N400.png}
+\caption{Independent budget sweep, torus at the tight budget $N{=}400$: \emph{both}
+narrow priors inflate the significant-H1 count above the true value (phantom
+handles)---the narrow-topological B2 more than the narrow-random B3---while the baseline
+recovers the correct count. The over-tessellation is a narrowness effect, worsened by
+topological placement.}
+% src: D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\tight_N400\report\torus_betti.png
+\label{fig:phantom}
+\end{figure}
+
+\paragraph{Interpretation: one principle, two observable regimes.}
+A single principle organizes all three cases---spread importance over the feature's
+\emph{support}, not its localized death simplex---and, together with the peakedness
+caveat, it predicts \emph{why} voids look width-driven while loops look
+narrowness-driven: the difference is how much of the surface the support occupies. A
+void's support is the whole bounding shell ($\approx$ the entire compact surface), so
+any wide field already spreads over it and topological placement is only a residual
+(Section~\ref{sec:results-h2}). A loop's support is a thin tube, far smaller than the
+surface: a wide field does not specifically spread along that tube, and a \emph{narrow}
+field over-tessellates it into phantom handles---so here narrowness is harmful and the
+wide (spread) prior recovers the correct topology (Section~\ref{sec:results-crossover}).
+The optimal prior is thus spread at every dimension (no crossover); only the observable
+signature---and the harm from being narrow---depends on the support's extent. The
+genus-2 multi-loop case did not resolve at feasible budgets and is reported as
+inconclusive.
+% src(spread > concentrate at every dim; H0 null; double_torus inconclusive): crossover/crossover_report/results.json

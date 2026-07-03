@@ -1,0 +1,87 @@
+% ===== 4. Experimental setup (DRAFTABLE) ====================================
+\section{Experimental setup}
+\label{sec:setup}
+
+\paragraph{Conditions.}
+All conditions are identical in seed, target scene, triangle budget $N$,
+optimizer, step count, and schedule; they differ \emph{only} in the resampling
+importance (Section~\ref{sec:method-policy}).
+\begin{itemize}
+  \item \textbf{B0} --- baseline resampler ($\lambda_{\text{topo}}=0$); the control.
+  \item \textbf{B1} --- topological field applied \emph{once at initialization} only;
+        tests whether init-time bias survives (it does not).
+  \item \textbf{B2} --- topological field applied in-loop, \emph{concentrated}
+        ($s\!=\!1$); the proposed method.
+  \item \textbf{B3} --- a \emph{non-topological} importance field (random blobs at the
+        default \emph{narrow} width) applied in-loop; with B2 it tests whether narrow
+        topological placement beats narrow non-topological densification.
+  \item \textbf{B4} --- topological field applied in-loop but \emph{spread}
+        ($s\!>\!1$); identical to B2 except for the concentrate$\leftrightarrow$spread
+        scale. \emph{Results in Sections~\ref{sec:results-h2} and \ref{sec:results-crossover}.}
+  \item \textbf{B5} --- a \emph{non-topological} field \emph{width-matched} to B4
+        (random blobs widened to B4's kernel $\sigma$, mass-preserved); with B3 and B4
+        it separates topological \emph{placement} from kernel \emph{width}
+        (H2 shapes; Section~\ref{sec:results-h2}).
+\end{itemize}
+
+\paragraph{Synthetic targets with known topology.}
+Targets are analytic shapes rendered into multi-view scenes so the ground-truth
+surface (and hence its Betti numbers) is exact. Each shape's Betti numbers are
+recovered by the alpha-complex pipeline before any reconstruction experiment.
+% src(Betti recovery, 9/9 pass): D:\Project\CG-Soup-Topology\tests\test_betti.py
+\begin{table}[h]
+\centering
+\begin{tabular}{lccl}
+\toprule
+target & $(b_0,b_1,b_2)$ & decisive dim & role \\
+\midrule
+sphere        & $(1,0,1)$ & H2 & enclosed void \\
+cube          & $(1,0,1)$ & H2 & void, flat faces / sharp edges \\
+cylinder      & $(1,0,1)$ & H2 & void, capped \\
+torus         & $(1,2,1)$ & H1 & loops / handle \\
+two\_spheres  & $(2,0,2)$ & H0 & two components \\
+three\_spheres& $(3,0,3)$ & H0 & three components \\
+double\_torus & $(1,4,1)$ & H1 & genus-2, multi-loop \\
+\bottomrule
+\end{tabular}
+\caption{Synthetic targets and their (verified) Betti numbers.}
+% src: D:\Project\CG-Soup-Topology\tests\test_betti.py (sphere/torus/two_spheres/
+% double_torus/three_spheres/thick_shell cases) and topology/meshes.py.
+% TODO(human): cube/cylinder Betti are verified via the scene gt_mesh.ply target
+% diagrams (betti=(1,0,1)); state that provenance if a reviewer asks.
+\label{tab:targets}
+\end{table}
+
+\paragraph{Metric.}
+The primary metric is the \emph{bottleneck
+distance}~\cite{cohensteiner2007stability,edelsbrunner2010book} between the reconstruction's
+persistence diagram and the target's, in the shape's decisive homology dimension,
+reported as the tail mean over the last 30\% of training steps (lower is better).
+Geometry is reported in parallel as Chamfer / Hausdorff-95 (\% of bbox diagonal)
+so that any topological gain can be checked to occur at \emph{comparable}
+geometry rather than from a geometric change.
+% src(metric definition): topology/metrics.py (topology_stability_series, bottleneck_distance)
+
+\paragraph{Determinism and seeds.}
+Resampling decisions (the face structure $F$) are deterministic given the seed,
+but the CUDA rasterizer's gradient atomics make vertex positions $V$
+\emph{not} bit-reproducible run-to-run: two same-seed baseline runs can drift by a
+small number of triangles. We therefore (i) use \emph{paired} seeds across
+conditions and (ii) average each comparison over multiple seeds---5 for the H2
+study and the torus, 3 for the remaining crossover shapes; the topology metric
+samples the soup $\alpha\!\times$area-weighted and is robust to a few drifting
+triangles.
+% src(determinism caveat): D:\Project\CG-Soup-Topology\PHASE2_STATUS.md
+% src(seed counts, VERIFIED from disk 2026-07-03): h2_unified = 5 seed dirs per
+%   shape x condition (all B0-B5); crossover_report records: torus nseeds=5,
+%   two_spheres/three_spheres 3, double_torus 3 (exp crossover_N2000).
+
+\paragraph{Budget.}
+All comparisons are budget-neutral: the triangle count $N$ is held fixed across
+conditions and across the run (the densify step trades faces 1-for-1). Training
+runs 2500 steps, at $N{=}1200$ for the H2 study and at each shape's headroom
+budget for the crossover (Table~\ref{tab:crossover}).
+% src(N=1200, 2500 steps): D:\Project\CG-Soup-Topology\PHASE2_STATUS.md
+% src(2500 steps, VERIFIED from disk 2026-07-03): trajectory dumps end at
+%   step_02500.pt in h2_unified AND crossover run dirs (torus, two_spheres,
+%   double_torus checked) -- no experiment used a different schedule.

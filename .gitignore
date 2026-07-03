@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Local Claude Code settings
+.claude/
+
+# LaTeX build intermediates (main.pdf is committed on purpose)
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.fls
+paper/*.fdb_latexmk

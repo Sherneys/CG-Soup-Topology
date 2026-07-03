@@ -1,0 +1,57 @@
+% ===== 7. Limitations & future work (DRAFTABLE) =============================
+\section{Limitations and future work}
+\label{sec:limitations}
+
+\paragraph{Synthetic targets.}
+All experiments use analytic shapes rendered into multi-view scenes, chosen so
+the ground-truth surface and its Betti numbers are exact and so geometry can be
+held fixed while topology varies---the control that makes the blindness result
+and the topological-vs-non-topological comparison clean. The cost is external
+validity: we do not yet demonstrate the method on captured or noisy real scenes,
+where the target persistence diagram itself must be estimated.
+% TODO(human): if you run any real/captured scene, add it; otherwise keep this honest.
+
+\paragraph{Non-determinism of the optimizer.}
+The CUDA rasterizer's gradient atomics make vertex positions non-reproducible
+run-to-run; resampling structure ($F$) is deterministic but vertex positions
+($V$) are not, so single-run differences can include a few drifting triangles. We
+mitigate with paired seeds and seed-averaging and a soup-sampled topology metric,
+but absolute numbers carry this run-to-run variance.
+% src(determinism caveat): D:\Project\CG-Soup-Topology\PHASE2_STATUS.md
+
+\paragraph{What the spread scale varies (limited dynamic range).}
+For the compact targets used here, topological death scales are of order the shape
+size, so even the concentrated field ($s{=}1$) already overlaps most of the surface.
+The scale $s$ therefore controls the \emph{peakedness} of the importance field---and
+thus the differential protection applied by the keep-map---rather than its literal
+spatial coverage; our claims about ``spreading'' should be read in that sense.
+Characterizing the effect on targets whose features are small relative to the shape,
+where coverage and peakedness decouple, is left to future work.
+% src(limited dynamic range / peakedness): PHASE2B_CROSSOVER.md (Caveats)
+
+\paragraph{Width vs.\ topological placement.}
+The void gain is primarily a kernel-width effect: a width-matched non-topological
+control recovers most of it, and the residual attributable to topological placement
+is small and shape-dependent---clear for the cylinder, modest for the sphere, absent
+for the cube (Section~\ref{sec:results-h2}). Establishing that residual robustly, and
+whether it grows for targets with finer or off-centre voids, would need more shapes
+and seeds.
+% src(width-matched control B5): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\h2_unified\report\results.json
+
+\paragraph{Precomputed, non-differentiable prior.}
+The importance field is distilled once from the target and is \emph{not}
+differentiated through; the method biases sampling, it does not flow a topological
+gradient. Making persistent homology differentiable so the topological signal can
+backpropagate into vertex positions---rather than only steer resampling---is the
+natural next phase, building on existing differentiable-persistence
+machinery~\cite{gabrielsson2020topologylayer,carriere2021optimizing,poulenard2018shapematching}.
+% src(scope: precomputed field, no differentiable PH): methods/topo_importance.py header
+
+\paragraph{Resolving multi-loop / genus-2 targets.}
+Our genus-2 \texttt{double\_torus} stress test was inconclusive: at every feasible
+budget the soup recovered only 2 of its 4 loops and the decisive-dimension
+bottleneck did not discriminate between conditions
+(Section~\ref{sec:results-crossover}). Strengthening the spread-vs-concentrate
+finding on a richer multi-loop target needs a higher-resolution or longer-schedule
+re-run, which we leave to future work.
+% src(double_torus inconclusive): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\crossover\crossover_report\results.json

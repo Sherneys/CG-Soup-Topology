@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Viritphon Chongpermwattanapol Pizzanu Kanongchaiyos Department of Computer Engineering, Faculty of Engineering, Chulalongkorn University, Bangkok, Thailand" />
+  <meta name="dcterms.date" content="2026-07-03" />
+  <title>Concentrate or Spread? Shaping Topological Resampling Priors for Differentiable Triangle-Soup Reconstruction</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    div.abstract {
+      margin: 2em 2em 2em 2em;
+      text-align: left;
+      font-size: 85%;
+    }
+    div.abstract-title {
+      font-weight: bold;
+      text-align: center;
+      padding: 0;
+      margin-bottom: 0.5em;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Concentrate or Spread? Shaping Topological Resampling
+Priors<br />
+for Differentiable Triangle-Soup Reconstruction</h1>
+<p class="author">Viritphon Chongpermwattanapol Pizzanu
+Kanongchaiyos<br />
+Department of Computer Engineering, Faculty of Engineering,<br />
+Chulalongkorn University, Bangkok, Thailand</p>
+<p class="date">2026-07-03</p>
+<div class="abstract">
+<div class="abstract-title">Abstract</div>
+<p>Differentiable rasterization reconstructs a 3D triangle soup from
+images by following photometric gradients while periodically resampling
+triangles to redistribute geometric detail. We first show this pipeline
+is topologically blind: Chamfer and Hausdorff distances cannot separate
+reconstructions that differ in genus, connectivity, or enclosed-void
+structure, and any topological bias supplied at initialization is erased
+by the first resampling step. Correct topology therefore requires
+guidance applied in the loop, together with a persistence-based metric
+able to detect it. We introduce topology-aware adaptive resampling: a
+precomputed importance field that localizes the target’s persistent
+features and biases where new triangles respawn and which triangles are
+protected from pruning. It is budget-neutral and reduces exactly to the
+baseline when disabled. A single mass-preserving scale on the field
+interpolates between a <em>concentrated</em> prior (importance piled on
+each feature’s localized death-simplex) and a <em>spread</em> prior (the
+same mass distributed over the feature’s support), letting us ask not
+whether topological guidance helps but what spatial form it should take.
+Our central finding is that a spread prior is at least as good as
+concentrating at every feature dimension, and strictly better for voids
+and loops; the natural hypothesis of a dimensional crossover—concentrate
+for high-dimensional features, spread for low-dimensional ones—does
+<em>not</em> hold. For enclosed voids (H2) a <em>spread</em> prior cuts
+bottleneck distance to the target by 33–53% below the baseline across
+spheres, cubes, and capped cylinders, at comparable or better geometry;
+but a width-matched <em>non-topological</em> control recovers most of
+this, so the void gain is chiefly a <em>width</em> (spread) effect
+rather than topological placement—at matched width, placing the prior at
+the topological locus adds only a small, shape-dependent residual
+(significant for cylinder and sphere, absent for the cube). For loops
+(H1) concentrating backfires, over-tessellating the loop into phantom
+handles and underperforming the baseline, while a <em>wide</em> prior
+recovers the correct topology—driven by width, not topological
+placement, since a width-matched non-topological prior does at least as
+well. For components (H0) neither prior beats generic densification (a
+null). One principle accounts for all three: a feature’s death-simplex
+is a localized witness, not its full support, so spreading importance
+over that support is the right bias (for a void the support fills the
+surface, so width alone realizes it); the <em>harm</em> from being
+<em>narrow</em> is what depends on dimension—catastrophic for
+one-dimensional loops, mild for two-dimensional voids, and immaterial
+for zero-dimensional components. These results replace the question
+“does topological guidance help reconstruction?” with a prescription for
+<em>how</em> to shape it—<em>spread</em>, do not concentrate—and a
+caveat: the benefit is carried by width, not topological targeting per
+se, since a width-matched non-topological prior does as well or
+better.</p>
+</div>
+</header>
+<h1 id="sec:intro">Introduction</h1>
+<p>Differentiable rasterization optimizes an explicit 3D representation
+directly against multi-view images by backpropagating a photometric loss
+through the rasterizer <span class="citation"
+data-cites="loper2014opendr kato2018neural liu2019softras laine2020nvdiffrast">(Loper
+and Black 2014; Kato et al. 2018; Liu et al. 2019; Laine et al.
+2020)</span>. A <em>triangle soup</em>—an unstructured collection of
+triangles with no shared connectivity—is an attractive such
+representation: it is cheap to render, places no manifold constraint on
+the geometry, and supports <em>adaptive resampling</em>, a periodic
+in-loop step that prunes poorly-contributing triangles and respawns new
+ones to redistribute resolution where the image residual demands it, in
+the spirit of the adaptive densify-and-prune loops of explicit-primitive
+and mesh-evolution pipelines <span class="citation"
+data-cites="kerbl2023gaussians held2025trianglesplatting nicolet2021largesteps palfinger2022remeshing">(Kerbl
+et al. 2023; Held et al. 2025; Nicolet et al. 2021; Palfinger
+2022)</span>.</p>
+<p>Such pipelines are tuned to minimize geometric error, and geometric
+error is exactly what they reduce. But geometry and <em>topology</em>
+are different: a reconstruction can be everywhere close to the target
+surface yet wrong in genus, in the number of connected components, or in
+whether an enclosed void survives. Our first contribution is to show
+that the standard pipeline is <em>topologically blind</em> in a precise,
+measurable sense. We construct matched pairs of candidate
+reconstructions whose Chamfer distance to the ground truth is <em>equal
+by construction</em> but whose topology differs, and show that
+Chamfer—and even Hausdorff—cannot separate them, whereas the bottleneck
+distance between persistence diagrams can (Section <a
+href="#sec:results-blindness" data-reference-type="ref"
+data-reference="sec:results-blindness">5.1</a>). We further observe that
+a topological bias injected only at <em>initialization</em> is erased:
+the first resampling step washes it out, so the final topology is
+independent of the initial bias.</p>
+<p>Two consequences follow, and they frame the paper. First, correcting
+topology requires guidance applied <em>in the loop</em>, not at
+initialization. Second, detecting whether topology is correct requires a
+metric that sees it—a persistence-based measure rather than a
+point-to-point distance.</p>
+<p>We introduce <em>topology-aware adaptive resampling</em> (Section <a
+href="#sec:method" data-reference-type="ref"
+data-reference="sec:method">3</a>): a precomputed importance field that
+localizes the target’s persistent features and biases (i) where new
+triangles respawn and (ii) which triangles are protected from pruning.
+The method is budget-neutral (the triangle count is held fixed) and
+reduces <em>exactly</em> to the baseline when its single strength knob
+is set to zero. Within this one mechanism we vary a <em>concentrate<span
+class="math inline">↔︎</span>spread</em> scale on the importance field,
+which lets us ask not merely whether topological guidance helps, but
+<em>what spatial form</em> the guidance should take.</p>
+<p>Our central finding concerns the <em>spatial form</em> of that
+guidance. A topological prior helps voids (H2), but chiefly through
+<em>width</em>: a spread prior lowers bottleneck-to-target by 33–53%
+across spheres, cubes, and capped cylinders, yet a width-matched
+non-topological control recovers most of it—so the void gain is mainly a
+spread effect, with only a small, shape-dependent topological residual
+(Section <a href="#sec:results-h2" data-reference-type="ref"
+data-reference="sec:results-h2">5.2</a>). But the natural
+hypothesis—that high-dimensional features want a <em>concentrating</em>
+prior and low-dimensional ones a <em>spreading</em> one, a dimensional
+crossover—turns out to be <em>false</em>. Comparing the two priors
+directly (Section <a href="#sec:results-crossover"
+data-reference-type="ref"
+data-reference="sec:results-crossover">5.3</a>), a spread prior is at
+least as good as concentrating at every dimension and strictly better
+for voids and loops; concentrating on a one-dimensional loop actively
+backfires, over-tessellating it into phantom handles. Across dimensions
+the benefit tracks <em>width</em>, not topological placement—a
+width-matched non-topological prior does at least as well (better, on
+the loop)—so the operative takeaway is to <em>spread</em> resampling
+resolution, not to target topology per se. The unifying reason
+(Section <a href="#sec:mechanism" data-reference-type="ref"
+data-reference="sec:mechanism">6</a>) is that a feature’s death-simplex
+is only a localized witness of its support, so spreading importance over
+that support is the right bias—while the <em>harm</em> from
+concentrating is what depends on dimension. This turns “does topology
+help?” into a prescription for how to shape the prior.</p>
+<h1 id="sec:related">Related work</h1>
+<h4 id="topology-in-3d-reconstruction.">Topology in 3D
+reconstruction.</h4>
+<p>Topological correctness in reconstruction has mainly been pursued
+along three lines. Interactive, constraint-driven reconstruction
+resolves topological ambiguity during fitting, deferring to a user where
+the data cannot decide genus or connectivity <span class="citation"
+data-cites="sharf2007topologyaware">(Sharf et al. 2007)</span>. Mesh
+repair removes topological defects—holes, spurious handles, disconnected
+shells—from an already-built mesh <span class="citation"
+data-cites="ju2004repair attene2010repair">(Ju 2004; Attene
+2010)</span>. Closest to our setting, persistence-based priors have been
+imposed while fitting an implicit representation to a point cloud,
+promoting a prescribed persistence diagram during optimization <span
+class="citation" data-cites="bruel2020toporecon">(Brüel-Gabrielsson et
+al. 2020)</span>. All of these presuppose either explicit connectivity
+(something to repair or constrain) or a global surface fit that can
+absorb a topological penalty. A triangle soup under differentiable
+rasterization offers neither: there is no connectivity to repair, and we
+show (Section <a href="#sec:results-blindness" data-reference-type="ref"
+data-reference="sec:results-blindness">5.1</a>) that a topological bias
+present only at initialization is erased by the first resampling step—so
+guidance has to act inside the resampling loop itself.</p>
+<h4
+id="persistent-homology-based-losses-and-priors.">Persistent-homology-based
+losses and priors.</h4>
+<p>Persistent homology can serve as an optimizable objective:
+differentiable persistence layers <span class="citation"
+data-cites="gabrielsson2020topologylayer">(Brüel Gabrielsson et al.
+2020)</span>, topological loss terms for image segmentation <span
+class="citation"
+data-cites="hu2019topopreserving clough2022topoloss">(Hu et al. 2019;
+Clough et al. 2022)</span>, persistence-driven shape matching <span
+class="citation" data-cites="poulenard2018shapematching">(Poulenard et
+al. 2018)</span>, and a general convergence analysis for
+persistence-based objectives <span class="citation"
+data-cites="carriere2021optimizing">(Carrière et al. 2021)</span>. In
+all of these the topological signal reaches the parameters as a
+<em>gradient</em>, at the price of a persistence computation in every
+step. Our importance field is deliberately weaker: the target’s diagram
+is computed <em>once</em>, offline, and only steers where the resampler
+spends its fixed triangle budget; nothing is differentiated through
+persistent homology. This makes the prior essentially free at training
+time and isolates the question studied here—<em>where</em> topological
+guidance should place resolution—from how a differentiable topological
+signal would be constructed (the natural next phase; Section <a
+href="#sec:limitations" data-reference-type="ref"
+data-reference="sec:limitations">7</a>).</p>
+<h4 id="differentiable-rendering-rasterization.">Differentiable
+rendering / rasterization.</h4>
+<p>Differentiable rasterizers obtain image-space gradients for explicit
+geometry, from approximate derivatives <span class="citation"
+data-cites="loper2014opendr kato2018neural">(Loper and Black 2014; Kato
+et al. 2018)</span> to smoothed coverage <span class="citation"
+data-cites="liu2019softras">(Liu et al. 2019)</span> and
+high-performance modular primitives <span class="citation"
+data-cites="laine2020nvdiffrast">(Laine et al. 2020)</span>. On top of
+them, explicit-primitive pipelines evolve their primitive set <em>in the
+loop</em>: 3D Gaussian splatting densifies and prunes by view-space
+gradient magnitude <span class="citation"
+data-cites="kerbl2023gaussians">(Kerbl et al. 2023)</span>, triangle
+splatting carries the same adaptive-density recipe to triangle
+primitives <span class="citation"
+data-cites="held2025trianglesplatting">(Held et al. 2025)</span>, and
+mesh-evolution methods remesh inside the inverse-rendering loop <span
+class="citation"
+data-cites="nicolet2021largesteps palfinger2022remeshing">(Nicolet et
+al. 2021; Palfinger 2022)</span>. In every case the densification
+heuristic is photometric or geometric—screen-space error, gradient
+magnitude, edge length—and none targets topology. The triangle-soup
+pipeline we build on inherits exactly this heuristic, which is what
+makes it topologically blind (Section <a href="#sec:results-blindness"
+data-reference-type="ref"
+data-reference="sec:results-blindness">5.1</a>).</p>
+<h4 id="remeshing-and-adaptive-sampling.">Remeshing and adaptive
+sampling.</h4>
+<p>Allocating resolution adaptively is classical: progressive meshes and
+quadric-error simplification concentrate triangles where a geometric
+error metric demands <span class="citation"
+data-cites="hoppe1996progressive garland1997qem">(Hoppe 1996; Garland
+and Heckbert 1997)</span>, and remeshing methods adapt triangle density
+to curvature or approximation error, interactively or in real time <span
+class="citation"
+data-cites="alliez2003anisotropic botsch2004remeshing dunyach2013adaptive">(Alliez
+et al. 2003; Botsch and Kobbelt 2004; Dunyach et al. 2013)</span>. Our
+resampling policy keeps this machinery and swaps the <em>signal</em>:
+importance derives from the target’s persistent features rather than
+from curvature or error. The non-topological controls B3/B5 (Section <a
+href="#sec:setup" data-reference-type="ref"
+data-reference="sec:setup">4</a>) are precisely the
+generic-densification analogue of such heuristics at matched kernel
+width—which is what lets the experiments separate “more resolution, well
+spread” from “resolution placed by topology.”</p>
+<h1 id="sec:method">Topology-aware adaptive resampling</h1>
+<p>The method has two offline-then-online parts: a <em>precomputed
+importance field</em> distilled once from the target, and a
+<em>resampling policy</em> that consumes the field inside the training
+loop. Neither touches the renderer, and both are budget-neutral.</p>
+<h2 id="sec:method-field">The importance field</h2>
+<p>Let <span class="math inline"><em>P</em></span> be a seeded surface
+sample of the target. We compute its persistence diagram <span
+class="citation" data-cites="edelsbrunner2002persistence">(Edelsbrunner
+et al. 2002)</span> with a GUDHI <span class="citation"
+data-cites="maria2014gudhi">(Maria et al. 2014)</span> alpha
+complex <span class="citation"
+data-cites="edelsbrunner1994alphashapes">(Edelsbrunner and Mücke
+1994)</span> and keep the <em>significant</em> features—intervals whose
+lifetime exceeds a self-calibrating multiple of the median
+nearest-neighbour spacing. Each significant feature <span
+class="math inline"><em>f</em></span> of homological dimension <span
+class="math inline"><em>d</em><sub><em>f</em></sub></span> is
+<em>localized</em> in space using the persistence pairs together with
+the alpha-complex point coordinates: an H1 loop is located by the
+edge/triangle that births/fills it, an H2 void by the tetrahedron that
+fills it (which sits on the bounding shell), and an H0 component by the
+edge that merges it. This yields, per feature, a set of 3D kernel
+centers <span
+class="math inline">{<em>c</em>}<sub><em>f</em></sub></span> on the
+target surface.</p>
+<p>Each feature contributes an isotropic Gaussian splat, and the field
+is evaluated on a dense surface sample <span
+class="math inline"><em>Q</em></span> (an “option-B surface splat”) so
+that importance is tied to the manifold the soup must reproduce: <span
+class="math display">$$\begin{equation}
+  r(q) \;=\; \sum_{f}\; w_f \sum_{c\in\{c\}_f}
+            \exp\!\Big(-\tfrac{\lVert q-c\rVert^2}{2\,\sigma_f^2}\Big),
+  \qquad q\in Q,
+  \label{eq:splat}
+\end{equation}$$</span> with per-feature weight <span
+class="math inline"><em>w</em><sub><em>f</em></sub></span> equal to the
+(normalized) persistence and radius <span
+class="math inline"><em>σ</em><sub><em>f</em></sub></span> set to the
+feature’s own death scale—its alpha circumradius <span
+class="math inline">$\sqrt{\text{death}_f}$</span>, clamped to a spacing
+floor and a bounding-box-fraction ceiling. The per-dimension fields are
+normalized to <span class="math inline">[0, 1]</span> and a query point
+takes the value of its nearest sample in <span
+class="math inline"><em>Q</em></span>.</p>
+<h4 id="concentrateleftrightarrowspread-scale.">Concentrate<span
+class="math inline">↔︎</span>spread scale.</h4>
+<p>We add a single scale <span class="math inline"><em>s</em> ≥ 1</span>
+that widens every kernel while preserving the injected surface mass:
+<span
+class="math inline"><em>σ</em><sub><em>f</em></sub> → <em>s</em> <em>σ</em><sub><em>f</em></sub></span>
+and <span
+class="math inline"><em>w</em><sub><em>f</em></sub> → <em>w</em><sub><em>f</em></sub>/<em>s</em><sup>2</sup></span>.
+Because a 2D Gaussian’s surface integral scales as <span
+class="math inline"><em>w</em><em>σ</em><sup>2</sup></span>, the total
+importance mass <span
+class="math inline">∑<sub><em>f</em></sub><em>w</em><sub><em>f</em></sub><em>σ</em><sub><em>f</em></sub><sup>2</sup></span>
+is invariant in <span class="math inline"><em>s</em></span>; <span
+class="math inline"><em>s</em></span> changes only the spatial
+<em>spread</em> of the prior, not how much of it there is. By
+construction <span class="math inline"><em>s</em> = 1</span> is the
+<em>concentrated</em> field and is numerically identical to the field
+used without the knob.</p>
+<h2 id="sec:method-policy">The resampling policy</h2>
+<p>The baseline resampler periodically (i) <em>prunes</em> the least
+screen-visible triangles and (ii) <em>respawns</em> triangles by
+subdividing large screen-space edges. Our policy biases both with the
+field via one strength knob <span
+class="math inline"><em>λ</em><sub>topo</sub></span>, and keeps the
+triangle count <span class="math inline"><em>N</em></span> fixed:</p>
+<ul>
+<li><p><strong>Prune protection (keep-map).</strong> Faces are ranked by
+<span
+class="math inline">visibility + <em>λ</em><sub>topo</sub> <em>κ</em> imp</span>,
+where <span class="math inline">imp</span> is the field value at the
+face centroid and <span class="math inline"><em>κ</em></span> a
+visibility-scale factor; the same number of faces is removed as in the
+baseline, so important faces are protected without changing the
+budget.</p></li>
+<li><p><strong>Budget-neutral densification.</strong> After the
+unchanged baseline split, we add up to <span
+class="math inline">cap = <em>λ</em><sub>topo</sub> ⋅ <em>c</em> ⋅ <em>N</em></span>
+extra subdivisions of the highest-importance visible faces, then remove
+exactly <span class="math inline">cap</span> faces with the protective
+keep-map. Net face count is unchanged; the effect is a pure trade of
+low-importance triangles for high-importance ones.</p></li>
+</ul>
+<p>When <span class="math inline"><em>λ</em><sub>topo</sub> = 0</span>
+both levers are bypassed and the policy reduces <em>exactly</em> to the
+baseline resampler (bit-identical resampling decisions); this is
+condition B0 below. The policy is field-agnostic: swapping which field
+it reads (concentrated topological, spread topological, or a
+non-topological control) gives the different experimental conditions of
+Section <a href="#sec:setup" data-reference-type="ref"
+data-reference="sec:setup">4</a> without any other change.</p>
+<h1 id="sec:setup">Experimental setup</h1>
+<h4 id="conditions.">Conditions.</h4>
+<p>All conditions are identical in seed, target scene, triangle budget
+<span class="math inline"><em>N</em></span>, optimizer, step count, and
+schedule; they differ <em>only</em> in the resampling importance
+(Section <a href="#sec:method-policy" data-reference-type="ref"
+data-reference="sec:method-policy">3.2</a>).</p>
+<ul>
+<li><p><strong>B0</strong> — baseline resampler (<span
+class="math inline"><em>λ</em><sub>topo</sub> = 0</span>); the
+control.</p></li>
+<li><p><strong>B1</strong> — topological field applied <em>once at
+initialization</em> only; tests whether init-time bias survives (it does
+not).</p></li>
+<li><p><strong>B2</strong> — topological field applied in-loop,
+<em>concentrated</em> (<span class="math inline"><em>s</em> = 1</span>);
+the proposed method.</p></li>
+<li><p><strong>B3</strong> — a <em>non-topological</em> importance field
+(random blobs at the default <em>narrow</em> width) applied in-loop;
+with B2 it tests whether narrow topological placement beats narrow
+non-topological densification.</p></li>
+<li><p><strong>B4</strong> — topological field applied in-loop but
+<em>spread</em> (<span class="math inline"><em>s</em> &gt; 1</span>);
+identical to B2 except for the concentrate<span
+class="math inline">↔︎</span>spread scale. <em>Results in Sections <a
+href="#sec:results-h2" data-reference-type="ref"
+data-reference="sec:results-h2">5.2</a> and <a
+href="#sec:results-crossover" data-reference-type="ref"
+data-reference="sec:results-crossover">5.3</a>.</em></p></li>
+<li><p><strong>B5</strong> — a <em>non-topological</em> field
+<em>width-matched</em> to B4 (random blobs widened to B4’s kernel <span
+class="math inline"><em>σ</em></span>, mass-preserved); with B3 and B4
+it separates topological <em>placement</em> from kernel <em>width</em>
+(H2 shapes; Section <a href="#sec:results-h2" data-reference-type="ref"
+data-reference="sec:results-h2">5.2</a>).</p></li>
+</ul>
+<h4 id="synthetic-targets-with-known-topology.">Synthetic targets with
+known topology.</h4>
+<p>Targets are analytic shapes rendered into multi-view scenes so the
+ground-truth surface (and hence its Betti numbers) is exact. Each
+shape’s Betti numbers are recovered by the alpha-complex pipeline before
+any reconstruction experiment.</p>
+<div id="tab:targets">
+<table>
+<caption>Synthetic targets and their (verified) Betti numbers.</caption>
+<thead>
+<tr>
+<th style="text-align: left;">target</th>
+<th style="text-align: center;"><span
+class="math inline">(<em>b</em><sub>0</sub>, <em>b</em><sub>1</sub>, <em>b</em><sub>2</sub>)</span></th>
+<th style="text-align: center;">decisive dim</th>
+<th style="text-align: left;">role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">sphere</td>
+<td style="text-align: center;"><span
+class="math inline">(1, 0, 1)</span></td>
+<td style="text-align: center;">H2</td>
+<td style="text-align: left;">enclosed void</td>
+</tr>
+<tr>
+<td style="text-align: left;">cube</td>
+<td style="text-align: center;"><span
+class="math inline">(1, 0, 1)</span></td>
+<td style="text-align: center;">H2</td>
+<td style="text-align: left;">void, flat faces / sharp edges</td>
+</tr>
+<tr>
+<td style="text-align: left;">cylinder</td>
+<td style="text-align: center;"><span
+class="math inline">(1, 0, 1)</span></td>
+<td style="text-align: center;">H2</td>
+<td style="text-align: left;">void, capped</td>
+</tr>
+<tr>
+<td style="text-align: left;">torus</td>
+<td style="text-align: center;"><span
+class="math inline">(1, 2, 1)</span></td>
+<td style="text-align: center;">H1</td>
+<td style="text-align: left;">loops / handle</td>
+</tr>
+<tr>
+<td style="text-align: left;">two_spheres</td>
+<td style="text-align: center;"><span
+class="math inline">(2, 0, 2)</span></td>
+<td style="text-align: center;">H0</td>
+<td style="text-align: left;">two components</td>
+</tr>
+<tr>
+<td style="text-align: left;">three_spheres</td>
+<td style="text-align: center;"><span
+class="math inline">(3, 0, 3)</span></td>
+<td style="text-align: center;">H0</td>
+<td style="text-align: left;">three components</td>
+</tr>
+<tr>
+<td style="text-align: left;">double_torus</td>
+<td style="text-align: center;"><span
+class="math inline">(1, 4, 1)</span></td>
+<td style="text-align: center;">H1</td>
+<td style="text-align: left;">genus-2, multi-loop</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="metric.">Metric.</h4>
+<p>The primary metric is the <em>bottleneck distance</em> <span
+class="citation"
+data-cites="cohensteiner2007stability edelsbrunner2010book">(Cohen-Steiner
+et al. 2007; Edelsbrunner and Harer 2010)</span> between the
+reconstruction’s persistence diagram and the target’s, in the shape’s
+decisive homology dimension, reported as the tail mean over the last 30%
+of training steps (lower is better). Geometry is reported in parallel as
+Chamfer / Hausdorff-95 (% of bbox diagonal) so that any topological gain
+can be checked to occur at <em>comparable</em> geometry rather than from
+a geometric change.</p>
+<h4 id="determinism-and-seeds.">Determinism and seeds.</h4>
+<p>Resampling decisions (the face structure <span
+class="math inline"><em>F</em></span>) are deterministic given the seed,
+but the CUDA rasterizer’s gradient atomics make vertex positions <span
+class="math inline"><em>V</em></span> <em>not</em> bit-reproducible
+run-to-run: two same-seed baseline runs can drift by a small number of
+triangles. We therefore (i) use <em>paired</em> seeds across conditions
+and (ii) average each comparison over multiple seeds—5 for the H2 study
+and the torus, 3 for the remaining crossover shapes; the topology metric
+samples the soup <span
+class="math inline"><em>α</em> ×</span>area-weighted and is robust to a
+few drifting triangles.</p>
+<h4 id="budget.">Budget.</h4>
+<p>All comparisons are budget-neutral: the triangle count <span
+class="math inline"><em>N</em></span> is held fixed across conditions
+and across the run (the densify step trades faces 1-for-1). Training
+runs 2500 steps, at <span class="math inline"><em>N</em> = 1200</span>
+for the H2 study and at each shape’s headroom budget for the crossover
+(Table <a href="#tab:crossover" data-reference-type="ref"
+data-reference="tab:crossover">2</a>).</p>
+<h1 id="sec:results">Results</h1>
+<h2 id="sec:results-blindness">Geometric metrics are topologically
+blind</h2>
+<p>We build three controlled pairs (A = topologically correct, B =
+topologically wrong). In each pair A’s geometry is bisection-matched so
+its Chamfer distance to the ground truth <em>equals</em> B’s; topology
+is the only thing that differs. Diagrams are computed on
+40<span>,</span>000 seeded surface samples per shape.</p>
+<p>In all three cases Chamfer ranks the wrong candidate equal-or-better
+while the bottleneck distance separates them cleanly (Figure <a
+href="#fig:pd" data-reference-type="ref" data-reference="fig:pd">1</a>).
+The blindness holds even at the level of geometry’s most
+outlier-sensitive metric: Hausdorff-95 is <em>lower</em> (better) for
+the wrong candidate in cases i and ii.</p>
+<figure id="fig:pd" data-latex-placement="h">
+<p><img src="pd_i_genus.png" style="width:32.0%" alt="image" /> <img
+src="pd_ii_components.png" style="width:32.0%" alt="image" /> <img
+src="pd_iii_void.png" style="width:32.0%" alt="image" /></p>
+<figcaption>Persistence diagrams (GT / A / B) for the three blindness
+cases: (i) genus, (ii) components, (iii) void.</figcaption>
+</figure>
+<p>A topological bias supplied only at initialization does not survive
+training: the first resampling step removes it, so the final topology is
+independent of the initial bias. The persistence-based stability series
+makes the gap visible—Chamfer drifts smoothly while the bottleneck jumps
+when a spurious feature becomes significant (Figure <a
+href="#fig:stability" data-reference-type="ref"
+data-reference="fig:stability">2</a>).</p>
+<figure id="fig:stability" data-latex-placement="h">
+<img src="stability_series.png" style="width:70.0%" />
+<figcaption>Topology stability series: Chamfer (smooth) vs bottleneck-H1
+(jumps when a spurious handle becomes significant).</figcaption>
+</figure>
+<h2 id="sec:results-h2">Voids (H2): mostly width, with a shape-dependent
+topological residual</h2>
+<p>For voids, spreading the resampling prior helps substantially—a
+controlled 2<span class="math inline">×</span>2 over <em>kernel
+width</em> (narrow <span class="math inline"><em>s</em> = 1</span>
+vs. wide <span class="math inline"><em>s</em> = 3</span>) and
+<em>placement</em> (topological vs. non-topological; Table <a
+href="#tab:h2" data-reference-type="ref"
+data-reference="tab:h2">[tab:h2]</a>) shows the gain is chiefly a
+<em>width</em> effect with a smaller, shape-dependent topological
+component. <em>Width:</em> at matched placement, widening cuts error by
+15–33% (topological B4-vs-B2 by 18–33%, non-topological B5-vs-B3 by
+15–33%), so both <em>wide</em> priors land far below both
+<em>narrow</em> ones. (Not every wide-vs-narrow <em>cross</em>-pair
+clears 15%—e.g. B5-vs-B2 is <span class="math inline">≈</span>9% for the
+cylinder—so the range is stated for matched-placement widening.)
+<em>Placement:</em> the topological-placement benefit is real but
+shape-dependent, clearest for the cylinder, where topology helps at
+<em>both</em> widths (narrow B2-vs-B3 by 7.8%; wide B4-vs-B5 by <span
+class="math inline">≈</span>4.6<span
+class="math inline"><em>σ</em></span>); for the sphere it is weak
+(narrow: a tie; wide: <span class="math inline">≈</span>2.2<span
+class="math inline"><em>σ</em></span>), and for the cube absent (a tie
+at both widths). B4 is the best single condition at better-or-equal
+geometry, but a width-matched non-topological control recovers most of
+its advantage, so the void gain is chiefly width with a real but
+shape-dependent topological residual. Init-time bias washes out (B1<span
+class="math inline">≈</span>B0).</p>
+<figure id="fig:h2" data-latex-placement="h">
+<p><img src="sphere_bottleneck.png" style="width:32.0%" alt="image" />
+<img src="cube_bottleneck.png" style="width:32.0%" alt="image" /> <img
+src="cylinder_bottleneck.png" style="width:32.0%" alt="image" /></p>
+<figcaption>Bottleneck-to-target over training for the three voids
+(conditions B0–B5): the two <em>wide</em> priors (B4 topological, B5
+non-topological) track well below the two <em>narrow</em> priors (B2,
+B3), and B4/B5 nearly coincide—width, not topology, is the driver.
+Geometry parity: Figure <a href="#fig:sphere-geom"
+data-reference-type="ref"
+data-reference="fig:sphere-geom">4</a>.</figcaption>
+</figure>
+<figure id="fig:sphere-geom" data-latex-placement="h">
+<img src="sphere_geometry.png" style="width:55.0%" />
+<figcaption>Sphere geometry (Chamfer): B4 (spread) sits at or below
+baseline, so the topological gain is not bought with
+geometry.</figcaption>
+</figure>
+<p>Whether this “spread beats concentrate” ordering is special to voids
+or holds across feature dimensions is the subject of Section <a
+href="#sec:results-crossover" data-reference-type="ref"
+data-reference="sec:results-crossover">5.3</a>.</p>
+<h2 id="sec:results-crossover">Does the optimal prior flip with
+dimension?</h2>
+<p>Section <a href="#sec:results-h2" data-reference-type="ref"
+data-reference="sec:results-h2">5.2</a> shows spread beats concentrate
+for voids. Does a low-dimensional feature instead prefer concentration—a
+<em>dimensional crossover</em>? We compare the concentrated (B2) and
+spread (B4) priors—identical but for the width scale—in each shape’s
+decisive dimension, at a per-class <em>headroom</em> budget, and track
+the signed difference <span
+class="math inline"><em>Δ</em> = bottleneck(B4) − bottleneck(B2)</span>
+(Table <a href="#tab:crossover" data-reference-type="ref"
+data-reference="tab:crossover">2</a>); a crossover would show <span
+class="math inline"><em>Δ</em></span> change sign with dimension. We add
+a genus-2 <code>double_torus</code> (<span
+class="math inline"><em>b</em><sub>1</sub> = 4</span>) and
+<code>three_spheres</code> (<span
+class="math inline"><em>b</em><sub>0</sub> = 3</span>).</p>
+<div id="tab:crossover">
+<table>
+<caption>Concentrate vs. spread across feature dimensions: <span
+class="math inline"><em>Δ</em> ≤ 0</span> <em>everywhere</em>, so there
+is no sign flip and no crossover—spread is at least as good as
+concentrating at every dimension, and strictly better for voids and the
+torus. The H2 rows are the paired-seed run of Table <a href="#tab:h2"
+data-reference-type="ref" data-reference="tab:h2">[tab:h2]</a>
+(h2_unified, 5 seeds); the low-dimensional rows are the crossover run
+(torus 5 seeds, others 3). Each row is internally consistent (one run
+per shape).</caption>
+<thead>
+<tr>
+<th style="text-align: left;">target</th>
+<th style="text-align: left;">dim</th>
+<th style="text-align: center;"><span
+class="math inline"><em>N</em></span></th>
+<th style="text-align: center;">B2 concentrate</th>
+<th style="text-align: center;">B4 spread</th>
+<th style="text-align: center;"><span
+class="math inline"><em>Δ</em>=</span>B4<span
+class="math inline">−</span>B2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">sphere</td>
+<td style="text-align: left;">H2</td>
+<td style="text-align: center;">1200</td>
+<td style="text-align: center;">0.0438</td>
+<td style="text-align: center;">0.0357</td>
+<td style="text-align: center;"><span
+class="math inline">−0.0081</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">cube</td>
+<td style="text-align: left;">H2</td>
+<td style="text-align: center;">1200</td>
+<td style="text-align: center;">0.0409</td>
+<td style="text-align: center;">0.0273</td>
+<td style="text-align: center;"><span
+class="math inline">−0.0136</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">cylinder</td>
+<td style="text-align: left;">H2</td>
+<td style="text-align: center;">1200</td>
+<td style="text-align: center;">0.0440</td>
+<td style="text-align: center;">0.0360</td>
+<td style="text-align: center;"><span
+class="math inline">−0.0080</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">torus</td>
+<td style="text-align: left;">H1</td>
+<td style="text-align: center;">700</td>
+<td style="text-align: center;">0.0425</td>
+<td style="text-align: center;">0.0316</td>
+<td style="text-align: center;"><span
+class="math inline">−0.0109</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">two_spheres</td>
+<td style="text-align: left;">H0</td>
+<td style="text-align: center;">700</td>
+<td style="text-align: center;">0.0059</td>
+<td style="text-align: center;">0.0057</td>
+<td style="text-align: center;"><span
+class="math inline">−0.0002</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">three_spheres</td>
+<td style="text-align: left;">H0</td>
+<td style="text-align: center;">700</td>
+<td style="text-align: center;">0.0062</td>
+<td style="text-align: center;">0.0053</td>
+<td style="text-align: center;"><span
+class="math inline">−0.0009</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">double_torus</td>
+<td style="text-align: left;">H1</td>
+<td style="text-align: center;">2000</td>
+<td colspan="3" style="text-align: center;">inconclusive (bottleneck
+pinned; see text)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="no-crossover-spread-wins-or-ties-everywhere.">No crossover;
+spread wins or ties everywhere.</h4>
+<p><span class="math inline"><em>Δ</em>=</span>B4<span
+class="math inline">−</span>B2 (spread minus concentrate, both
+<em>topological</em>) is clearly negative for voids and the torus
+(spread better) and only marginally negative for the two H0
+shapes—within noise of the non-topological control, i.e. a null. Nowhere
+does concentrating win, so the optimal spatial prior does not flip with
+dimension. Because this <span class="math inline"><em>Δ</em></span>
+holds placement fixed (both priors topological), it isolates the effect
+of <em>width</em>; whether the loop spread-win is <em>topological</em>
+needs the non-topological arm, which we add for the torus next (Table <a
+href="#tab:torus2x2" data-reference-type="ref"
+data-reference="tab:torus2x2">3</a>).</p>
+<h4
+id="on-the-loop-width-drives-the-gain-topological-placement-does-not.">On
+the loop, width drives the gain; topological placement does not.</h4>
+<p>A width<span class="math inline">×</span>placement 2<span
+class="math inline">×</span>2 on the torus (Table <a
+href="#tab:torus2x2" data-reference-type="ref"
+data-reference="tab:torus2x2">3</a>), mirroring the void analysis,
+decomposes the spread-win. <em>Width</em> helps massively at either
+placement: widening drops the bottleneck <span
+class="math inline">26%</span> for the topological pair (B2<span
+class="math inline">→</span>B4) and <span class="math inline">33%</span>
+for the non-topological pair (B3<span class="math inline">→</span>B5),
+putting both <em>wide</em> cells far below both <em>narrow</em> ones.
+<em>Placement</em>, by contrast, gives no benefit on the loop—at both
+widths the <em>non-topological</em> prior is better: narrow B3 <span
+class="math inline">0.0397&lt;</span> B2 <span
+class="math inline">0.0425</span> (<span
+class="math inline">7.6<em>σ</em></span>) and wide B5 <span
+class="math inline">0.0267&lt;</span> B4 <span
+class="math inline">0.0316</span> (<span
+class="math inline">3.25<em>σ</em></span>), so the best torus condition
+is a <em>wide non-topological</em> prior. The only distinctly
+topological effect is a harmful one: at this budget only the
+narrow-topological prior (B2) inflates significant-H1 into phantom
+handles (<span class="math inline">4.4</span> vs. a true <span
+class="math inline">2</span>; B3, B4, and B5 all hold <span
+class="math inline">2.0</span>), the concentrate backfire of Section <a
+href="#sec:mechanism" data-reference-type="ref"
+data-reference="sec:mechanism">6</a>. So on the torus, as on the voids,
+<em>width</em> drives the gain—but here topological placement is a small
+cost, not a small residual.</p>
+<div id="tab:torus2x2">
+<table>
+<caption>Torus width<span class="math inline">×</span>placement 2<span
+class="math inline">×</span>2 (5 paired seeds, <span
+class="math inline"><em>N</em> = 700</span>), mirroring Table <a
+href="#tab:h2" data-reference-type="ref"
+data-reference="tab:h2">[tab:h2]</a> for a loop. <em>Width</em> helps at
+either placement (both wide cells far below both narrow); at matched
+<em>placement</em> the <em>non-topological</em> prior is better at both
+widths (narrow <span class="math inline">7.6<em>σ</em></span>, wide
+<span class="math inline">3.25<em>σ</em></span>), so the loop spread-win
+is a width effect. Topological placement’s only distinct effect is
+harmful: the narrow-topological B2 alone inflates significant-H1 into
+phantom handles.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th colspan="2" style="text-align: center;">narrow (<span
+class="math inline"><em>s</em> = 1</span>)</th>
+<th colspan="2" style="text-align: center;">wide (<span
+class="math inline"><em>s</em> = 3</span>)</th>
+<th style="text-align: center;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span>2-3</span>(lr)<span>4-5</span> torus
+(H1), <span class="math inline"><em>N</em> = 700</span></td>
+<td style="text-align: center;">B2 topo</td>
+<td style="text-align: center;">B3 non-topo</td>
+<td style="text-align: center;">B4 topo</td>
+<td style="text-align: center;"><strong>B5 non-topo</strong></td>
+<td style="text-align: center;">B0</td>
+</tr>
+<tr>
+<td style="text-align: left;">bottleneck (tail mean)</td>
+<td style="text-align: center;">0.0425</td>
+<td style="text-align: center;">0.0397</td>
+<td style="text-align: center;">0.0316</td>
+<td style="text-align: center;"><strong>0.0267</strong></td>
+<td style="text-align: center;">0.0409</td>
+</tr>
+<tr>
+<td style="text-align: left;">significant-H1 (true <span
+class="math inline">2</span>)</td>
+<td style="text-align: center;">4.4</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">2.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="components-are-a-null.">Components are a null.</h4>
+<p>For <code>two_spheres</code> and <code>three_spheres</code> neither
+topological prior beats the non-topological control: component
+correctness is governed by the <em>absence</em> of geometry in the
+inter-component gap, which a placement prior does not control
+(Section <a href="#sec:mechanism" data-reference-type="ref"
+data-reference="sec:mechanism">6</a>).</p>
+<h4 id="multi-loop-genus-2-inconclusive.">Multi-loop genus-2:
+inconclusive.</h4>
+<p>On <code>double_torus</code> the decisive-dimension bottleneck is
+identical across all conditions (pinned at <span
+class="math inline">0.0264</span>) and the soup recovers only 2 of the 4
+loops at every budget tried, so this stress test does not discriminate;
+we report it as inconclusive rather than support, and flag a
+higher-resolution re-run as future work.</p>
+<figure id="fig:phantom2" data-latex-placement="h">
+<img src="phantom.png" style="width:60.0%" />
+<figcaption>Significant-feature count vs. true Betti (low-dimensional
+shapes): concentrate (B2) inflates the torus H1 count (phantom handles),
+while spread (B4) <em>and</em> both non-topological priors (narrow B3,
+wide B5; Table <a href="#tab:torus2x2" data-reference-type="ref"
+data-reference="tab:torus2x2">3</a>) hold the true value—so the
+inflation is specific to the narrow-<em>topological</em> prior; the H0
+shapes are unaffected.</figcaption>
+</figure>
+<h1 id="sec:mechanism">Why spreading wins, and why concentration’s harm
+depends on dimension</h1>
+<h4 id="what-the-importance-scale-actually-varies.">What the importance
+scale actually varies.</h4>
+<p>A feature’s death simplex marks <em>where</em> its topology is
+fragile, but the feature’s support is larger—the bounding shell of a
+void, the whole tube of a handle. For the compact targets used here the
+feature’s death scale is of order the shape size, so even the
+concentrated field (<span class="math inline"><em>s</em> = 1</span>)
+already overlaps most of the surface. The scale <span
+class="math inline"><em>s</em></span> therefore varies the
+<em>peakedness</em> of the field—and hence the differential protection
+the keep-map applies to feature geometry—far more than its literal
+spatial coverage. “Spreading” here means “protect the feature’s whole
+support evenly,” not “reach more of the surface.”</p>
+<h4
+id="voids-spreading-width-helps-topological-placement-is-a-small-residual.">Voids:
+spreading (width) helps; topological placement is a small residual.</h4>
+<p>An enclosed void is destroyed by a hole <em>anywhere</em> on the
+2-manifold shell that bounds it, so the void’s support—the geometry
+whose failure collapses it—is the <em>entire</em> shell, which for a
+compact shape is essentially the whole surface. As the peakedness caveat
+above notes, even the concentrated field (<span
+class="math inline"><em>s</em> = 1</span>) already overlaps most of that
+surface, so <em>any</em> wide field—topological or not—approximately
+spreads over the void’s support. The single principle “spread over the
+support” therefore predicts the void effect should look width-driven,
+with topological placement only a residual—and it is: a width-matched
+non-topological control (B5) recovers most of the spread prior’s gain
+(Section <a href="#sec:results-h2" data-reference-type="ref"
+data-reference="sec:results-h2">5.2</a>). That residual—placing the wide
+prior at the void locus (B4) rather than at random (B5)—should track how
+<em>non-uniform</em> the bounding shell is, and it does: largest for the
+cylinder (flat caps and a curved side; <span
+class="math inline">≈</span>4.6<span
+class="math inline"><em>σ</em></span>), smaller for the near-uniform
+sphere (<span class="math inline">≈</span>2.2<span
+class="math inline"><em>σ</em></span>), and absent for the cube (a
+tie).</p>
+<h4 id="the-harm-of-concentrating-and-why-it-scales-with-dimension.">The
+harm of concentrating, and why it scales with dimension.</h4>
+<p>What <em>does</em> depend on dimension is the damage a concentrating
+prior does, and it is governed by how readily over-tessellating a
+<em>single</em> locus <em>fabricates a spurious feature of the same
+dimension</em>:</p>
+<ul>
+<li><p><strong>Loops (1-D): catastrophic, and here placement
+matters.</strong> A loop’s support is a thin tube, far smaller than the
+surface, so a <em>narrow</em> prior cannot spread along it and
+over-tessellates it into phantom handles—the significant-H1 count rises
+above the true value and the bottleneck worsens <em>below baseline</em>
+(Section <a href="#sec:results-crossover" data-reference-type="ref"
+data-reference="sec:results-crossover">5.3</a>). At the headroom budget
+this backfire is <em>narrow-topological</em>-specific: only the
+narrow-topological prior inflates the count (<span
+class="math inline"><em>N</em> = 700</span>: B2 <span
+class="math inline">4.4</span> vs. narrow-random B3 <span
+class="math inline">2.0</span>; Table <a href="#tab:torus2x2"
+data-reference-type="ref" data-reference="tab:torus2x2">3</a>). Only
+under severe budget starvation does narrowness alone begin to
+over-tessellate a random prior too (<span
+class="math inline"><em>N</em> = 400</span>, 3 seeds: B2 <span
+class="math inline">≈ 7.7</span>, B3 <span
+class="math inline">≈ 5.7</span>, true value <span
+class="math inline">2</span>; Figure <a href="#fig:phantom"
+data-reference-type="ref" data-reference="fig:phantom">6</a>). Either
+way the cure is <em>width</em>: a wide prior, topological or not,
+recovers the true count.</p></li>
+<li><p><strong>Voids (2-D): mild.</strong> Over-tessellating one shell
+patch cannot <em>create</em> a second enclosed void, so concentrating
+fabricates no spurious H2; it merely under-protects the rest of the
+shell—an incomplete-protection shortfall behind spreading, never worse
+than baseline.</p></li>
+<li><p><strong>Components (0-D): none.</strong> A component boundary is
+defined by the <em>absence</em> of geometry between shells; no placement
+of triangles on the shells adds or removes a component, so a placement
+prior has no purchase and the result is a null—neither topological prior
+beats the non-topological control (Section <a href="#sec:results-h2"
+data-reference-type="ref"
+data-reference="sec:results-h2">5.2</a>).</p></li>
+</ul>
+<figure id="fig:phantom" data-latex-placement="h">
+<img src="torus_betti_N400.png" style="width:60.0%" />
+<figcaption>Independent budget sweep, torus at the tight budget <span
+class="math inline"><em>N</em> = 400</span>: <em>both</em> narrow priors
+inflate the significant-H1 count above the true value (phantom
+handles)—the narrow-topological B2 more than the narrow-random B3—while
+the baseline recovers the correct count. The over-tessellation is a
+narrowness effect, worsened by topological placement.</figcaption>
+</figure>
+<h4
+id="interpretation-one-principle-two-observable-regimes.">Interpretation:
+one principle, two observable regimes.</h4>
+<p>A single principle organizes all three cases—spread importance over
+the feature’s <em>support</em>, not its localized death simplex—and,
+together with the peakedness caveat, it predicts <em>why</em> voids look
+width-driven while loops look narrowness-driven: the difference is how
+much of the surface the support occupies. A void’s support is the whole
+bounding shell (<span class="math inline">≈</span> the entire compact
+surface), so any wide field already spreads over it and topological
+placement is only a residual (Section <a href="#sec:results-h2"
+data-reference-type="ref" data-reference="sec:results-h2">5.2</a>). A
+loop’s support is a thin tube, far smaller than the surface: a wide
+field does not specifically spread along that tube, and a
+<em>narrow</em> field over-tessellates it into phantom handles—so here
+narrowness is harmful and the wide (spread) prior recovers the correct
+topology (Section <a href="#sec:results-crossover"
+data-reference-type="ref"
+data-reference="sec:results-crossover">5.3</a>). The optimal prior is
+thus spread at every dimension (no crossover); only the observable
+signature—and the harm from being narrow—depends on the support’s
+extent. The genus-2 multi-loop case did not resolve at feasible budgets
+and is reported as inconclusive.</p>
+<h1 id="sec:limitations">Limitations and future work</h1>
+<h4 id="synthetic-targets.">Synthetic targets.</h4>
+<p>All experiments use analytic shapes rendered into multi-view scenes,
+chosen so the ground-truth surface and its Betti numbers are exact and
+so geometry can be held fixed while topology varies—the control that
+makes the blindness result and the topological-vs-non-topological
+comparison clean. The cost is external validity: we do not yet
+demonstrate the method on captured or noisy real scenes, where the
+target persistence diagram itself must be estimated.</p>
+<h4 id="non-determinism-of-the-optimizer.">Non-determinism of the
+optimizer.</h4>
+<p>The CUDA rasterizer’s gradient atomics make vertex positions
+non-reproducible run-to-run; resampling structure (<span
+class="math inline"><em>F</em></span>) is deterministic but vertex
+positions (<span class="math inline"><em>V</em></span>) are not, so
+single-run differences can include a few drifting triangles. We mitigate
+with paired seeds and seed-averaging and a soup-sampled topology metric,
+but absolute numbers carry this run-to-run variance.</p>
+<h4 id="what-the-spread-scale-varies-limited-dynamic-range.">What the
+spread scale varies (limited dynamic range).</h4>
+<p>For the compact targets used here, topological death scales are of
+order the shape size, so even the concentrated field (<span
+class="math inline"><em>s</em> = 1</span>) already overlaps most of the
+surface. The scale <span class="math inline"><em>s</em></span> therefore
+controls the <em>peakedness</em> of the importance field—and thus the
+differential protection applied by the keep-map—rather than its literal
+spatial coverage; our claims about “spreading” should be read in that
+sense. Characterizing the effect on targets whose features are small
+relative to the shape, where coverage and peakedness decouple, is left
+to future work.</p>
+<h4 id="width-vs.-topological-placement.">Width vs. topological
+placement.</h4>
+<p>The void gain is primarily a kernel-width effect: a width-matched
+non-topological control recovers most of it, and the residual
+attributable to topological placement is small and shape-dependent—clear
+for the cylinder, modest for the sphere, absent for the cube (Section <a
+href="#sec:results-h2" data-reference-type="ref"
+data-reference="sec:results-h2">5.2</a>). Establishing that residual
+robustly, and whether it grows for targets with finer or off-centre
+voids, would need more shapes and seeds.</p>
+<h4 id="precomputed-non-differentiable-prior.">Precomputed,
+non-differentiable prior.</h4>
+<p>The importance field is distilled once from the target and is
+<em>not</em> differentiated through; the method biases sampling, it does
+not flow a topological gradient. Making persistent homology
+differentiable so the topological signal can backpropagate into vertex
+positions—rather than only steer resampling—is the natural next phase,
+building on existing differentiable-persistence machinery <span
+class="citation"
+data-cites="gabrielsson2020topologylayer carriere2021optimizing poulenard2018shapematching">(Brüel
+Gabrielsson et al. 2020; Carrière et al. 2021; Poulenard et al.
+2018)</span>.</p>
+<h4 id="resolving-multi-loop-genus-2-targets.">Resolving multi-loop /
+genus-2 targets.</h4>
+<p>Our genus-2 <code>double_torus</code> stress test was inconclusive:
+at every feasible budget the soup recovered only 2 of its 4 loops and
+the decisive-dimension bottleneck did not discriminate between
+conditions (Section <a href="#sec:results-crossover"
+data-reference-type="ref"
+data-reference="sec:results-crossover">5.3</a>). Strengthening the
+spread-vs-concentrate finding on a richer multi-loop target needs a
+higher-resolution or longer-schedule re-run, which we leave to future
+work.</p>
+<div id="refs" class="references csl-bib-body hanging-indent"
+role="list">
+<div id="ref-alliez2003anisotropic" class="csl-entry" role="listitem">
+Alliez, Pierre, David Cohen-Steiner, Olivier Devillers, Bruno Lévy, and
+Mathieu Desbrun. 2003. <span>“Anisotropic Polygonal Remeshing.”</span>
+<em>ACM Transactions on Graphics</em> 22 (3): 485–93.
+</div>
+<div id="ref-attene2010repair" class="csl-entry" role="listitem">
+Attene, Marco. 2010. <span>“A Lightweight Approach to Repairing
+Digitized Polygon Meshes.”</span> <em>The Visual Computer</em> 26 (11):
+1393–406.
+</div>
+<div id="ref-botsch2004remeshing" class="csl-entry" role="listitem">
+Botsch, Mario, and Leif Kobbelt. 2004. <span>“A Remeshing Approach to
+Multiresolution Modeling.”</span> <em>Eurographics/ACM SIGGRAPH
+Symposium on Geometry Processing (SGP)</em>.
+</div>
+<div id="ref-gabrielsson2020topologylayer" class="csl-entry"
+role="listitem">
+Brüel Gabrielsson, Rickard, Bradley J. Nelson, Anjan Dwaraknath, and
+Primoz Skraba. 2020. <span>“A Topology Layer for Machine
+Learning.”</span> <em>International Conference on Artificial
+Intelligence and Statistics (AISTATS)</em>, Proceedings of machine
+learning research, vol. 108: 1553–63.
+</div>
+<div id="ref-bruel2020toporecon" class="csl-entry" role="listitem">
+Brüel-Gabrielsson, Rickard, Vignesh Ganapathi-Subramanian, Primoz
+Skraba, and Leonidas J. Guibas. 2020. <span>“Topology-Aware Surface
+Reconstruction for Point Clouds.”</span> <em>Computer Graphics
+Forum</em> 39 (5): 197–207.
+</div>
+<div id="ref-carriere2021optimizing" class="csl-entry" role="listitem">
+Carrière, Mathieu, Frédéric Chazal, Marc Glisse, Yuichi Ike, Hariprasad
+Kannan, and Yuhei Umeda. 2021. <span>“Optimizing Persistent Homology
+Based Functions.”</span> <em>International Conference on Machine
+Learning (ICML)</em>, Proceedings of machine learning research, vol.
+139.
+</div>
+<div id="ref-clough2022topoloss" class="csl-entry" role="listitem">
+Clough, James R., Nicholas Byrne, Ilkay Oksuz, Veronika A. Zimmer, Julia
+A. Schnabel, and Andrew P. King. 2022. <span>“A Topological Loss
+Function for Deep-Learning Based Image Segmentation Using Persistent
+Homology.”</span> <em>IEEE Transactions on Pattern Analysis and Machine
+Intelligence</em> 44 (12): 8766–78.
+</div>
+<div id="ref-cohensteiner2007stability" class="csl-entry"
+role="listitem">
+Cohen-Steiner, David, Herbert Edelsbrunner, and John Harer. 2007.
+<span>“Stability of Persistence Diagrams.”</span> <em>Discrete &amp;
+Computational Geometry</em> 37 (1): 103–20.
+</div>
+<div id="ref-dunyach2013adaptive" class="csl-entry" role="listitem">
+Dunyach, Marion, David Vanderhaeghe, Loïc Barthe, and Mario Botsch.
+2013. <span>“Adaptive Remeshing for Real-Time Mesh Deformation.”</span>
+<em>Eurographics 2013 — Short Papers</em>.
+</div>
+<div id="ref-edelsbrunner2010book" class="csl-entry" role="listitem">
+Edelsbrunner, Herbert, and John L. Harer. 2010. <em>Computational
+Topology: An Introduction</em>. American Mathematical Society.
+</div>
+<div id="ref-edelsbrunner2002persistence" class="csl-entry"
+role="listitem">
+Edelsbrunner, Herbert, David Letscher, and Afra Zomorodian. 2002.
+<span>“Topological Persistence and Simplification.”</span> <em>Discrete
+&amp; Computational Geometry</em> 28 (4): 511–33.
+</div>
+<div id="ref-edelsbrunner1994alphashapes" class="csl-entry"
+role="listitem">
+Edelsbrunner, Herbert, and Ernst P. Mücke. 1994.
+<span>“Three-Dimensional Alpha Shapes.”</span> <em>ACM Transactions on
+Graphics</em> 13 (1): 43–72.
+</div>
+<div id="ref-garland1997qem" class="csl-entry" role="listitem">
+Garland, Michael, and Paul S. Heckbert. 1997. <span>“Surface
+Simplification Using Quadric Error Metrics.”</span> <em>Proceedings of
+SIGGRAPH 97</em>, 209–16.
+</div>
+<div id="ref-held2025trianglesplatting" class="csl-entry"
+role="listitem">
+Held, Jan, Renaud Vandeghen, Adrien Deliège, et al. 2025. <em>Triangle
+Splatting for Real-Time Radiance Field Rendering</em>. arXiv:2505.19175.
+</div>
+<div id="ref-hoppe1996progressive" class="csl-entry" role="listitem">
+Hoppe, Hugues. 1996. <span>“Progressive Meshes.”</span> <em>Proceedings
+of SIGGRAPH 96</em>, 99–108.
+</div>
+<div id="ref-hu2019topopreserving" class="csl-entry" role="listitem">
+Hu, Xiaoling, Fuxin Li, Dimitris Samaras, and Chao Chen. 2019.
+<span>“Topology-Preserving Deep Image Segmentation.”</span> <em>Advances
+in Neural Information Processing Systems 32 (NeurIPS)</em>.
+</div>
+<div id="ref-ju2004repair" class="csl-entry" role="listitem">
+Ju, Tao. 2004. <span>“Robust Repair of Polygonal Models.”</span> <em>ACM
+Transactions on Graphics</em> 23 (3): 888–95.
+</div>
+<div id="ref-kato2018neural" class="csl-entry" role="listitem">
+Kato, Hiroharu, Yoshitaka Ushiku, and Tatsuya Harada. 2018.
+<span>“Neural <span>3D</span> Mesh Renderer.”</span> <em>IEEE/CVF
+Conference on Computer Vision and Pattern Recognition (CVPR)</em>,
+3907–16.
+</div>
+<div id="ref-kerbl2023gaussians" class="csl-entry" role="listitem">
+Kerbl, Bernhard, Georgios Kopanas, Thomas Leimkühler, and George
+Drettakis. 2023. <span>“<span>3D</span> <span>Gaussian</span> Splatting
+for Real-Time Radiance Field Rendering.”</span> <em>ACM Transactions on
+Graphics</em> 42 (4): 139:1–14.
+</div>
+<div id="ref-laine2020nvdiffrast" class="csl-entry" role="listitem">
+Laine, Samuli, Janne Hellsten, Tero Karras, Yeongho Seol, Jaakko
+Lehtinen, and Timo Aila. 2020. <span>“Modular Primitives for
+High-Performance Differentiable Rendering.”</span> <em>ACM Transactions
+on Graphics</em> 39 (6): 194:1–14.
+</div>
+<div id="ref-liu2019softras" class="csl-entry" role="listitem">
+Liu, Shichen, Tianye Li, Weikai Chen, and Hao Li. 2019. <span>“Soft
+Rasterizer: A Differentiable Renderer for Image-Based <span>3D</span>
+Reasoning.”</span> <em>IEEE/CVF International Conference on Computer
+Vision (ICCV)</em>, 7708–17.
+</div>
+<div id="ref-loper2014opendr" class="csl-entry" role="listitem">
+Loper, Matthew M., and Michael J. Black. 2014.
+<span>“<span>OpenDR</span>: An Approximate Differentiable
+Renderer.”</span> <em>European Conference on Computer Vision
+(ECCV)</em>, 154–69.
+</div>
+<div id="ref-maria2014gudhi" class="csl-entry" role="listitem">
+Maria, Clément, Jean-Daniel Boissonnat, Marc Glisse, and Mariette
+Yvinec. 2014. <span>“The <span>Gudhi</span> Library: Simplicial
+Complexes and Persistent Homology.”</span> <em>International Congress on
+Mathematical Software (ICMS)</em>, Lecture notes in computer science,
+vol. 8592: 167–74.
+</div>
+<div id="ref-nicolet2021largesteps" class="csl-entry" role="listitem">
+Nicolet, Baptiste, Alec Jacobson, and Wenzel Jakob. 2021. <span>“Large
+Steps in Inverse Rendering of Geometry.”</span> <em>ACM Transactions on
+Graphics</em> 40 (6).
+</div>
+<div id="ref-palfinger2022remeshing" class="csl-entry" role="listitem">
+Palfinger, Werner. 2022. <span>“Continuous Remeshing for Inverse
+Rendering.”</span> <em>Computer Animation and Virtual Worlds</em> 33
+(5): e2101.
+</div>
+<div id="ref-poulenard2018shapematching" class="csl-entry"
+role="listitem">
+Poulenard, Adrien, Primoz Skraba, and Maks Ovsjanikov. 2018.
+<span>“Topological Function Optimization for Continuous Shape
+Matching.”</span> <em>Computer Graphics Forum</em> 37 (5): 13–25.
+</div>
+<div id="ref-sharf2007topologyaware" class="csl-entry" role="listitem">
+Sharf, Andrei, Thomas Lewiner, Gil Shklarski, Sivan Toledo, and Daniel
+Cohen-Or. 2007. <span>“Interactive Topology-Aware Surface
+Reconstruction.”</span> <em>ACM Transactions on Graphics</em> 26 (3):
+43:1–10.
+</div>
+</div>
+</body>
+</html>

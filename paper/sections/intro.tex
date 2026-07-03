@@ -1,0 +1,72 @@
+% ===== 1. Introduction (DRAFTABLE) ==========================================
+\section{Introduction}
+\label{sec:intro}
+
+Differentiable rasterization optimizes an explicit 3D representation directly
+against multi-view images by backpropagating a photometric loss through the
+rasterizer~\cite{loper2014opendr,kato2018neural,liu2019softras,laine2020nvdiffrast}.
+A \emph{triangle soup}---an unstructured collection of triangles
+with no shared connectivity---is an attractive such representation: it is cheap
+to render, places no manifold constraint on the geometry, and supports
+\emph{adaptive resampling}, a periodic in-loop step that prunes
+poorly-contributing triangles and respawns new ones to redistribute resolution
+where the image residual demands it, in the spirit of the adaptive
+densify-and-prune loops of explicit-primitive and mesh-evolution
+pipelines~\cite{kerbl2023gaussians,held2025trianglesplatting,nicolet2021largesteps,palfinger2022remeshing}.
+% NOTE: the DiffSoup renderer/trainer this instantiates is our own (unpublished)
+% system; add its citation here once it is public.
+
+Such pipelines are tuned to minimize geometric error, and geometric error is
+exactly what they reduce. But geometry and \emph{topology} are different: a
+reconstruction can be everywhere close to the target surface yet wrong in genus,
+in the number of connected components, or in whether an enclosed void survives.
+Our first contribution is to show that the standard pipeline is
+\emph{topologically blind} in a precise, measurable sense. We construct matched
+pairs of candidate reconstructions whose Chamfer distance to the ground truth is
+\emph{equal by construction} but whose topology differs, and show that
+Chamfer---and even Hausdorff---cannot separate them, whereas the
+bottleneck distance between persistence diagrams can
+(Section~\ref{sec:results-blindness}). We further observe that a topological
+bias injected only at \emph{initialization} is erased: the first resampling step
+washes it out, so the final topology is independent of the initial bias.
+% src(qualitative, washout/blindness): D:\Project\CG-Soup-Topology\figures\summary.md
+% TODO(human): verify the one-line phrasing of the washout claim matches how you
+% want to state Phase-1 finding F1 (init-bias erased by first resample ~step 100).
+
+Two consequences follow, and they frame the paper. First, correcting topology
+requires guidance applied \emph{in the loop}, not at initialization. Second,
+detecting whether topology is correct requires a metric that sees it---a
+persistence-based measure rather than a point-to-point distance.
+
+We introduce \emph{topology-aware adaptive resampling}
+(Section~\ref{sec:method}): a precomputed importance field that localizes the
+target's persistent features and biases (i) where new triangles respawn and
+(ii) which triangles are protected from pruning. The method is budget-neutral
+(the triangle count is held fixed) and reduces \emph{exactly} to the baseline
+when its single strength knob is set to zero. Within this one mechanism we vary a
+\emph{concentrate$\leftrightarrow$spread} scale on the importance field, which
+lets us ask not merely whether topological guidance helps, but \emph{what spatial
+form} the guidance should take.
+
+Our central finding concerns the \emph{spatial form} of that guidance. A
+topological prior helps voids (H2), but chiefly through \emph{width}: a spread prior
+lowers bottleneck-to-target by 33--53\% across spheres, cubes, and capped cylinders,
+yet a width-matched non-topological control recovers most of it---so the void gain is
+mainly a spread effect, with only a small, shape-dependent topological residual
+(Section~\ref{sec:results-h2}).
+% src(33--53% = B4 vs B0: sphere 33 / cube 53 / cylinder 34): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\h2_unified\report\results.json
+But the natural hypothesis---that high-dimensional features want a
+\emph{concentrating} prior and low-dimensional ones a \emph{spreading} one, a
+dimensional crossover---turns out to be \emph{false}. Comparing the two priors
+directly (Section~\ref{sec:results-crossover}), a spread prior is at least as good
+as concentrating at every dimension and strictly better for voids and loops;
+concentrating on a one-dimensional loop actively backfires, over-tessellating it
+into phantom handles. Across dimensions the benefit tracks \emph{width}, not
+topological placement---a width-matched non-topological prior does at least as well
+(better, on the loop)---so the operative takeaway is to \emph{spread} resampling
+resolution, not to target topology per se. The unifying reason (Section~\ref{sec:mechanism}) is that a
+feature's death-simplex is only a localized witness of its support, so spreading
+importance over that support is the right bias---while the \emph{harm} from
+concentrating is what depends on dimension. This turns ``does topology help?''
+into a prescription for how to shape the prior.
+% src(spread>concentrate): D:\Project\CG-Soup-for-Digital-Dentistry\output\synth\crossover\crossover_report\results.json

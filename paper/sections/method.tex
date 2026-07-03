@@ -1,0 +1,84 @@
+% ===== 3. Method (DRAFTABLE from code) ======================================
+% Grounded in: methods/topo_importance.py and methods/topo_resampling.py.
+% No experimental numbers in this section.
+\section{Topology-aware adaptive resampling}
+\label{sec:method}
+
+The method has two offline-then-online parts: a \emph{precomputed importance
+field} distilled once from the target, and a \emph{resampling policy} that
+consumes the field inside the training loop. Neither touches the renderer, and
+both are budget-neutral.
+
+\subsection{The importance field}
+\label{sec:method-field}
+% src(design): methods/topo_importance.py (build_importance_field, _localize_features)
+Let $P$ be a seeded surface sample of the target. We compute its persistence
+diagram~\cite{edelsbrunner2002persistence} with a GUDHI~\cite{maria2014gudhi}
+alpha complex~\cite{edelsbrunner1994alphashapes} and keep the \emph{significant}
+features---intervals whose lifetime exceeds a self-calibrating multiple of the median
+nearest-neighbour spacing. Each significant feature $f$ of homological dimension
+$d_f$ is \emph{localized} in space using the persistence pairs together with the
+alpha-complex point coordinates: an H1 loop is located by the edge/triangle that
+births/fills it, an H2 void by the tetrahedron that fills it (which sits on the
+bounding shell), and an H0 component by the edge that merges it. This yields, per
+feature, a set of 3D kernel centers $\{c\}_f$ on the target surface.
+% TODO(human): if you include a localization figure, add it here.
+
+Each feature contributes an isotropic Gaussian splat, and the field is evaluated
+on a dense surface sample $Q$ (an ``option-B surface splat'') so that importance
+is tied to the manifold the soup must reproduce:
+\begin{equation}
+  r(q) \;=\; \sum_{f}\; w_f \sum_{c\in\{c\}_f}
+            \exp\!\Big(-\tfrac{\lVert q-c\rVert^2}{2\,\sigma_f^2}\Big),
+  \qquad q\in Q,
+  \label{eq:splat}
+\end{equation}
+with per-feature weight $w_f$ equal to the (normalized) persistence and radius
+$\sigma_f$ set to the feature's own death scale---its alpha circumradius
+$\sqrt{\text{death}_f}$, clamped to a spacing floor and a bounding-box-fraction
+ceiling. The per-dimension fields are normalized to $[0,1]$ and a query point
+takes the value of its nearest sample in $Q$.
+
+\paragraph{Concentrate$\leftrightarrow$spread scale.}
+% src: methods/topo_importance.py (_localize_features: sigma=s*sigma_base, w=life/s**2)
+We add a single scale $s\!\ge\!1$ that widens every kernel while preserving the
+injected surface mass: $\sigma_f \to s\,\sigma_f$ and
+$w_f \to w_f/s^2$. Because a 2D Gaussian's surface integral scales as
+$w\sigma^2$, the total importance mass $\sum_f w_f\sigma_f^2$ is invariant in $s$;
+$s$ changes only the spatial \emph{spread} of the prior, not how much of it there
+is. By construction $s\!=\!1$ is the \emph{concentrated} field and is numerically
+identical to the field used without the knob.
+% TODO(human): the mass-invariance and s=1 identity were checked empirically
+% (Sigma w sigma^2 constant across s; s=1 field byte-identical to baseline field).
+% Cite that check or move it to the appendix if you want it in-paper.
+
+\subsection{The resampling policy}
+\label{sec:method-policy}
+% src(design): methods/topo_resampling.py (TopoResamplePolicy: keep_map, densify_and_rebalance)
+The baseline resampler periodically (i) \emph{prunes} the least screen-visible
+triangles and (ii) \emph{respawns} triangles by subdividing large screen-space
+edges. Our policy biases both with the field via one strength knob
+$\lambda_{\text{topo}}$, and keeps the triangle count $N$ fixed:
+
+\begin{itemize}
+  \item \textbf{Prune protection (keep-map).} Faces are ranked by
+  $\text{visibility} + \lambda_{\text{topo}}\,\kappa\,\mathrm{imp}$, where
+  $\mathrm{imp}$ is the field value at the face centroid and $\kappa$ a
+  visibility-scale factor; the same number of faces is removed as in the baseline,
+  so important faces are protected without changing the budget.
+  \item \textbf{Budget-neutral densification.} After the unchanged baseline split,
+  we add up to $\mathrm{cap}=\lambda_{\text{topo}}\!\cdot\!c\!\cdot\!N$ extra
+  subdivisions of the highest-importance visible faces, then remove exactly
+  $\mathrm{cap}$ faces with the protective keep-map. Net face count is unchanged;
+  the effect is a pure trade of low-importance triangles for high-importance ones.
+\end{itemize}
+
+When $\lambda_{\text{topo}}=0$ both levers are bypassed and the policy reduces
+\emph{exactly} to the baseline resampler (bit-identical resampling decisions);
+this is condition B0 below. The policy is field-agnostic: swapping which field it
+reads (concentrated topological, spread topological, or a non-topological control)
+gives the different experimental conditions of Section~\ref{sec:setup} without any
+other change.
+% TODO(human): confirm you want the keep-map / densify formulae at this level of
+% detail (vs. an algorithm box). Symbols kappa, c are protect-scale and
+% split_cap_frac in the code.
