@@ -438,3 +438,58 @@ pushing the REAL void toward the diagonal.
 Matrix: sphere & torus (decisive): C0/C1/C2/C3/C5 × 5 seeds @N=1200/700;
 cube & two_spheres: C0/C1/C2 × 3 seeds @N=1200/700. ρ=0.1, ramp 0.2:0.5,
 2,500 steps. ~65 fresh runs, resumable (`output/synth/topo3/wave1.log`).
+
+---
+
+## Appendix D — Stage 3d wave-1 results (2026-07-07): **verdict PASS on H2 and H1**
+
+68/68 runs completed, no failures. Tail-mean bottleneck-to-target in the
+discriminating dim (mean ± sd over seeds; Chamfer% in parentheses).
+Source: `output/synth/topo3/quicklook.json`.
+
+| shape (dim, N) | C0 baseline | C1 topo loss | C2 norm-matched control | C3 no-ramp | C5 loss+B4 |
+|---|---|---|---|---|---|
+| sphere (H2, 1200, 5s) | .0623±.0063 (0.50) | **.0156±.0013, 4.0×** (0.46) | .1372, b₂ intact but 2.2× WORSE (1.56) | .0151±.0004 | **.0082±.0007, 7.6×** (0.42) |
+| cube (H2, 1200, 3s) | .0582±.0047 (1.05) | **.0074±.0011, 7.9×** (0.92) | .1346, **b₂ 1→0** (2.94) | — | — |
+| torus (H1, 700, 5s) | .0424±.0031 (0.54) | **.0180±.0016, 2.4×** (0.51) | .0457, **b₁ 2→1** (1.05) | .0155±.0014 | **.0133±.0004, 3.2×** (0.50) |
+| two_spheres (H0, 700, 3s) | .0065±.0007 (0.85) | .0007±.0002, 9.3× (0.54) | .0008 — TIES C1 (1.94) | — | — |
+
+**Verdict rule (C1 < C0 AND C1 < C2 at Chamfer parity, seed-averaged):**
+
+- **sphere H2: PASS** (~7σ vs C0; control 2.2× worse than baseline).
+- **cube H2: PASS** (control destroys the void outright).
+- **torus H1: PASS** — **the class where the resampling channel failed.**
+  Phase 2's concentrated prior manufactured phantom handles and its spread
+  prior never beat the random control; the loss channel cuts H1 error 2.4×
+  with **zero phantom handles in all 5 seeds** (#sig H1 = 2 throughout) while
+  the control collapses a loop (b₁ 2→1).
+- **two_spheres H0: NOT topology-specific** — C1 ties the generic control on
+  the diagram metric (the topological increment shows only in Chamfer, 0.54
+  vs 1.94). Third consecutive H0 null across channels (Phase 2, 2b, 3) — by
+  now a *finding*: component structure is helped by any spreading pressure,
+  not by topological information.
+
+**Cross-cutting observations**
+
+1. **The loss channel is stronger than the prior channel on its home turf**:
+   C1 sphere .0156 vs Phase-2b's best resampling arm B4 ≈ .038; and it
+   succeeds on H1 where the prior never did.
+2. **The channels STACK (C5)**: loss + B4 prior is best everywhere tested —
+   sphere .0082 (7.6× vs C0, ~2× vs C1 alone), torus .0133 — with the best
+   Chamfer too. Allocation (prior) and value-tuning (loss) are complementary
+   mechanisms, as hypothesized in §2.
+3. **Curriculum is unnecessary (C3 ≈ C1 on both decisive shapes)** once
+   λ_peak is set by gradient-ratio calibration — the advisor's blow-up
+   concern does not materialize; calibration, not scheduling, is what makes
+   the knob safe. (C3 was even marginally tighter than C1.)
+4. **The C2 control is informative in both directions**: it damages topology
+   (void death pinned at the repulsion equilibrium — bottleneck identical
+   across seeds; b₂/b₁ losses on cube/torus) — so C1's wins cannot be
+   "generic vertex regularization". Caveat: it is an aggressive control; a
+   gentler variant (e.g. half-r0) is worth one arm in wave 2 if a referee-
+   proof version is needed.
+
+**Remaining for 3d/3e**: double_torus stretch (2 seeds), optional gentler-C2
+arm, per-seed statistics + plots via a proper report script (extend
+`topo_eval_report.py` labels), PHASE3_STATUS.md + Thai .docx, paper-2
+skeleton. C4 (curvature-weighted) still deferred on the weight-mask feature.
