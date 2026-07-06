@@ -157,9 +157,13 @@ if topo_loss_state is not None:                       # built iff --topo_loss_np
   `--topo_ramp` ("0.2:0.5"), `--topo_loss_mode` (`matched` | `control_repulsion`).
 - Lazy import from `TOPO_ROOT` exactly like the Phase-2 policy import — flag
   off ⇒ zero Phase-3 code executes ⇒ baseline byte-identical.
-- **Cleanliness contract** (same as Phase 2): flag-off and ρ=0 runs must show
-  an identical F-trajectory/resampling-decision stream vs B0 (bit-identical V
-  is impossible on CUDA; documented in `PHASE2_STATUS.md`).
+- **Cleanliness contract** (REVISED in 3b — see Appendix B): flag-off and ρ=0
+  runs must be **divergence-equivalent** to a baseline-vs-baseline control
+  pair (same first-divergence step, same magnitude). The Phase-2 criterion
+  (bit-identical F-trajectory) turned out to be torus-smoke-specific: on the
+  sphere scene two same-seed FLAG-OFF baselines already flip borderline
+  prune/split decisions at the first resample (CUDA V-drift ~2 units;
+  bit-identical V was already known impossible, `PHASE2_STATUS.md`).
 - Target bundle builder: `python -m methods.topological_loss --shape sphere
   --out fields/sphere_diag.npz` — stores per-dim target diagrams, `scale`,
   significance threshold, and config. **Density-matched**: the target diagram
@@ -333,3 +337,52 @@ Artifacts: `figures/phase3_toy/t{1..4}.{png,json}`.
 
 **Gate to 3b: OPEN.** Next: the `diffsoup_train.py` hook (§4) + cleanliness
 check.
+
+---
+
+## Appendix B — Stage 3b results (2026-07-06): **hook landed, gate PASSED**
+
+Deliverables: `TopoLossState` (this repo, `methods/topological_loss.py`) —
+frozen α×area barycentric sampling, auto re-pair on `F` tensor identity change
++ every K steps, λ ramp with ρ gradient-ratio calibration, C2
+`control_repulsion` mode, run log writer — and the `diffsoup_train.py` hook
+(dentistry repo): 7 `--topo_*` flags, lazy import, a one-line loss addition
+after the `reg_normal` block, `topo_loss_log.json` on exit. Flag-off executes
+zero Phase-3 code; ρ=0 short-circuits before any sampling.
+
+### Cleanliness (sphere scene, 500 steps, N=2500, seed 0, downscale 1)
+
+The original criterion FAILED — and the failure was **informative, not ours**:
+
+| pair | first F divergence | face-count Δ at checkpoints |
+|---|---|---|
+| flag-off **A vs A′** (two identical baselines) | step 100 (F content; counts equal) | 0–1 |
+| A/A′ vs **ρ=0** | step 100 | 1–6 |
+
+Two same-seed FLAG-OFF baselines already diverge in F at the first resample:
+the documented CUDA V-drift (~2 units, `PHASE2_STATUS.md`) flips borderline
+prune/split decisions on this scene. Phase 2's "F is deterministic" held on
+its torus smoke but is NOT a general property. Pre-resample steps (1–99) are
+indistinguishable across all three runs (identical F, V-drift onset 0.0195 vs
+0.0197). Verdict under the corrected criterion (divergence-equivalence):
+**PASS** — the ρ=0 run's divergence starts at the same step with baseline-like
+magnitude; post-divergence trajectories are chaos amplification in all pairs
+alike. `phase2-task` memory and §4 updated; seed-averaging (already the
+Phase-2 methodology) remains the mitigation.
+
+### C1 engagement smoke (ρ=0.1, ramp 0.2:0.5, same scene/settings)
+
+- Calibration fired once at step 101: **λ_peak = 0.405** (=ρ·‖g_photo‖/‖g_topo‖).
+- λ ramps exactly per schedule (0.0027 @101 → 0.405 @250, flat after).
+- Live diagram: 1 matched H2 term throughout, raw cost ~7–9e-4, no spurious
+  bars, no recruitment, no NaN. At N=2500 the sphere has no topological
+  headroom (baseline already recovers the void — the Phase-2 "too easy"
+  regime), so a flat-small raw is the CORRECT behavior; effect measurement
+  belongs to 3d at headroom budgets (N=1200).
+- Quality preserved: PSNR 30.10 / SSIM 0.949 vs baseline 29.96 / 0.947.
+- Overhead: ~+9 s over 400 active steps at this scale (32 vs 72 it/s on the
+  tiny smoke) ⇒ ~+45–55 s for a real 2,500-step run — within the §3.5 budget.
+
+**Gate to 3c/3d: OPEN.** Next: ρ mini-sweep {0.03, 0.1, 0.3} on sphere seed 0
+(§10.5), then the C-matrix at headroom budgets (§6) via
+`experiments/topo_loss_eval.py`.

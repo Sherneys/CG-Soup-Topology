@@ -463,6 +463,175 @@ def matched_topo_loss(X: torch.Tensor, bundle: TargetBundle, *,
     return eval_topo_loss(X, plan), plan
 
 
+# ── training integration (stage 3b): TopoLossState ────────────────────────
+
+class TopoLossState:
+    """Owns the topological loss during a DiffSoup training run
+    (PHASE3_PLAN.md §3.3-3.6, §4). The train loop adds ONE line:
+
+        loss = loss + state.term(V_single, F, i_iter, photo_loss=loss,
+                                 face_alpha_fn=...)
+
+    - Differentiable sampling (§3.3): per refresh, faces are drawn
+      sigmoid(alpha)×area-weighted and barycentric coordinates frozen; the
+      positions X_j = Σ_i w_ij · V[F[f_j], i] are recomputed from live V every
+      step, so gradients reach the vertices while the combinatorics stay fixed.
+    - Refresh (§3.5): re-sample + re-pair every `every` steps, and
+      automatically whenever `F` is a DIFFERENT TENSOR OBJECT — resampling
+      replaces V/F wholesale, so every recorded index would be stale.
+    - λ(t) (§3.6): 0 before ramp[0]·total steps, linear to λ_peak at
+      ramp[1]·total. λ_peak is set ONCE by gradient-ratio calibration at the
+      first active step with a usable gradient:
+      λ_peak = ρ·‖∇V L_photo‖ / ‖∇V L_topo‖. ρ=0 returns a constant zero
+      before any Phase-3 work happens (cleanliness contract).
+    - mode="control_repulsion" (C2): short-range repulsion on the SAME sampled
+      points with the SAME ρ calibration — the norm-matched non-topological
+      control of §6. Zero topology, identical channel.
+    """
+
+    def __init__(self, bundle_path, *, rho: float = 0.1, every: int = 10,
+                 n_pts: int = 2048, dims: Optional[Sequence[int]] = None,
+                 ramp: Sequence[float] = (0.2, 0.5), total_steps: int = 2500,
+                 mode: str = "matched", seed: int = 0):
+        self.bundle = (TargetBundle.load(bundle_path)
+                       if isinstance(bundle_path, str) else bundle_path)
+        self.rho = float(rho)
+        self.every = max(int(every), 1)
+        self.n_pts = int(n_pts)
+        self.dims = tuple(dims) if dims else None
+        self.ramp = (float(ramp[0]), float(ramp[1]))
+        self.total = int(total_steps)
+        if mode not in ("matched", "control_repulsion"):
+            raise ValueError(f"unknown topo-loss mode {mode!r}")
+        self.mode = mode
+        self.seed = int(seed)
+        self.lam_peak: Optional[float] = None
+        self.log: list = []                    # (step, lam, raw, n_terms)
+        self._plan: Optional[LossPlan] = None
+        self._faces = self._bary = None        # frozen sampling (torch)
+        self._F_ref = None
+        self._last_refresh: Optional[int] = None
+        self._n_refresh = 0
+        self._rep = None                       # (i_idx, j_idx, r0) for C2
+        if self.n_pts != self.bundle.n_points:
+            print(f"[topo-loss] WARNING: n_pts={self.n_pts} != bundle M="
+                  f"{self.bundle.n_points} — density-matching contract broken "
+                  f"(PHASE3_PLAN.md §4)")
+
+    # -- schedule ---------------------------------------------------------
+
+    def _ramp_mult(self, step: int) -> float:
+        s0, s1 = self.ramp[0] * self.total, self.ramp[1] * self.total
+        if step < s0:
+            return 0.0
+        if step >= s1 or s1 <= s0:
+            return 1.0
+        return (step - s0) / (s1 - s0)
+
+    # -- frozen sampling + plan -------------------------------------------
+
+    def _positions(self, V: torch.Tensor) -> torch.Tensor:
+        tri = V[self._F_ref[self._faces]]                  # (M,3,3)
+        return (self._bary.unsqueeze(-1) * tri).sum(dim=1)
+
+    def _refresh(self, V: torch.Tensor, F: torch.Tensor, face_alpha) -> None:
+        self._F_ref = F
+        self._n_refresh += 1
+        rng = np.random.default_rng(self.seed * 1_000_003 + self._n_refresh)
+        with torch.no_grad():
+            tri = V.detach()[F]
+            area = torch.linalg.norm(
+                torch.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0], dim=-1),
+                dim=-1)                                    # ∝ face area
+            w = area if face_alpha is None else area * face_alpha.clamp_min(1e-6)
+            p = w.double().cpu().numpy()
+        p = np.maximum(p, 0.0)
+        s = p.sum()
+        p = np.full_like(p, 1.0 / len(p)) if s <= 0 else p / s
+        f = rng.choice(len(p), size=self.n_pts, p=p)
+        u, v = rng.random((self.n_pts, 1)), rng.random((self.n_pts, 1))
+        su = np.sqrt(u)                                    # uniform on each triangle
+        bary = np.concatenate([1.0 - su, su * (1.0 - v), su * v], axis=1)
+        self._faces = torch.as_tensor(f, device=V.device, dtype=torch.long)
+        self._bary = torch.as_tensor(bary, device=V.device, dtype=V.dtype)
+        X = self._positions(V.detach()).double().cpu().numpy()
+        if self.mode == "matched":
+            self._plan = plan_topo_loss(X, self.bundle, dims=self.dims)
+        else:                                              # C2: frozen kNN pairs
+            dd, jj = cKDTree(X).query(X, k=5)
+            ii = np.repeat(np.arange(len(X)), 4)
+            jj = jj[:, 1:].reshape(-1)
+            keep = ii < jj
+            self._rep = (torch.as_tensor(ii[keep], device=V.device),
+                         torch.as_tensor(jj[keep], device=V.device),
+                         float(np.median(dd[:, 1]) * 2.0))
+
+    # -- raw loss ---------------------------------------------------------
+
+    def _raw(self, V: torch.Tensor) -> torch.Tensor:
+        X = self._positions(V)
+        if self.mode == "matched":
+            return eval_topo_loss(X.double(), self._plan).to(V.dtype)
+        ii, jj, r0 = self._rep
+        d = torch.linalg.norm(X[ii] - X[jj], dim=-1)
+        return torch.relu(r0 - d).pow(2).mean().to(V.dtype)
+
+    # -- the one-line API --------------------------------------------------
+
+    def term(self, V: torch.Tensor, F: torch.Tensor, step: int, *,
+             photo_loss: Optional[torch.Tensor] = None,
+             face_alpha_fn=None) -> torch.Tensor:
+        """λ(step)·L_topo as a scalar on V's device/dtype; a constant zero
+        while inactive (ρ=0 or before the ramp)."""
+        if self.rho == 0.0:
+            return V.new_zeros(())
+        m = self._ramp_mult(step)
+        if m == 0.0:
+            return V.new_zeros(())
+        if (self._last_refresh is None or F is not self._F_ref
+                or step - self._last_refresh >= self.every):
+            self._last_refresh = step
+            fa = None
+            if face_alpha_fn is not None:
+                with torch.no_grad():
+                    fa = face_alpha_fn().detach()
+            self._refresh(V, F, fa)
+        raw = self._raw(V)
+        n_terms = (len(self._plan.terms) if self.mode == "matched"
+                   else int(len(self._rep[0])))
+        if self.lam_peak is None:
+            if not raw.requires_grad:                      # no gradient path yet
+                self.log.append((step, 0.0, float(raw.detach()), n_terms))
+                return V.new_zeros(())
+            g_t = torch.autograd.grad(raw, V, retain_graph=True,
+                                      allow_unused=True)[0]
+            gt = float(g_t.norm()) if g_t is not None else 0.0
+            gp = 0.0
+            if photo_loss is not None and photo_loss.requires_grad:
+                g_p = torch.autograd.grad(photo_loss, V, retain_graph=True,
+                                          allow_unused=True)[0]
+                gp = float(g_p.norm()) if g_p is not None else 0.0
+            if gt <= 0.0 or gp <= 0.0:                     # retry next step
+                self.log.append((step, 0.0, float(raw.detach()), n_terms))
+                return V.new_zeros(())
+            self.lam_peak = self.rho * gp / gt
+            print(f"[topo-loss] calibrated lam_peak={self.lam_peak:.4g} at step "
+                  f"{step} (|g_photo|={gp:.3g}, |g_topo|={gt:.3g}, rho={self.rho})")
+        lam = self.lam_peak * m
+        self.log.append((step, lam, float(raw.detach()), n_terms))
+        return lam * raw
+
+    def save_log(self, path: str) -> str:
+        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump({"lam_peak": self.lam_peak, "rho": self.rho,
+                       "mode": self.mode, "ramp": list(self.ramp),
+                       "every": self.every, "n_pts": self.n_pts,
+                       "entries": [[int(s), float(l), float(r), int(n)]
+                                   for s, l, r, n in self.log]}, fh)
+        return path
+
+
 # ── CLI: build + inspect a target bundle ──────────────────────────────────
 
 def main(argv=None) -> int:
