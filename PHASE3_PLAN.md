@@ -386,3 +386,55 @@ Phase-2 methodology) remains the mitigation.
 **Gate to 3c/3d: OPEN.** Next: ρ mini-sweep {0.03, 0.1, 0.3} on sphere seed 0
 (§10.5), then the C-matrix at headroom budgets (§6) via
 `experiments/topo_loss_eval.py`.
+
+---
+
+## Appendix C — Stage 3c results (2026-07-06): **ρ = 0.1 picked; wave 1 launched**
+
+Runner landed: `experiments/topo_loss_eval.py` (C0/C1/C2/C3/C5; C4 deferred
+until `TopoLossState` grows a spatial weight mask). Deviation from §6: C0 is
+re-run fresh rather than reusing Phase-2 B0 trajectories — a full 2,500-step
+run at this scene scale is ~1–3 min, and fresh runs keep the traj schedule +
+code state identical across arms.
+
+### ρ mini-sweep (sphere @N=1200, 2,500 steps, seed 0, tail = last 3 dumps)
+
+| arm | tail bottleneck H2 | final #sig H2 | Chamfer% |
+|---|---:|---:|---:|
+| C0 baseline | 0.0560 | 1 | 0.496 |
+| C1 ρ=0.03 (λ_peak 0.073) | 0.0181 | 1 | 0.462 |
+| C1 ρ=0.10 (λ_peak 0.422) | **0.0172** | 1 | 0.465 |
+| C1 ρ=0.30 (λ_peak 1.105) | 0.0177 | 1 | 0.458 |
+| C2 ρ=0.10 (repulsion control) | 0.1372 | 1 | 1.407 |
+
+Single-seed preliminary reads (decisive claims wait for the 5-seed matrix):
+
+- **C1 cuts the H2 bottleneck ~3.2× (0.056 → 0.017) at Chamfer parity**, and
+  the response is FLAT across a 10× ρ range — the gradient-ratio calibration
+  makes the knob robust. C0 at 0.0560 replicates the Phase-2 B0 headroom
+  regime (~0.05–0.06 at N=1200), and 0.017 is well below Phase-2b's best
+  resampling arm (B4 ≈ 0.038 on sphere) — the loss channel is preliminarily
+  STRONGER than the prior channel.
+- **C2 (norm-matched repulsion) actively hurts** (bottleneck 2.4× worse,
+  Chamfer 3×): the same gradient budget spent non-topologically damages the
+  fit, so C1's gain is not "any extra vertex regularization". Caveat: this
+  control is aggressive (pushes to 2× median spacing); a gentler variant is
+  worth adding if the matrix confirms the pattern.
+- Betti is already correct everywhere (#sig H2 = 1): as in Phase 2b, the win
+  lives in diagram-value ACCURACY, not feature counts.
+
+**Decision (§10.5): ρ = 0.1** (middle of the flat region, calibrated units).
+
+### Wave 1 (launched, detached; Appendix D will carry results)
+
+Per-shape bundle preflight passed — cube H2 [0.059,0.289]; two_spheres H0
+[0,0.117] + H2×2; torus **both** H1 bars significant at M=2048 ([0.012,0.096]
+tube, [0.013,0.156] big loop; the 3a density worry was about
+`meshes.torus_cloud` proportions, not this scene's torus). Torus's own H2
+void bar is sub-threshold at M=2048, so torus runs restrict the loss to H1
+(`--topo_loss_dims 1`, runner `--loss_dims`) to avoid threshold-flicker
+pushing the REAL void toward the diagonal.
+
+Matrix: sphere & torus (decisive): C0/C1/C2/C3/C5 × 5 seeds @N=1200/700;
+cube & two_spheres: C0/C1/C2 × 3 seeds @N=1200/700. ρ=0.1, ramp 0.2:0.5,
+2,500 steps. ~65 fresh runs, resumable (`output/synth/topo3/wave1.log`).
