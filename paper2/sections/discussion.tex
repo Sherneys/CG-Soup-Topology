@@ -1,0 +1,47 @@
+\section{Mechanism and discussion}
+\label{sec:discussion}
+
+% TODO(human): voice pass; consider merging with results at venue length.
+
+\paragraph{Sparse tugs vs.\ budget allocation.} Each significant pair
+back-propagates through at most a handful of sampled points, so the loss
+delivers \emph{precise but sparse} pulls, iterated by re-pairing --- the toy
+probes show surgery ``walking'' around a defect a few points at a time. The
+resampling prior is the opposite: broad, indirect, budget-limited. The
+results sort cleanly along this axis: 1-D loops, which the prior could only
+over- or under-tessellate, respond to precise value pressure (H1 win); wide
+2-D shells benefit from both (H2: prior helps, loss helps more, composition
+best); 0-D component structure needs neither --- any spreading pressure
+suffices (H0 null, three channels).
+
+\paragraph{Why the control damages topology.} The norm-matched repulsion
+imposes a length-scale floor on the sampled surface; the void's death time
+pins at that equilibrium (identical across seeds) and thin structures
+collapse ($\beta_2$ loss on the cube, $\beta_1$ loss on the torus). This
+sharpens the control argument: spending the same gradient budget through the
+same channel \emph{without} topological information is not neutral --- it is
+harmful --- so C1's wins cannot be an artifact of extra regularization.
+
+\paragraph{Measurability at the loss's density.} A persistence loss can only
+enforce features that clear the significance floor at its sampling density
+$M$: the torus void and the double torus's two tube loops do not, at
+$M{=}2048$. We treat this as a principle rather than a nuisance: the target
+bundle is built (and audited) at the same $M$, features below the floor are
+excluded from the objective, and the double-torus stretch case is evaluated
+against its two measurable loops --- which is also all the reconstruction
+itself can express at feasible budgets. Raising $M$ buys resolution at
+linear-ish persistence cost; the trade is explicit and logged at bundle-build
+time.
+
+\paragraph{Recruitment is landscape-guided in practice.} Its location
+blindness --- pull the nearest bar anywhere --- did not misfire on our
+geometry because unproductive tears self-extinguish (their bar's death
+saturates at the local detour scale) while productive cuts run away toward
+the target. The caveat stands for target features larger than any achievable
+detour; the probe and its mechanism are reported so the term is used with
+eyes open.
+
+\paragraph{Prescription.} Correct topology in the \emph{loss}; allocate
+budget with a \emph{wide} prior; combine for the best of both. Curriculum
+schedules are unnecessary once the loss scale is calibrated against the
+photometric gradient.

@@ -79,6 +79,9 @@ def condition_flags(cond: str, shape: str, bundle: str, rho: float, ramp: str,
         return c1
     if cond == "C2":
         return c1 + ["--topo_loss_mode", "control_repulsion"]
+    if cond == "C2g":                                    # gentler control (r0 = 1 spacing)
+        return c1 + ["--topo_loss_mode", "control_repulsion",
+                     "--topo_rep_scale", "1.0"]
     if cond == "C3":                                     # no curriculum
         return c1[:2] + ["--topo_rho", str(rho), "--topo_ramp", "0:0"] \
             + (["--topo_loss_dims", str(loss_dims)] if loss_dims >= 0 else [])
@@ -161,7 +164,7 @@ def main() -> int:
     ap.add_argument("--shapes", nargs="+", default=["sphere"])
     ap.add_argument("--seeds", nargs="+", type=int, default=[0])
     ap.add_argument("--conditions", nargs="+", default=["C0", "C1", "C2"],
-                    choices=["C0", "C1", "C2", "C3", "C5"])
+                    choices=["C0", "C1", "C2", "C2g", "C3", "C5"])
     ap.add_argument("--rhos", nargs="+", type=float, default=[0.1])
     ap.add_argument("--ramp", default="0.2:0.5")
     ap.add_argument("--steps", type=int, default=2500)

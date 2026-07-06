@@ -1,0 +1,272 @@
+% ============================================================================
+%  refs.bib -- REAL references (placeholders replaced 2026-07-03).
+%  Metadata verified against publisher / arXiv / PMLR pages where uncertain;
+%  page numbers are OMITTED (not guessed) where they could not be verified.
+%  Organized by the related-work bucket each entry serves.
+% ============================================================================
+
+% ---------- differentiable rasterization / rendering (was TODO-diffrast) ----
+
+@inproceedings{loper2014opendr,
+  author    = {Loper, Matthew M. and Black, Michael J.},
+  title     = {{OpenDR}: An Approximate Differentiable Renderer},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  pages     = {154--169},
+  year      = {2014}
+}
+
+@inproceedings{kato2018neural,
+  author    = {Kato, Hiroharu and Ushiku, Yoshitaka and Harada, Tatsuya},
+  title     = {Neural {3D} Mesh Renderer},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {3907--3916},
+  year      = {2018}
+}
+
+@inproceedings{liu2019softras,
+  author    = {Liu, Shichen and Li, Tianye and Chen, Weikai and Li, Hao},
+  title     = {Soft Rasterizer: A Differentiable Renderer for Image-Based {3D} Reasoning},
+  booktitle = {IEEE/CVF International Conference on Computer Vision (ICCV)},
+  pages     = {7708--7717},
+  year      = {2019}
+}
+
+@article{laine2020nvdiffrast,
+  author  = {Laine, Samuli and Hellsten, Janne and Karras, Tero and Seol, Yeongho and Lehtinen, Jaakko and Aila, Timo},
+  title   = {Modular Primitives for High-Performance Differentiable Rendering},
+  journal = {ACM Transactions on Graphics},
+  volume  = {39},
+  number  = {6},
+  pages   = {194:1--194:14},
+  year    = {2020}
+}
+
+% ---------- explicit primitives / soup with adaptive prune-respawn (was TODO-soup)
+
+% NOTE(author, VERIFY): the verbatim-paste block for this entry arrived EMPTY, so the
+% fields below were taken from arxiv.org/abs/2603.27151 + the authors' GitHub/ETH pages
+% (2026-07-03), which all agree. CVPR-2026 proceedings pages not yet assigned/known.
+@inproceedings{tojo2026diffsoup,
+  author    = {Tojo, Kenji and Bickel, Bernd and Umetani, Nobuyuki},
+  title     = {{DiffSoup}: Direct Differentiable Rasterization of Triangle Soup for Extreme Radiance Field Simplification},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2026},
+  note      = {arXiv:2603.27151}
+}
+
+@article{kerbl2023gaussians,
+  author  = {Kerbl, Bernhard and Kopanas, Georgios and Leimk{\"u}hler, Thomas and Drettakis, George},
+  title   = {{3D} {Gaussian} Splatting for Real-Time Radiance Field Rendering},
+  journal = {ACM Transactions on Graphics},
+  volume  = {42},
+  number  = {4},
+  pages   = {139:1--139:14},
+  year    = {2023}
+}
+
+@misc{held2025trianglesplatting,
+  author       = {Held, Jan and Vandeghen, Renaud and Deli{\`e}ge, Adrien and Hamdi, Abdullah and Giancola, Silvio and Cioppa, Anthony and Vedaldi, Andrea and Ghanem, Bernard and Tagliasacchi, Andrea and Van Droogenbroeck, Marc},
+  title        = {Triangle Splatting for Real-Time Radiance Field Rendering},
+  howpublished = {arXiv:2505.19175},
+  year         = {2025}
+}
+
+@article{nicolet2021largesteps,
+  author  = {Nicolet, Baptiste and Jacobson, Alec and Jakob, Wenzel},
+  title   = {Large Steps in Inverse Rendering of Geometry},
+  journal = {ACM Transactions on Graphics},
+  volume  = {40},
+  number  = {6},
+  year    = {2021}
+}
+
+@article{palfinger2022remeshing,
+  author  = {Palfinger, Werner},
+  title   = {Continuous remeshing for inverse rendering},
+  journal = {Computer Animation and Virtual Worlds},
+  volume  = {33},
+  number  = {5},
+  pages   = {e2101},
+  year    = {2022}
+}
+
+% ---------- topology in 3D reconstruction (was TODO-topo-recon) -------------
+
+@article{sharf2007topologyaware,
+  author  = {Sharf, Andrei and Lewiner, Thomas and Shklarski, Gil and Toledo, Sivan and Cohen-Or, Daniel},
+  title   = {Interactive Topology-Aware Surface Reconstruction},
+  journal = {ACM Transactions on Graphics},
+  volume  = {26},
+  number  = {3},
+  pages   = {43:1--43:10},
+  year    = {2007}
+}
+
+@article{ju2004repair,
+  author  = {Ju, Tao},
+  title   = {Robust Repair of Polygonal Models},
+  journal = {ACM Transactions on Graphics},
+  volume  = {23},
+  number  = {3},
+  pages   = {888--895},
+  year    = {2004}
+}
+
+@article{attene2010repair,
+  author  = {Attene, Marco},
+  title   = {A Lightweight Approach to Repairing Digitized Polygon Meshes},
+  journal = {The Visual Computer},
+  volume  = {26},
+  number  = {11},
+  pages   = {1393--1406},
+  year    = {2010}
+}
+
+@article{bruel2020toporecon,
+  author  = {Br{\"u}el-Gabrielsson, Rickard and Ganapathi-Subramanian, Vignesh and Skraba, Primoz and Guibas, Leonidas J.},
+  title   = {Topology-Aware Surface Reconstruction for Point Clouds},
+  journal = {Computer Graphics Forum},
+  volume  = {39},
+  number  = {5},
+  pages   = {197--207},
+  year    = {2020}
+}
+
+% ---------- persistent-homology losses / differentiable PH (was TODO-ph-loss)
+
+@inproceedings{gabrielsson2020topologylayer,
+  author    = {Br{\"u}el Gabrielsson, Rickard and Nelson, Bradley J. and Dwaraknath, Anjan and Skraba, Primoz},
+  title     = {A Topology Layer for Machine Learning},
+  booktitle = {International Conference on Artificial Intelligence and Statistics (AISTATS)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {108},
+  pages     = {1553--1563},
+  year      = {2020}
+}
+
+@inproceedings{hu2019topopreserving,
+  author    = {Hu, Xiaoling and Li, Fuxin and Samaras, Dimitris and Chen, Chao},
+  title     = {Topology-Preserving Deep Image Segmentation},
+  booktitle = {Advances in Neural Information Processing Systems 32 (NeurIPS)},
+  year      = {2019}
+}
+
+@article{clough2022topoloss,
+  author  = {Clough, James R. and Byrne, Nicholas and Oksuz, Ilkay and Zimmer, Veronika A. and Schnabel, Julia A. and King, Andrew P.},
+  title   = {A Topological Loss Function for Deep-Learning Based Image Segmentation Using Persistent Homology},
+  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume  = {44},
+  number  = {12},
+  pages   = {8766--8778},
+  year    = {2022}
+}
+
+@inproceedings{carriere2021optimizing,
+  author    = {Carri{\`e}re, Mathieu and Chazal, Fr{\'e}d{\'e}ric and Glisse, Marc and Ike, Yuichi and Kannan, Hariprasad and Umeda, Yuhei},
+  title     = {Optimizing Persistent Homology Based Functions},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {139},
+  year      = {2021}
+}
+
+@article{poulenard2018shapematching,
+  author  = {Poulenard, Adrien and Skraba, Primoz and Ovsjanikov, Maks},
+  title   = {Topological Function Optimization for Continuous Shape Matching},
+  journal = {Computer Graphics Forum},
+  volume  = {37},
+  number  = {5},
+  pages   = {13--25},
+  year    = {2018}
+}
+
+% ---------- remeshing / adaptive sampling (was TODO-remesh) -----------------
+
+@inproceedings{hoppe1996progressive,
+  author    = {Hoppe, Hugues},
+  title     = {Progressive Meshes},
+  booktitle = {Proceedings of SIGGRAPH 96},
+  pages     = {99--108},
+  year      = {1996}
+}
+
+@inproceedings{garland1997qem,
+  author    = {Garland, Michael and Heckbert, Paul S.},
+  title     = {Surface Simplification Using Quadric Error Metrics},
+  booktitle = {Proceedings of SIGGRAPH 97},
+  pages     = {209--216},
+  year      = {1997}
+}
+
+@article{alliez2003anisotropic,
+  author  = {Alliez, Pierre and Cohen-Steiner, David and Devillers, Olivier and L{\'e}vy, Bruno and Desbrun, Mathieu},
+  title   = {Anisotropic Polygonal Remeshing},
+  journal = {ACM Transactions on Graphics},
+  volume  = {22},
+  number  = {3},
+  pages   = {485--493},
+  year    = {2003}
+}
+
+@inproceedings{botsch2004remeshing,
+  author    = {Botsch, Mario and Kobbelt, Leif},
+  title     = {A Remeshing Approach to Multiresolution Modeling},
+  booktitle = {Eurographics/ACM SIGGRAPH Symposium on Geometry Processing (SGP)},
+  year      = {2004}
+}
+
+@inproceedings{dunyach2013adaptive,
+  author    = {Dunyach, Marion and Vanderhaeghe, David and Barthe, Lo{\"i}c and Botsch, Mario},
+  title     = {Adaptive Remeshing for Real-Time Mesh Deformation},
+  booktitle = {Eurographics 2013 --- Short Papers},
+  year      = {2013}
+}
+
+% ---------- persistence / TDA foundations and tooling ------------------------
+
+@article{edelsbrunner2002persistence,
+  author  = {Edelsbrunner, Herbert and Letscher, David and Zomorodian, Afra},
+  title   = {Topological Persistence and Simplification},
+  journal = {Discrete \& Computational Geometry},
+  volume  = {28},
+  number  = {4},
+  pages   = {511--533},
+  year    = {2002}
+}
+
+@article{cohensteiner2007stability,
+  author  = {Cohen-Steiner, David and Edelsbrunner, Herbert and Harer, John},
+  title   = {Stability of Persistence Diagrams},
+  journal = {Discrete \& Computational Geometry},
+  volume  = {37},
+  number  = {1},
+  pages   = {103--120},
+  year    = {2007}
+}
+
+@book{edelsbrunner2010book,
+  author    = {Edelsbrunner, Herbert and Harer, John L.},
+  title     = {Computational Topology: An Introduction},
+  publisher = {American Mathematical Society},
+  year      = {2010}
+}
+
+@article{edelsbrunner1994alphashapes,
+  author  = {Edelsbrunner, Herbert and M{\"u}cke, Ernst P.},
+  title   = {Three-Dimensional Alpha Shapes},
+  journal = {ACM Transactions on Graphics},
+  volume  = {13},
+  number  = {1},
+  pages   = {43--72},
+  year    = {1994}
+}
+
+@inproceedings{maria2014gudhi,
+  author    = {Maria, Cl{\'e}ment and Boissonnat, Jean-Daniel and Glisse, Marc and Yvinec, Mariette},
+  title     = {The {Gudhi} Library: Simplicial Complexes and Persistent Homology},
+  booktitle = {International Congress on Mathematical Software (ICMS)},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {8592},
+  pages     = {167--174},
+  year      = {2014}
+}

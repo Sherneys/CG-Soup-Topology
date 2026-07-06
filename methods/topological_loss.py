@@ -492,7 +492,7 @@ class TopoLossState:
     def __init__(self, bundle_path, *, rho: float = 0.1, every: int = 10,
                  n_pts: int = 2048, dims: Optional[Sequence[int]] = None,
                  ramp: Sequence[float] = (0.2, 0.5), total_steps: int = 2500,
-                 mode: str = "matched", seed: int = 0):
+                 mode: str = "matched", seed: int = 0, rep_scale: float = 2.0):
         self.bundle = (TargetBundle.load(bundle_path)
                        if isinstance(bundle_path, str) else bundle_path)
         self.rho = float(rho)
@@ -505,6 +505,7 @@ class TopoLossState:
             raise ValueError(f"unknown topo-loss mode {mode!r}")
         self.mode = mode
         self.seed = int(seed)
+        self.rep_scale = float(rep_scale)      # C2's push radius, in median spacings
         self.lam_peak: Optional[float] = None
         self.log: list = []                    # (step, lam, raw, n_terms)
         self._plan: Optional[LossPlan] = None
@@ -564,7 +565,7 @@ class TopoLossState:
             keep = ii < jj
             self._rep = (torch.as_tensor(ii[keep], device=V.device),
                          torch.as_tensor(jj[keep], device=V.device),
-                         float(np.median(dd[:, 1]) * 2.0))
+                         float(np.median(dd[:, 1]) * self.rep_scale))
 
     # -- raw loss ---------------------------------------------------------
 

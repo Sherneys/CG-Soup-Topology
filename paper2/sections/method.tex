@@ -1,0 +1,85 @@
+\section{Method: a matched persistence loss for triangle soups}
+\label{sec:method}
+
+% Grounded in methods/topological_loss.py + PHASE3_PLAN.md §3-4.
+% TODO(human): tighten notation to venue conventions.
+
+\subsection{Objective}
+DiffSoup trains with a photometric objective $L_{\mathrm{photo}}$ (opacity
+auxiliary + $0.8\,L_1 + 0.2\,\mathrm{SSIM}$)~\citep{tojo2026diffsoup}. We add
+\begin{equation}
+L \;=\; L_{\mathrm{photo}} \;+\; \lambda(t)\, L_{\mathrm{topo}}(V),
+\end{equation}
+where $V$ are the soup's vertex positions and $L_{\mathrm{topo}}$ compares the
+persistence diagram of the live surface to a fixed \emph{target bundle}
+$\mathcal{T}$: the significant finite bars of the ground-truth shape's
+diagram, computed once at the same sampling density $M$ the loss will see
+(alpha birth/death values shift with point spacing, so density matching is a
+correctness requirement, not a convenience) and normalized by the target's
+bounding-box diagonal, which is locked for all live evaluations.
+
+\subsection{Live diagram and pair-frozen backward}
+At each refresh we draw $M{=}2048$ surface samples
+$X_j=\sum_i w_{ij}\,V[F(f_j),i]$ with faces $f_j$ drawn
+$\sigma(\alpha)\times$area-weighted and barycentric weights $w_{ij}$ frozen;
+$X$ is recomputed from live $V$ every step, so gradients reach vertices while
+the combinatorics stay fixed. The alpha complex of $X$ yields persistence
+pairs (birth simplex, death simplex) per dimension. For a Gabriel simplex the
+alpha filtration value is its squared circumradius, so each paired bar's
+coordinates are closed-form functions of a few sample positions ---
+half edge length (H0 deaths), triangle circumradius (H1 deaths, H2 births),
+tetrahedron circumradius (H2 deaths) --- all exactly differentiable. We
+verify, per pairing, that the re-expressed value matches the filtration value
+(relative $10^{-6}$); non-Gabriel simplices would contribute value without
+gradient, but on all six benchmark shapes 100\% of significant pairs are
+Gabriel-exact.
+% src: PHASE3_PLAN.md Appendix A (mapping + Gabriel gates, 22/22)
+The pairing is treated as locally constant --- the standard pair-frozen
+device~\citep{gabrielsson2020topologylayer,carriere2021optimizing} --- and
+refreshed every $K{=}10$ steps and, necessarily, immediately after every
+resampling event, which replaces the vertex and face tensors wholesale.
+
+\subsection{Matching, diagonal pressure, and recruitment}
+Let $D$ be the live significant bars and $\mathcal{T}$ the target bars of one
+dimension. An optimal partial matching (Hungarian on the standard augmented
+cost; equivalently $W_2$) splits bars into matched pairs, unmatched live, and
+unmatched target:
+\begin{equation}
+L_{\mathrm{topo}} = \!\!\sum_{(i,j)\,\mathrm{matched}}\!\!\!
+  \big[(b_i-b^*_j)^2+(d_i-d^*_j)^2\big]
+ \;+\; \sum_{i\,\mathrm{unmatched}} \Big(\tfrac{d_i-b_i}{2}\Big)^{\!2}
+ \;+\; L_{\mathrm{recruit}} .
+\end{equation}
+The first term pulls matched features to their target coordinates; the second
+pushes spurious features to the diagonal. The third exists because optimal
+matching has a blind spot: when a target feature is entirely missing, the
+cheapest transport diagonalizes both sides and the gradient is exactly zero
+--- precisely in the most important failure case. Recruitment attaches each
+unmatched target bar to the nearest not-yet-matched live bar (sub-threshold
+bars allowed) and pulls it toward the target. This deliberately departs from
+a metric-faithful $W_2$; \S\ref{sec:results} probes its known pathology
+(location-blindness) directly.
+
+\subsection{Calibration instead of curriculum}
+$\lambda(t)$ ramps linearly from 20\% to 50\% of training, with peak set once
+by a gradient-norm ratio at the first active step:
+$\lambda_{\mathrm{peak}}=\rho\,\lVert\nabla_V L_{\mathrm{photo}}\rVert /
+\lVert\nabla_V L_{\mathrm{topo}}\rVert$. The single knob $\rho$ is
+dimensionless; $\rho{=}0.1$ throughout. The tail error is flat across
+$\rho\in\{0.03,0.1,0.3\}$, and an uncalibrated-schedule ablation (constant
+$\lambda$ from step one) matches the ramped version --- calibration, not
+scheduling, is what makes the knob safe.
+% src: PHASE3_PLAN.md Appendix C (rho sweep) + Appendix D (C3 vs C1)
+
+\subsection{Conditions}
+\label{sec:conditions}
+C0: baseline (photometric only). C1: $+L_{\mathrm{topo}}$. C2: $+$ a
+short-range repulsion on the \emph{same} frozen samples, calibrated with the
+\emph{same} $\rho$ --- a norm-matched non-topological control through the
+identical channel (C2g: a gentler radius). C3: C1 without the ramp.
+C5: C1 combined with the best allocation-channel prior of the companion study
+(the spread topological resampling field, B4). The hook adds one loss line to
+the training loop; with the flag off, no new code executes, and a $\rho{=}0$
+run is divergence-equivalent to baseline re-runs under CUDA
+nondeterminism.
+% src: PHASE3_PLAN.md Appendix B (cleanliness, revised criterion)

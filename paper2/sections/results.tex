@@ -1,0 +1,99 @@
+\section{Results}
+\label{sec:results}
+
+% Every number: % src: topo3/report/results.json (regenerate via
+% experiments/topo_loss_report.py) unless marked otherwise.
+% TODO(human): swap the placeholder figure includes once report PNGs are
+% copied into paper2/figures/.
+
+\subsection{Gate: the loss alone repairs topology}
+Before integration, the loss (no photometric term, Adam directly on point
+positions) must repair defective clouds. It does, on all four probes:
+% src: figures/phase3_toy/t{1..4}.json (PHASE3_PLAN.md Appendix A)
+a punctured sphere's void birth is pulled to target ($8.8\times$ bottleneck
+reduction; the hole closes), a spurious handle is pushed to the diagonal and
+dies (H1 bar eliminated; $\beta$ restored), mis-spaced components are pulled
+to the target separation ($1229\times$), and --- the recruitment probe --- a
+bridged merge with \emph{no} significant live H0 bar is severed
+($450\times$, $\beta_0\,1{\to}2$). The predicted location-blind pathology did
+not materialize, for a mechanism reason worth stating: tearing a 2-manifold
+shell cannot grow a component bar past the local detour scale (the tug is
+abandoned), while cutting the 1-D bridge raises the recruited bar's death
+monotonically toward target --- the runaway concentrates on the only
+profitable direction.
+
+\subsection{The C-matrix}
+\label{sec:cmatrix}
+Table~\ref{tab:main} reports tail bottleneck (mean$\pm$sd over seeds) in each
+shape's discriminating dimension; Chamfer in the text where it matters.
+
+\begin{table}[t]
+\centering\small
+\caption{Tail bottleneck to target (lower is better); $\times$ = reduction vs
+C0. Verdict requires C1 $<$ C0 and C1 $<$ every control at Chamfer parity.}
+\label{tab:main}
+\begin{tabular}{llllll}
+\toprule
+shape (dim) & C0 & C1 loss & C2 control & C3 no-ramp & C5 loss+prior \\
+\midrule
+% src: topo3/report/results.json
+sphere (H2)      & .0623$\pm$.0063 & \textbf{.0156$\pm$.0013} (4.0$\times$) & .1372 (worse) & .0151$\pm$.0004 & \textbf{.0082$\pm$.0007} (7.6$\times$) \\
+cube (H2)        & .0582$\pm$.0047 & \textbf{.0074$\pm$.0011} (7.9$\times$) & .1346 ($\beta_2\,1{\to}0$) & --- & --- \\
+torus (H1)       & .0424$\pm$.0031 & \textbf{.0180$\pm$.0016} (2.4$\times$) & .0457 ($\beta_1\,2{\to}1$) & .0155$\pm$.0014 & \textbf{.0133$\pm$.0004} (3.2$\times$) \\
+two\_spheres (H0)& .0065$\pm$.0008 & .0007$\pm$.0002 (9.3$\times$)          & .0008 (ties C1) & --- & --- \\
+double\_torus (H1)& .0264$\pm$.0000 & .0264$\pm$.0000 (saturated)           & .0264$\pm$.0000 & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Voids (H2): topology-specific, large.} Sphere $4.0\times$
+($16.2\sigma$ Welch vs C0), cube $7.9\times$ ($18.5\sigma$), both at
+equal-or-better Chamfer (sphere $0.46$ vs $0.50$; cube $0.92$ vs $1.05$). The
+norm-matched control is not merely weaker --- it is \emph{destructive}: it
+pins the void's death at its repulsion equilibrium (bottleneck $2.2\times$
+worse than baseline, identical across seeds) and on the cube erases the void
+outright. Nor is this an artifact of control strength: a gentle variant at
+half the push radius still lands $1.6\times$ \emph{worse} than baseline
+(.0972 vs .0623) --- the sphere ordering is C1 $<$ C2g $<$ C0 $<$ C2, so no
+tested repulsion strength reproduces any of the gain.
+% src: topo3/report/results.json (sphere: C2g 0.0972±0.0169)
+
+\paragraph{Loops (H1): the channel's distinguishing result.} In the
+companion study no prior shape won this class --- concentration manufactured
+phantom handles; spreading never beat a random control. The loss cuts torus
+H1 error $2.4\times$ with \emph{zero phantom handles in all five seeds}
+(significant-count trajectories flat at the true $\beta_1{=}2$), while the
+control collapses one loop. Metric pressure on birth/death values suits 1-D
+features in a way budget allocation does not.
+
+\paragraph{Components (H0): not topological --- third channel, same answer.}
+C1 reduces the (already small) baseline error $9.3\times$, but the generic
+control matches it on the diagram metric (.0008 vs .0007); the topological
+increment appears only in Chamfer ($0.54$ vs $1.94$). Together with the
+allocation-channel results this is now a statement about the feature class:
+component structure is helped by any spreading pressure, not by topological
+information.
+
+\paragraph{Composition (C5).} Loss $+$ spread prior is best everywhere
+tested --- sphere $.0082$ ($7.6\times$ vs C0, ${\approx}2\times$ vs C1 alone,
+${\approx}4.6\times$ below the prior alone
+% src: h2_unified/report/results.json (B4 sphere ~.038)
+), torus $.0133$ --- with the best Chamfer as well. Allocation and
+value-tuning are complementary mechanisms, not substitutes.
+
+\paragraph{Stretch case (genus 2): saturated, honestly.} On the double torus
+every arm --- baseline, loss, control --- returns a bottleneck of exactly
+$.0264$ (sd $0$ over seeds), and Wasserstein is equally pinned
+($.0527$--$.0528$): the two tube loops are unexpressable at feasible budgets
+(replicating the companion study's floor), and they dominate both diagram
+metrics regardless of guidance. The loss adds no phantoms there
+($\beta_1$-significant count $=2$ in every run) and its Chamfer is marginally
+best; the case measures the \emph{representation's} ceiling, not the
+channel's.
+% src: topo3/report/{results.json,cache/double_torus_*} (W2 check 2026-07-07)
+
+\paragraph{Ablations.} $\rho$-response flat over $\{0.03,0.1,0.3\}$
+(.0181/.0172/.0177 on sphere); C3 (no curriculum) $\approx$ C1 on both
+decisive shapes. Overhead: ${\approx}45$--$55$\,s per 2{,}500-step run
+(refresh 174\,ms at $M{=}2048$, every 10 steps).
+% src: PHASE3_PLAN.md Appendices B-D

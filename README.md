@@ -12,7 +12,7 @@ Differentiable Triangle-Soup Reconstruction* — prebuilt at `paper/main.pdf`
 (rebuild with `latexmk -pdf main.tex` inside `paper/`). Author notes, grounding
 log, and open items: `NOTES_FOR_AUTHOR.md`.
 
-## The story in four results
+## The story in five results
 
 1. **Geometric metrics are topology-blind (Phase 1).** In 3/3 controlled cases,
    candidate reconstructions tuned to *equal Chamfer* but different topology
@@ -40,6 +40,16 @@ log, and open items: `NOTES_FOR_AUTHOR.md`.
    most of that gain — **the value-add is width, not topological targeting**,
    leaving only a small, shape-dependent topological residual for voids. That
    honest caveat is the paper's thesis.
+5. **Topology in the loss beats topology in the resampler (Phase 3).** A
+   differentiable persistence loss (`L = photometric + λ(t)·L_topo`;
+   pair-frozen circumradius backward, matched-Wasserstein + recruitment, one
+   gradient-ratio-calibrated knob ρ) is topology-specific where the priors
+   were not: voids improve 4.0–7.9×, and **loops improve 2.4× with zero
+   phantom handles** — the class every prior shape failed. The two channels
+   stack (loss + B4 prior: 7.6× below baseline at the best Chamfer), H0 stays
+   non-topological for a third consecutive channel, and a curriculum schedule
+   proved unnecessary once λ is calibrated. See `PHASE3_STATUS.md` and the
+   paper-2 skeleton in `paper2/`.
 
 ## Experimental conditions (the vocabulary used everywhere)
 
@@ -71,19 +81,23 @@ experiments/
   dimensional_crossover.py   Phase-2b orchestrator (feature-dim x concentrate/spread)
   crossover_report.py        Phase-2b analysis
   make_crossover_scenes.py   builds the Phase-2b COLMAP scenes
+  topo_loss_eval.py          Phase-3 C-matrix runner (C0..C5) + quicklook
+  topo_loss_report.py        Phase-3 report: series/tail/nsig plots, verdicts
 tests/test_betti.py    9/9: Betti recovery on 6 deterministic shapes + determinism checks
 tests/test_topo_loss.py  10/10: Phase-3 stage-3a gate (gradchecks, alpha-complex
                        assumption gates, defect-repair toys -> figures/phase3_toy/)
 scripts/               builders for the Thai .docx reports (Phase 1 & 2)
-paper/                 LaTeX sources, sections/, figures/, refs.bib, prebuilt main.pdf
+paper/                 paper 1 ("Concentrate or Spread?"): LaTeX, figures, prebuilt main.pdf
+paper2/                paper 2 skeleton ("Topology-Correcting ... via Persistent Homology")
 figures/  docs/        Phase-1 outputs; Thai reports (CG-Soup_Topology_Phase{1,2}_TH.docx)
 ```
 
 Status documents: `PHASE2_EXPLORATION_AND_PLAN.md` (design + injection-point
 exploration), `PHASE2_STATUS.md` (implementation + full-sweep results),
 `PHASE2B_CROSSOVER.md` (spread-vs-concentrate experiment), `PHASE3_PLAN.md`
-(differentiable topological loss: plan + stage-3a gate results),
-`NOTES_FOR_AUTHOR.md` (paper-level narrative and checklist).
+(differentiable topological loss: plan + appendices A–D with all gate/matrix
+results), `PHASE3_STATUS.md` (Phase-3 summary + how to reproduce),
+`NOTES_FOR_AUTHOR.md` (paper-1 narrative and checklist).
 
 ## Import quirk (standalone checkout)
 

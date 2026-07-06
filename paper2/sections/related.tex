@@ -1,0 +1,45 @@
+\section{Related work}
+\label{sec:related}
+
+% Reuses only citations verified for paper 1 (refs.bib copied verbatim).
+% TODO(human): prose voice pass; consider adding 2-3 newer differentiable-PH
+% works after verifying their entries (red TODO below).
+
+\paragraph{Differentiable rasterization and soup pipelines.}
+OpenDR~\citep{loper2014opendr}, neural mesh
+rendering~\citep{kato2018neural}, SoftRas~\citep{liu2019softras} and
+nvdiffrast~\citep{laine2020nvdiffrast} established gradient flow from pixels
+to geometry; Gaussian splatting~\citep{kerbl2023gaussians} and triangle
+splatting~\citep{held2025trianglesplatting} trade connectivity for speed. The
+pipeline we build on is DiffSoup~\citep{tojo2026diffsoup}, whose in-loop
+prune/respawn resampler is exactly the mechanism our companion study steered
+with importance priors; here the resampler stays untouched and the objective
+changes instead. Vertex-domain optimizers such as large-steps
+preconditioning~\citep{nicolet2021largesteps} are complementary --- they change
+\emph{how} vertices move, we change \emph{why}.
+
+\paragraph{Persistence in learning objectives.}
+Persistent homology~\citep{edelsbrunner2002persistence} with its stability
+guarantees~\citep{cohensteiner2007stability} has been used as a trainable
+signal via differentiable sorting of filtration
+values~\citep{gabrielsson2020topologylayer}, for topology-preserving image
+segmentation~\citep{hu2019topopreserving,clough2022topoloss}, point-cloud and
+shape optimization~\citep{bruel2020toporecon,poulenard2018shapematching}, and
+diagram-metric optimization with convergence
+analysis~\citep{carriere2021optimizing}. Our backward pass is in this family
+--- gradients through the filtration values of paired simplices --- with three
+pipeline-specific ingredients: an \emph{alpha-complex} pairing over
+$\alpha$\,$\times$\,area surface samples of a live triangle soup (rather than
+image grids or raw clouds), a Gabriel-exactness gate that certifies the
+circumradius re-expression, and the recruitment term for missing target
+features, which pure optimal matching cannot see.
+\TODO{verify-and-add 1--2 recent differentiable-PH refs if the venue expects
+them; do NOT cite unverified entries}
+
+\paragraph{Topology-aware geometry processing.}
+Topology-aware reconstruction and repair predate differentiable
+pipelines~\citep{sharf2007topologyaware,ju2004repair,attene2010repair}, and
+budgeted remeshing has a long
+lineage~\citep{hoppe1996progressive,garland1997qem,alliez2003anisotropic,botsch2004remeshing,dunyach2013adaptive}.
+Our contribution is orthogonal: the budget mechanics stay DiffSoup's; only
+the training signal becomes topology-aware.

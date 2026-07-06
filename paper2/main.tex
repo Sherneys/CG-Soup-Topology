@@ -1,0 +1,85 @@
+% ============================================================================
+%  Topology-Correcting Differentiable Triangle-Soup Reconstruction via
+%  Persistent Homology  —  PAPER 2 (DRAFT SKELETON, stage 3e)
+%  Build:  cd paper2 && latexmk -pdf main.tex
+%
+%  GROUNDING CONTRACT (same discipline as paper/):
+%   * every numeric result carries a "% src:" comment naming the results file
+%     it was read from (PHASE3_PLAN.md appendices A-D and
+%     output/synth/topo3/report/results.json). No number without a source.
+%   * citations reuse ONLY entries already verified for paper 1 (refs.bib
+%     copied verbatim); anything new is a red \TODO, never a guessed entry.
+%   * author-only spots are marked % TODO(human).
+% ============================================================================
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\graphicspath{{figures/}}
+
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{[\,TODO: #1\,]}}}
+
+% TODO(human): venue document class + author block reformat, as with paper 1.
+\title{Topology-Correcting Differentiable Triangle-Soup Reconstruction\\
+       via Persistent Homology}
+\author{Viritphon Chongpermwattanapol \qquad Pizzanu Kanongchaiyos\\[4pt]
+  Department of Computer Engineering, Faculty of Engineering,\\
+  Chulalongkorn University, Bangkok, Thailand}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% ----------------------------------------------------------------------------
+% ABSTRACT — draft; numbers grounded per the contract.
+% TODO(human): voice pass.
+% ----------------------------------------------------------------------------
+\begin{abstract}
+Resampling priors can steer \emph{where} a differentiable triangle-soup
+reconstruction spends its triangle budget, but our companion study found their
+topological value is carried largely by spatial \emph{width}, and that no
+prior shape repairs one-dimensional features: concentrated priors manufacture
+phantom handles, spread priors never beat a random control. We move topology
+from the allocation channel into the \emph{objective}: a differentiable
+persistence loss $L=\mathrm{photometric}+\lambda(t)\,L_{\mathrm{topo}}$, where
+$L_{\mathrm{topo}}$ is an optimally-matched distance between the live surface's
+persistence diagram and a fixed target diagram. Gradients flow through a
+pair-frozen backward pass: the matched birth/death simplices are re-expressed
+as closed-form circumradii of live sample positions --- exact for the
+Gabriel simplices that constitute all significant pairs in practice --- and a
+recruitment term restores the gradient that optimal matching provably lacks
+when a target feature is missing entirely. A single ratio knob $\rho$ sets the
+loss scale by gradient-norm calibration; a curriculum proved unnecessary.
+% src: PHASE3_PLAN.md Appendix D / topo3/report/results.json
+On budget-starved synthetic scenes the loss is topology-specific where a
+norm-matched non-topological control is not: enclosed voids improve
+$4.0$--$7.9\times$ and --- the channel's distinguishing result --- torus loops
+improve $2.4\times$ with zero phantom handles across seeds, while the control
+collapses a loop. The two channels compose: loss plus the best resampling
+prior reaches $7.6\times$ below baseline at the best Chamfer. Component
+counting (H0) is again matched by the generic control --- a third channel
+agreeing that this class needs no topological information. Prescription:
+correct topology in the loss, allocate with a wide prior, and combine.
+\end{abstract}
+
+\input{sections/intro}
+\input{sections/related}
+\input{sections/method}
+\input{sections/setup}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/limitations}
+
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
+
+\end{document}

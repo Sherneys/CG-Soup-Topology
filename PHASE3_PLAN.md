@@ -493,3 +493,22 @@ Source: `output/synth/topo3/quicklook.json`.
 arm, per-seed statistics + plots via a proper report script (extend
 `topo_eval_report.py` labels), PHASE3_STATUS.md + Thai .docx, paper-2
 skeleton. C4 (curvature-weighted) still deferred on the weight-mask feature.
+
+### Wave 2 addendum (2026-07-07) — stretch + control-strength arm
+
+- **double_torus (2 seeds, N=2000, H1-only, 2/4 measurable loops): SATURATED,
+  not informative about the channel.** Bottleneck pinned at .0264 with sd
+  exactly 0 in C0, C1, AND C2; Wasserstein equally pinned (.0527–.0528).
+  This replicates Phase 2b's floor: the two tube loops are unexpressable at
+  feasible budgets, and they dominate both diagram metrics. #sig H1 = 2 in
+  every run (the loss adds no phantoms); Chamfer ordering C1 (0.96) < C0
+  (0.98) < C2 (1.14). Verdict per the mechanical rule: FAIL (C1 == C0) —
+  reported as *saturated stretch case*.
+- **C2g gentle control (sphere, 3 seeds, rep radius 1× median spacing):
+  .0972 ± .0169 — still 1.6× worse than C0 and 6.2× worse than C1.** With
+  C2 (2×) destructive and C2g (1×) merely harmful, no tested repulsion
+  strength reproduces any of C1's gain; the sphere verdict line now reads
+  "C1 .0156 < C2g .0972 < C0 .0623 < C2 .1372".
+- Full per-seed tables, Welch σ (sphere 16.2, cube 18.5, torus 15.6,
+  two_spheres 12.6), and plots: `output/synth/topo3/report/` via
+  `experiments/topo_loss_report.py`.

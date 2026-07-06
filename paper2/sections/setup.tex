@@ -1,0 +1,35 @@
+\section{Experimental setup}
+\label{sec:setup}
+
+% Mirrors the companion study's setup section; budgets/headroom carried over.
+% TODO(human): venue-dependent compression.
+
+\paragraph{Scenes and budgets.} Synthetic COLMAP scenes with analytically
+known topology, rendered at $200{\times}200$ from 21 views: sphere and cube
+(void class H2, $\beta{=}(1,0,1)$, budget $N{=}1200$), torus (loop class H1,
+$(1,2,1)$, $N{=}700$), two spheres (component class H0, $(2,0,2)$, $N{=}700$),
+and genus-2 double torus as a stretch case ($(1,4,1)$, $N{=}2000$). Budgets
+are the companion study's headroom points --- tight enough that the baseline's
+topology is imperfect, so there is something to win.
+% src: PHASE2B_CROSSOVER.md (headroom pilot); PHASE3_PLAN.md §6
+
+\paragraph{Protocol.} 2{,}500 steps; resampling every 100 steps (untouched);
+$\rho{=}0.1$, ramp $0.2{:}0.5$, refresh $K{=}10$, $M{=}2048$; decisive shapes
+(sphere, torus) run 5 seeds with the full condition set (C0/C1/C2/C3/C5),
+replication shapes (cube, two spheres) 3 seeds (C0/C1/C2), double torus 2
+seeds. The torus restricts the loss to H1: its own void bar is sub-threshold
+at $M{=}2048$, and a loss must not act on features it cannot reliably measure
+at its sampling density. For the same reason the double torus targets its two
+measurable loops (of four) --- matching what the reconstruction itself can
+express at any feasible budget.
+% src: PHASE3_PLAN.md Appendix C (bundle preflights) + PHASE2B (2/4 loops)
+
+\paragraph{Metrics and verdict.} Primary: bottleneck distance to the target
+diagram in the shape's discriminating dimension, tail-averaged over the last
+trajectory dumps, seed-averaged (20k evaluation samples, target-normalized).
+Secondary: significant-feature counts (phantom check) and Chamfer parity.
+\emph{Verdict rule:} C1 must beat C0 \textbf{and} every norm-matched control
+at Chamfer parity --- a topological win a dumb regularizer can match is not a
+topological win. CUDA training is not bit-reproducible (baseline re-runs
+diverge at the first resample), so no bit-level claims are made anywhere.
+% src: experiments/topo_loss_report.py verdict rule; PHASE3_PLAN.md App. B

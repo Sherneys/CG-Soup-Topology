@@ -1,0 +1,36 @@
+\section{Limitations}
+\label{sec:limitations}
+
+% TODO(human): trim to venue length; keep the honesty.
+
+\textbf{Synthetic, closed, single-machine.} All quantitative claims are on
+synthetic closed-surface scenes with analytically known topology, rendered at
+$200{\times}200$, on one GPU. Generality on public shape sets and a real
+(open-surface, clinical) demonstration are future work; open surfaces add a
+genuine research obstacle --- scan boundaries contaminate H1, and no clean
+ground-truth diagram exists.
+
+\textbf{Density floor.} The loss cannot see features below the significance
+threshold at its sampling density (torus void; two of four double-torus
+loops at $M{=}2048$). The bundle audit makes this visible, not invisible ---
+but it is a real ceiling on what the objective can enforce.
+
+\textbf{Fixed target diagram.} The target bundle presumes known ground-truth
+topology (true in reconstruction-from-scans settings where a prior scan or
+template exists; not in blind capture). Template-free variants (e.g., losses
+on diagram \emph{statistics}) are untested here.
+
+\textbf{Control strength.} The repulsion control is aggressive (it destroys
+topology at the calibrated magnitude); a gentler variant at half the radius
+is still $1.6\times$ worse than baseline (sphere: $.0972$ vs $.0623$), so the
+verdicts do not hinge on control tuning --- but control \emph{design} for
+loss-channel studies deserves more variety than one family at two strengths.
+% src: topo3/report/results.json
+
+\textbf{Nondeterminism.} DiffSoup's CUDA training is not bit-reproducible ---
+even baseline re-runs diverge in resampling decisions --- so all statements
+are seed-averaged; per-run reproductions will differ in detail.
+
+\textbf{Deferred arms.} Curvature-weighted spatial masking of the loss (C4)
+and the dental showcase are designed but not run; both are gated on a small
+weight-mask extension to the loss state.
