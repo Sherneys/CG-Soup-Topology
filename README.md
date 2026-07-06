@@ -1,63 +1,139 @@
-# topology/ — Topology-aware Adaptive Resampling (Phase 1: measurement + demo)
+# CG-Soup-Topology
 
-Self-contained module for the topology research thread, kept separate from the
-main CG-Soup / DiffSoup code (`src/`, `data/`, …). **Phase 1 is measurement-only**:
-it computes topology (persistent homology via an alpha complex) to *measure* what
-geometric metrics (Chamfer / Hausdorff) miss. No resampling method and no
-differentiable persistent homology live here yet — those are Phase 2 / 3.
+The topology research thread of the CG-Soup / DiffSoup project, checked out as a
+standalone repo. It asks one question about differentiable triangle-soup
+reconstruction: **can a topological prior fix the topology that photometric
+gradients miss — and what shape should that prior have?** The repo contains the
+full thread: the measurement harness (Phase 1), the topology-aware resampling
+method and its controlled experiments (Phase 2 / 2b), and the paper draft.
+
+**Paper:** *Concentrate or Spread? Shaping Topological Resampling Priors for
+Differentiable Triangle-Soup Reconstruction* — prebuilt at `paper/main.pdf`
+(rebuild with `latexmk -pdf main.tex` inside `paper/`). Author notes, grounding
+log, and open items: `NOTES_FOR_AUTHOR.md`.
+
+## The story in four results
+
+1. **Geometric metrics are topology-blind (Phase 1).** In 3/3 controlled cases,
+   candidate reconstructions tuned to *equal Chamfer* but different topology
+   (genus / connectivity / enclosed void) are separated ~30–40× by the
+   persistence-diagram bottleneck distance — and in 2 of 3 cases Hausdorff95
+   *prefers* the topologically wrong candidate. See `figures/summary.md`.
+2. **An init-only bias washes out.** A topological bias applied once at
+   initialization (condition B1) is erased by the first resampling step —
+   topological guidance must be **in-loop**.
+3. **Topology-aware in-loop resampling wins — but only for voids (Phase 2).**
+   The method: precompute an importance field from the target (persistence pairs
+   localized via GUDHI, splatted on the surface), use it to bias where new
+   triangles respawn and which are protected from pruning. Budget-neutral, one
+   knob `lambda_topo`, and `lambda_topo=0` reduces exactly to the baseline. The
+   concentrated field (B2) gives a genuine *topology-specific* win for enclosed
+   voids (H2: sphere / cube / cylinder — beats baseline **and** the
+   non-topological control at Chamfer parity), is null for components (H0), and
+   backfires on loops (H1) at tight budgets by manufacturing phantom handles.
+4. **No dimensional crossover — spread, don't concentrate (Phase 2b).** A
+   mass-preserving width knob interpolates between the *concentrated* prior (B2)
+   and the same mass *spread* over the feature's support (B4). Spread is at
+   least as good at every feature dimension and strictly better for voids and
+   loops: for voids it cuts bottleneck-to-target **33–53% below baseline** at
+   Chamfer parity. But a width-matched non-topological control (B5) recovers
+   most of that gain — **the value-add is width, not topological targeting**,
+   leaving only a small, shape-dependent topological residual for voids. That
+   honest caveat is the paper's thesis.
+
+## Experimental conditions (the vocabulary used everywhere)
+
+| Cond | Importance field | Applied | Isolates |
+|------|-----------------|---------|----------|
+| B0 | — (baseline DiffSoup resampling) | — | control |
+| B1 | topological, concentrated | init only | washout of one-shot bias |
+| B2 | topological, concentrated (σ = √death) | in-loop | the Phase-2 method |
+| B3 | non-topological (random / curvature) | in-loop | "is *topological* doing anything?" |
+| B4 | topological, spread (σ → s·σ, mass-preserving) | in-loop | concentrate vs spread |
+| B5 | non-topological, width-matched to B4 | in-loop | "is it just *width*?" |
 
 ## Layout
 
 ```
-topology/
-  __init__.py          package surface (import topology)
-  persistence.py       persistence diagrams H0/H1/H2 (GUDHI alpha complex); 2 entry points
-  metrics.py           Topology Stability Metric (bottleneck/Wasserstein + significant-feature counts)
-  meshes.py            deterministic synthetic shapes + seeded samplers (incl. soup/mesh adapters)
-  plots.py             persistence-diagram + stability-series plotting
-  experiments/
-    topology_blindness.py   the demo: 3 controlled cases + table + gate
-  tests/
-    test_betti.py           Betti recovery (sphere/torus/2-spheres) + determinism
-  scripts/
-    make_topology_report_docx.py   build the Thai .docx summary
-  figures/             generated: pd_*.png, stability_series.png/csv, summary.md, blindness_results.json
-  docs/                generated: CG-Soup_Topology_Phase1_TH.docx
+persistence.py  metrics.py  meshes.py  plots.py     Phase-1 measurement package ("topology"):
+                                                    persistence diagrams (alpha complex), stability
+                                                    metric, deterministic shapes, plotting
+methods/
+  _paths.py            import shim (see below) + sibling-repo roots
+  topo_importance.py   importance field: persistence localization -> surface splat; spread knob
+  topo_resampling.py   TopoResamplePolicy: protected keep-map + budget-neutral densify
+experiments/
+  topology_blindness.py      Phase-1 demo: 3 controlled cases + table + gate (standalone)
+  topo_resampling_eval.py    B0..B5 sweep harness driving diffsoup_train (needs siblings + CUDA)
+  topo_eval_report.py        tables + plots: bottleneck-to-target, Betti, Chamfer parity
+  dimensional_crossover.py   Phase-2b orchestrator (feature-dim x concentrate/spread)
+  crossover_report.py        Phase-2b analysis
+  make_crossover_scenes.py   builds the Phase-2b COLMAP scenes
+tests/test_betti.py    9/9: Betti recovery on 6 deterministic shapes + determinism checks
+scripts/               builders for the Thai .docx reports (Phase 1 & 2)
+paper/                 LaTeX sources, sections/, figures/, refs.bib, prebuilt main.pdf
+figures/  docs/        Phase-1 outputs; Thai reports (CG-Soup_Topology_Phase{1,2}_TH.docx)
 ```
 
-## Install
+Status documents: `PHASE2_EXPLORATION_AND_PLAN.md` (design + injection-point
+exploration), `PHASE2_STATUS.md` (implementation + full-sweep results),
+`PHASE2B_CROSSOVER.md` (spread-vs-concentrate experiment), `NOTES_FOR_AUTHOR.md`
+(paper-level narrative and checklist).
+
+## Import quirk (standalone checkout)
+
+The package is written to be imported as `topology`, but this repo's folder is
+named `CG-Soup-Topology`, so a plain `import topology` fails here. Use the shim:
+
+```python
+from methods._paths import load_topology
+load_topology()            # registers this dir under the name "topology"
+from topology import meshes, persistence
+```
+
+Every script in the repo already goes through it.
+
+## Sibling repos (training sweeps only)
+
+Measurement, tests, the blindness demo, and the paper are self-contained. The
+B0–B5 *training* sweeps drive the real DiffSoup optimizer and expect two sibling
+checkouts, located via env vars (defaults in parentheses):
+
+- `DIFFSOUP_ROOT` (`D:\Project\diffsoup`) — the differentiable rasterizer
+  library. Never modified by this work.
+- `CGSOUP_ROOT` (`D:\Project\CG-Soup-for-Digital-Dentistry`) — the training
+  repo: `src/diffsoup_train.py` (which carries the non-invasive
+  `resample_soup(..., policy=None)` hook and the `--resample_mode /
+  --lambda_topo / --importance_npz / --topo_init / --topo_dim` flags),
+  `src/make_synthetic_scene.py`, prebuilt `output/synth/*` scenes, and the
+  `.venv` the harness invokes (needs gudhi, POT, torch + CUDA, diffsoup,
+  trimesh, open3d).
+
+## Run
+
+Standalone (any Python ≥3.11 with `numpy scipy gudhi pot matplotlib scikit-image`):
 
 ```powershell
-uv pip install gudhi pot        # both ship Apple-Silicon (macOS arm64) wheels — no compiler needed
+python tests\test_betti.py                                     # 9/9 PASS, fully seeded
+$env:PYTHONUTF8=1; python experiments\topology_blindness.py    # Phase-1 demo (~40 s)
+python scripts\make_topology_report_docx.py                    # Thai Phase-1 .docx (python-docx)
 ```
 
-## Run (deterministic — every sample is seeded)
+Training sweeps (sibling repos + CUDA GPU; hours):
 
 ```powershell
-# from the repo root:
-.venv\Scripts\python.exe topology\tests\test_betti.py                  # 6/6 PASS
-$env:PYTHONUTF8=1 ; .venv\Scripts\python.exe topology\experiments\topology_blindness.py   # table + figures (~40s)
-.venv\Scripts\python.exe topology\scripts\make_topology_report_docx.py # Thai .docx into topology/docs/
+# Phase-2 sweep: shapes x conditions x seeds, resumable
+python experiments\topo_resampling_eval.py --shapes sphere cube cylinder `
+    --seeds 0 1 2 --conditions B0 B2 B3 --steps 2500 --max_faces 1200
+python experiments\topo_eval_report.py                         # tables + figures
+
+# Phase-2b crossover (per-feature-class headroom budgets)
+python experiments\dimensional_crossover.py
+python experiments\crossover_report.py
 ```
 
-The scripts add the repo root to `sys.path`, so `import topology` resolves wherever
-you run them from.
-
-## Result (Phase 1)
-
-Betti recovery passes 6/6. The blindness demo passes **3/3 cases**: A (topology-correct)
-and B (topology-wrong) are tuned to **equal Chamfer**, yet the bottleneck distance of
-the persistence diagram to ground truth separates them by ~30–40× in the relevant
-dimension — and in 2 of 3 cases Hausdorff95 even *prefers* the wrong candidate. See
-`figures/summary.md` (English) or `docs/CG-Soup_Topology_Phase1_TH.docx` (Thai).
-
-## Reuse / forward-compat (Phase 2)
-
-- `persistence.persistence_from_target(...)` is defined and API-frozen but **unused** by
-  Phase-1 code — it is the topological prior a Phase-2 resampler will match against.
-- `metrics.load_trajectory(traj_dir)` ingests the `step_*.pt` dumps that
-  `src/diffsoup_train.py --traj_dir` writes, so the stability metric plugs straight onto a
-  real DiffSoup run.
-- `meshes.soup_cloud(ckpt, …)` samples a DiffSoup checkpoint the same way
-  `src/eval_geometry.py` does (alpha × area), so topology and geometry metrics are
-  numerically consistent.
+Reproducibility caveat (documented in `PHASE2_STATUS.md`): resampling
+*decisions* are deterministic per seed, but DiffSoup's CUDA rasterizer is not
+bit-reproducible run-to-run (atomics), so vertex positions drift slightly —
+results are therefore averaged over seeds, and the topology metric samples
+soups α×area-weighted to be robust to a few drifting triangles.
