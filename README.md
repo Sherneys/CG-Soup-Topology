@@ -2,15 +2,23 @@
 
 The topology research thread of the CG-Soup / DiffSoup project, checked out as a
 standalone repo. It asks one question about differentiable triangle-soup
-reconstruction: **can a topological prior fix the topology that photometric
-gradients miss — and what shape should that prior have?** The repo contains the
-full thread: the measurement harness (Phase 1), the topology-aware resampling
-method and its controlled experiments (Phase 2 / 2b), and the paper draft.
+reconstruction: **photometric gradients are topology-blind — where should the
+topological signal enter, and what shape should it take?** The repo contains
+the full thread: the measurement harness (Phase 1), the topology-aware
+*resampling prior* and its controlled experiments (Phase 2 / 2b), the
+differentiable *topological loss* (Phase 3), and both paper drafts.
 
-**Paper:** *Concentrate or Spread? Shaping Topological Resampling Priors for
-Differentiable Triangle-Soup Reconstruction* — prebuilt at `paper/main.pdf`
-(rebuild with `latexmk -pdf main.tex` inside `paper/`). Author notes, grounding
-log, and open items: `NOTES_FOR_AUTHOR.md`.
+**Papers:**
+
+- Paper 1 — *Concentrate or Spread? Shaping Topological Resampling Priors for
+  Differentiable Triangle-Soup Reconstruction* — prebuilt at `paper/main.pdf`.
+  Author notes, grounding log, open items: `NOTES_FOR_AUTHOR.md`.
+- Paper 2 (skeleton) — *Topology-Correcting Differentiable Triangle-Soup
+  Reconstruction via Persistent Homology* — prebuilt at `paper2/main.pdf`.
+  Numbers and citations are wired; voice pass + venue pending.
+
+(Both build with `latexmk -pdf main.tex` or `tectonic main.tex` inside their
+directory.)
 
 ## The story in five results
 
@@ -53,6 +61,8 @@ log, and open items: `NOTES_FOR_AUTHOR.md`.
 
 ## Experimental conditions (the vocabulary used everywhere)
 
+Phase 2 / 2b — the **resampling-prior** channel (B-arms):
+
 | Cond | Importance field | Applied | Isolates |
 |------|-----------------|---------|----------|
 | B0 | — (baseline DiffSoup resampling) | — | control |
@@ -61,6 +71,16 @@ log, and open items: `NOTES_FOR_AUTHOR.md`.
 | B3 | non-topological (random / curvature) | in-loop | "is *topological* doing anything?" |
 | B4 | topological, spread (σ → s·σ, mass-preserving) | in-loop | concentrate vs spread |
 | B5 | non-topological, width-matched to B4 | in-loop | "is it just *width*?" |
+
+Phase 3 — the **loss** channel (C-arms; same control discipline):
+
+| Cond | Objective | Isolates |
+|------|-----------|----------|
+| C0 | photometric only | baseline |
+| C1 | + matched topological loss (ρ=0.1, ramp) | the Phase-3 method |
+| C2 / C2g | + norm-matched repulsion on the same samples (2× / 1× spacing) | "is it just extra vertex regularization?" — at two control strengths |
+| C3 | C1 with constant λ (no ramp) | is the curriculum needed? |
+| C5 | C1 + the B4 spread prior | do the two channels stack? |
 
 ## Layout
 
@@ -86,10 +106,12 @@ experiments/
 tests/test_betti.py    9/9: Betti recovery on 6 deterministic shapes + determinism checks
 tests/test_topo_loss.py  10/10: Phase-3 stage-3a gate (gradchecks, alpha-complex
                        assumption gates, defect-repair toys -> figures/phase3_toy/)
-scripts/               builders for the Thai .docx reports (Phase 1 & 2)
+scripts/               builders for the Thai .docx reports (Phases 1, 2 & 3)
 paper/                 paper 1 ("Concentrate or Spread?"): LaTeX, figures, prebuilt main.pdf
-paper2/                paper 2 skeleton ("Topology-Correcting ... via Persistent Homology")
-figures/  docs/        Phase-1 outputs; Thai reports (CG-Soup_Topology_Phase{1,2}_TH.docx)
+paper2/                paper 2 skeleton ("Topology-Correcting ... via Persistent
+                       Homology"): LaTeX, report figures, prebuilt main.pdf
+figures/  docs/        Phase-1 outputs + Phase-3 toy artifacts (phase3_toy/);
+                       Thai reports (CG-Soup_Topology_Phase{1,2,3}_TH.docx)
 ```
 
 Status documents: `PHASE2_EXPLORATION_AND_PLAN.md` (design + injection-point
@@ -114,34 +136,39 @@ Every script in the repo already goes through it.
 
 ## Sibling repos (training sweeps only)
 
-Measurement, tests, the blindness demo, and the paper are self-contained. The
-B0–B5 *training* sweeps drive the real DiffSoup optimizer and expect two sibling
-checkouts, located via env vars (defaults in parentheses):
+Measurement, tests, the blindness demo, and the papers are self-contained. The
+B- and C-arm *training* sweeps drive the real DiffSoup optimizer and expect two
+sibling checkouts, located via env vars (defaults in parentheses):
 
 - `DIFFSOUP_ROOT` (`D:\Project\diffsoup`) — the differentiable rasterizer
   library. Never modified by this work.
 - `CGSOUP_ROOT` (`D:\Project\CG-Soup-for-Digital-Dentistry`) — the training
-  repo: `src/diffsoup_train.py` (which carries the non-invasive
-  `resample_soup(..., policy=None)` hook and the `--resample_mode /
-  --lambda_topo / --importance_npz / --topo_init / --topo_dim` flags),
-  `src/make_synthetic_scene.py`, prebuilt `output/synth/*` scenes, and the
-  `.venv` the harness invokes (needs gudhi, POT, torch + CUDA, diffsoup,
+  repo: `src/diffsoup_train.py`, which carries two non-invasive hooks —
+  the Phase-2 `resample_soup(..., policy=None)` seam (`--resample_mode /
+  --lambda_topo / --importance_npz / --topo_init / --topo_dim`) and the
+  Phase-3 one-line loss hook (`--topo_loss_npz / --topo_rho /
+  --topo_loss_every / --topo_loss_pts / --topo_loss_dims / --topo_ramp /
+  --topo_loss_mode / --topo_rep_scale`; flag off ⇒ zero Phase-3 code runs) —
+  plus `src/make_synthetic_scene.py`, prebuilt `output/synth/*` scenes, and
+  the `.venv` the harness invokes (needs gudhi, POT, torch + CUDA, diffsoup,
   trimesh, open3d).
 
 ## Run
 
-Standalone (any Python ≥3.11 with `numpy scipy gudhi pot matplotlib scikit-image`):
+Standalone (any Python ≥3.11 with `numpy scipy gudhi pot matplotlib
+scikit-image`; the Phase-3 gate additionally needs `torch`, CPU is fine):
 
 ```powershell
 python tests\test_betti.py                                     # 9/9 PASS, fully seeded
+python tests\test_topo_loss.py                                 # 10/10 Phase-3 gate (~6 min)
 $env:PYTHONUTF8=1; python experiments\topology_blindness.py    # Phase-1 demo (~40 s)
 python scripts\make_topology_report_docx.py                    # Thai Phase-1 .docx (python-docx)
 ```
 
-Training sweeps (sibling repos + CUDA GPU; hours):
+Training sweeps (sibling repos + CUDA GPU):
 
 ```powershell
-# Phase-2 sweep: shapes x conditions x seeds, resumable
+# Phase-2 prior sweep: shapes x conditions x seeds, resumable
 python experiments\topo_resampling_eval.py --shapes sphere cube cylinder `
     --seeds 0 1 2 --conditions B0 B2 B3 --steps 2500 --max_faces 1200
 python experiments\topo_eval_report.py                         # tables + figures
@@ -149,10 +176,18 @@ python experiments\topo_eval_report.py                         # tables + figure
 # Phase-2b crossover (per-feature-class headroom budgets)
 python experiments\dimensional_crossover.py
 python experiments\crossover_report.py
+
+# Phase-3 loss matrix (bundle preflight is automatic; resumable)
+python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 3 4 `
+    --conditions C0 C1 C2 C3 C5 --rhos 0.1 --steps 2500 --max_faces 1200
+python experiments\topo_loss_report.py                         # verdicts + plots
 ```
 
-Reproducibility caveat (documented in `PHASE2_STATUS.md`): resampling
-*decisions* are deterministic per seed, but DiffSoup's CUDA rasterizer is not
-bit-reproducible run-to-run (atomics), so vertex positions drift slightly —
-results are therefore averaged over seeds, and the topology metric samples
-soups α×area-weighted to be robust to a few drifting triangles.
+Reproducibility caveat (documented in `PHASE2_STATUS.md`; sharpened in
+`PHASE3_PLAN.md` Appendix B): DiffSoup's CUDA rasterizer is not
+bit-reproducible run-to-run (atomics) — vertex positions drift, and even
+baseline resampling *decisions* can flip at borderline prune/split calls, so
+same-seed re-runs diverge. All results are therefore seed-averaged; hook
+cleanliness is judged by divergence-equivalence against a baseline-vs-baseline
+control pair, and the topology metric samples soups α×area-weighted to be
+robust to a few drifting triangles.
