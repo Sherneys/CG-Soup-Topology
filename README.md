@@ -62,6 +62,8 @@ methods/
   _paths.py            import shim (see below) + sibling-repo roots
   topo_importance.py   importance field: persistence localization -> surface splat; spread knob
   topo_resampling.py   TopoResamplePolicy: protected keep-map + budget-neutral densify
+  topological_loss.py  Phase 3: differentiable persistence loss (pair-frozen
+                       circumradius backward, matched-Wasserstein + recruitment)
 experiments/
   topology_blindness.py      Phase-1 demo: 3 controlled cases + table + gate (standalone)
   topo_resampling_eval.py    B0..B5 sweep harness driving diffsoup_train (needs siblings + CUDA)
@@ -70,6 +72,8 @@ experiments/
   crossover_report.py        Phase-2b analysis
   make_crossover_scenes.py   builds the Phase-2b COLMAP scenes
 tests/test_betti.py    9/9: Betti recovery on 6 deterministic shapes + determinism checks
+tests/test_topo_loss.py  10/10: Phase-3 stage-3a gate (gradchecks, alpha-complex
+                       assumption gates, defect-repair toys -> figures/phase3_toy/)
 scripts/               builders for the Thai .docx reports (Phase 1 & 2)
 paper/                 LaTeX sources, sections/, figures/, refs.bib, prebuilt main.pdf
 figures/  docs/        Phase-1 outputs; Thai reports (CG-Soup_Topology_Phase{1,2}_TH.docx)
@@ -77,8 +81,9 @@ figures/  docs/        Phase-1 outputs; Thai reports (CG-Soup_Topology_Phase{1,2
 
 Status documents: `PHASE2_EXPLORATION_AND_PLAN.md` (design + injection-point
 exploration), `PHASE2_STATUS.md` (implementation + full-sweep results),
-`PHASE2B_CROSSOVER.md` (spread-vs-concentrate experiment), `NOTES_FOR_AUTHOR.md`
-(paper-level narrative and checklist).
+`PHASE2B_CROSSOVER.md` (spread-vs-concentrate experiment), `PHASE3_PLAN.md`
+(differentiable topological loss: plan + stage-3a gate results),
+`NOTES_FOR_AUTHOR.md` (paper-level narrative and checklist).
 
 ## Import quirk (standalone checkout)
 
