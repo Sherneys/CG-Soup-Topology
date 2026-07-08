@@ -46,10 +46,11 @@ meshes, metrics = topology.meshes, topology.metrics
 TAG_RE = re.compile(r"^(?P<shape>[a-z_]+?)_(?P<cond>C\w+?)(?:_r(?P<rho>[0-9.]+))?_s(?P<seed>\d+)$")
 
 COLORS = {"C0": "#7f7f7f", "C1": "#1f77b4", "C2": "#d62728", "C2g": "#ff7f0e",
-          "C3": "#17becf", "C5": "#9467bd"}
+          "C3": "#17becf", "C5": "#9467bd", "C6": "#e377c2"}
 LABELS = {"C0": "C0 baseline", "C1": "C1 topo loss",
           "C2": "C2 repulsion control", "C2g": "C2g gentle control",
-          "C3": "C3 no-curriculum", "C5": "C5 loss + B4 prior"}
+          "C3": "C3 no-curriculum", "C5": "C5 loss + B4 prior",
+          "C6": "C6 no-recruitment"}
 CONTROLS = ("C2", "C2g")
 PARITY_MULT = 1.15                   # C1 Chamfer must stay within this of C0
 

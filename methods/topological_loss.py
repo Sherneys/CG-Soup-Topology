@@ -492,7 +492,8 @@ class TopoLossState:
     def __init__(self, bundle_path, *, rho: float = 0.1, every: int = 10,
                  n_pts: int = 2048, dims: Optional[Sequence[int]] = None,
                  ramp: Sequence[float] = (0.2, 0.5), total_steps: int = 2500,
-                 mode: str = "matched", seed: int = 0, rep_scale: float = 2.0):
+                 mode: str = "matched", seed: int = 0, rep_scale: float = 2.0,
+                 recruit: bool = True):
         self.bundle = (TargetBundle.load(bundle_path)
                        if isinstance(bundle_path, str) else bundle_path)
         self.rho = float(rho)
@@ -506,8 +507,10 @@ class TopoLossState:
         self.mode = mode
         self.seed = int(seed)
         self.rep_scale = float(rep_scale)      # C2's push radius, in median spacings
+        self.recruit = bool(recruit)           # False = pure matching+diagonal (C6)
         self.lam_peak: Optional[float] = None
         self.log: list = []                    # (step, lam, raw, n_terms)
+        self.refresh_log: list = []            # (refresh#, step, per-dim plan counts)
         self._plan: Optional[LossPlan] = None
         self._faces = self._bary = None        # frozen sampling (torch)
         self._F_ref = None
@@ -557,7 +560,10 @@ class TopoLossState:
         self._bary = torch.as_tensor(bary, device=V.device, dtype=V.dtype)
         X = self._positions(V.detach()).double().cpu().numpy()
         if self.mode == "matched":
-            self._plan = plan_topo_loss(X, self.bundle, dims=self.dims)
+            self._plan = plan_topo_loss(X, self.bundle, dims=self.dims,
+                                        recruit=self.recruit)
+            self.refresh_log.append((self._n_refresh, self._last_refresh,
+                                     self._plan.info.get("per_dim", {})))
         else:                                              # C2: frozen kNN pairs
             dd, jj = cKDTree(X).query(X, k=5)
             ii = np.repeat(np.arange(len(X)), 4)
@@ -628,8 +634,11 @@ class TopoLossState:
             json.dump({"lam_peak": self.lam_peak, "rho": self.rho,
                        "mode": self.mode, "ramp": list(self.ramp),
                        "every": self.every, "n_pts": self.n_pts,
+                       "recruit": self.recruit,
                        "entries": [[int(s), float(l), float(r), int(n)]
-                                   for s, l, r, n in self.log]}, fh)
+                                   for s, l, r, n in self.log],
+                       "refreshes": [[int(k), int(s), c]
+                                     for k, s, c in self.refresh_log]}, fh)
         return path
 
 

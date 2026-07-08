@@ -8,6 +8,7 @@
 #   C2  + gradient-norm-matched repulsion on the SAME samples (the control)
 #   C3  C1 WITHOUT curriculum (constant lambda from step 1: ramp "0:0")
 #   C5  C1 + the B4 spread resampling prior (Phase-2 best; channel stacking)
+#   C6  C1 WITHOUT recruitment (pure matching+diagonal; --topo_recruit 0)
 #   (C4 curvature-weighted spatial mask: DEFERRED — needs a weight-mask input
 #    on TopoLossState; wire it before the decisive-shape extension runs.)
 #
@@ -90,6 +91,8 @@ def condition_flags(cond: str, shape: str, bundle: str, rho: float, ramp: str,
                      "--importance_npz", field_path(shape, spread_kind(spread)),
                      "--lambda_topo", str(lam_prior),
                      "--topo_dim", str(SHAPE_DIM[shape])]
+    if cond == "C6":                                     # no recruitment (ablation)
+        return c1 + ["--topo_recruit", "0"]
     raise ValueError(cond)
 
 
@@ -164,7 +167,7 @@ def main() -> int:
     ap.add_argument("--shapes", nargs="+", default=["sphere"])
     ap.add_argument("--seeds", nargs="+", type=int, default=[0])
     ap.add_argument("--conditions", nargs="+", default=["C0", "C1", "C2"],
-                    choices=["C0", "C1", "C2", "C2g", "C3", "C5"])
+                    choices=["C0", "C1", "C2", "C2g", "C3", "C5", "C6"])
     ap.add_argument("--rhos", nargs="+", type=float, default=[0.1])
     ap.add_argument("--ramp", default="0.2:0.5")
     ap.add_argument("--steps", type=int, default=2500)
