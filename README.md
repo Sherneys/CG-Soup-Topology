@@ -52,13 +52,13 @@ directory.)
    differentiable persistence loss (`L = photometric + λ(t)·L_topo`;
    pair-frozen circumradius backward, matched-Wasserstein + recruitment, one
    gradient-ratio-calibrated knob ρ) is topology-specific where the priors
-   were not: voids improve 4.0–7.9×, and **loops improve 2.4× with zero
+   were not: voids improve 4.0–7.9×, and **loops improve 2.3× with zero
    phantom handles** — the class every prior shape failed. The two channels
    stack (loss + B4 prior: 7.6× below baseline at the best Chamfer), H0 stays
    non-topological for a third consecutive channel, and a curriculum schedule
    proved unnecessary once λ is calibrated. The verdicts replicate, with no
    per-shape tuning, on three external genus-known meshes (spot genus 0 /
-   bob genus 1 / fandisk CAD: 2.0–10.3× at equal-or-better Chamfer; zero
+   bob genus 1 / fandisk CAD: 2.1–10.4× at equal-or-better Chamfer; zero
    phantom handles on the genus-1 case). See `PHASE3_STATUS.md` and the
    paper-2 draft in `paper2/`.
 

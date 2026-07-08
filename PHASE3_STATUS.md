@@ -52,9 +52,9 @@ over seeds; ×N = reduction vs C0):
 | shape (dim, N, seeds) | C0 | C1 topo loss | C2 control | C3 no-ramp | C5 loss+B4 |
 |---|---|---|---|---|---|
 | sphere (H2, 1200, 5) | .0623±.0063 | **.0156±.0013 (4.0×)** | .1372 (2.2× worse); gentle C2g .0972±.0169 (still worse than C0) | .0151±.0004 | **.0082±.0007 (7.6×)** |
-| cube (H2, 1200, 3) | .0582±.0047 | **.0074±.0011 (7.9×)** | .1346, **b₂ 1→0** | — | — |
-| torus (H1, 700, 5) | .0424±.0031 | **.0180±.0016 (2.4×)** | .0457, **b₁ 2→1** | .0155±.0014 | **.0133±.0004 (3.2×)** |
-| two_spheres (H0, 700, 3) | .0065±.0008 | .0007±.0002 (9.3×) | .0008 (**ties C1**) | — | — |
+| cube (H2, 1200, 3) | .0582±.0046 | **.0074±.0011 (7.9×)** | .1346, **b₂ 1→0** | — | — |
+| torus (H1, 700, 5) | .0424±.0031 | **.0180±.0016 (2.3×)** | .0457, **b₁ 2→1** | .0155±.0015 | **.0133±.0004 (3.2×)** |
+| two_spheres (H0, 700, 3) | .0065±.0008 | .0007±.0002 (9.5×) | .0008 (**ties C1**) | — | — |
 | double_torus (H1, 2000, 2) | .0264±.0000 | .0264±.0000 | .0264±.0000 | — | — |
 
 **Verdicts** (report's Welch σ; C1 < C0 AND C1 < every control at Chamfer
@@ -73,13 +73,14 @@ Chamfer 0.96 vs C0's 0.98).
 
 1. **The loss channel succeeds where the prior channel failed: H1.** Phase 2's
    concentrated prior manufactured phantom handles; its spread prior never
-   beat the random control. The loss cuts torus H1 error 2.4× with zero
+   beat the random control. The loss cuts torus H1 error 2.3× with zero
    phantom handles in all 5 seeds (#sig H1 = 2 throughout), while the
    repulsion control collapses a loop. Metric pressure on birth/death values
    suits 1-D features better than budget allocation does.
 2. **The channels stack.** C5 (loss + Phase-2b's B4 spread prior) is best
    everywhere tested — sphere .0082 (7.6× vs C0, ≈2× vs C1 alone, ≈4.6× below
-   B4 alone), torus .0133 — with the best Chamfer too. Allocation (prior) and
+   B4 alone), torus .0133 — with the best sphere Chamfer too; on the torus its
+   Chamfer (.502) trails only C3 (.495). Allocation (prior) and
    value-tuning (loss) are complementary mechanisms.
 3. **H0 is not topological — third channel, same answer.** Component accuracy
    is matched by generic spreading pressure in Phase 2 (B3≈B2), Phase 2b
@@ -113,14 +114,14 @@ Protocol: C0/C1/C2 × seeds {0,1,2}, ρ=0.1, ramp 0.2:0.5, 2,500 steps —
 | shape (dim, N) | C0 | C1 topo loss | C2 control | verdict |
 |---|---|---|---|---|
 | spot (H2, 1200) | .0521±.0081 | **.0237±.0000 (2.2×)** | .0652, **b₂ 1→0** | PASS (6.1σ) |
-| bob (H1, 700) | .0426±.0012 | **.0208±.0008 (2.0×)** | .0437, **b₁ 2→1** | PASS (26.1σ) |
-| fandisk (H2, 1200) | .0538±.0022 | **.0052±.0008 (10.3×)** | .0571, **b₂ 1→0** | PASS (35.7σ) |
+| bob (H1, 700) | .0426±.0012 | **.0208±.0008 (2.1×)** | .0437, **b₁ 2→1** | PASS (26.1σ) |
+| fandisk (H2, 1200) | .0538±.0022 | **.0052±.0008 (10.4×)** | .0571, **b₂ 1→0** | PASS (35.7σ) |
 
 C1's Chamfer is *better* than C0 on all three (parity trivially OK). The
 control's failure modes replicate exactly: void erased on both H2 shapes,
 loop collapsed on the genus-1 shape, all seeds. **The H1 claim survives the
 family change** (bob: #sig H1 = 2 in every seed — zero phantom handles,
-replicating torus); **fandisk's 10.3× is the largest effect in the study**.
+replicating torus); **fandisk's 10.4× is the largest effect in the study**.
 
 Caveats, honestly: spot's *baseline* manufactures a phantom void in 2/3
 seeds (final #sig H2 = 2,1,2); C1 clears it in two seeds but retains one
