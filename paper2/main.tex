@@ -7,8 +7,9 @@
 %   * every numeric result carries a "% src:" comment naming the results file
 %     it was read from (PHASE3_PLAN.md appendices A-D and
 %     output/synth/topo3/report/results.json). No number without a source.
-%   * citations reuse ONLY entries already verified for paper 1 (refs.bib
-%     copied verbatim); anything new is a red \TODO, never a guessed entry.
+%   * citations: paper-1 verified set + three additions (companion manuscript,
+%     leygonie2022framework, nigmetov2024bigsteps — the latter two web-verified
+%     2026-07-09, provenance comments in refs.bib). Never a guessed entry.
 %   * author-only spots are marked % TODO(human).
 % ============================================================================
 \documentclass[11pt]{article}
@@ -31,9 +32,14 @@
 % TODO(human): venue document class + author block reformat, as with paper 1.
 \title{Topology-Correcting Differentiable Triangle-Soup Reconstruction\\
        via Persistent Homology}
-\author{Viritphon Chongpermwattanapol \qquad Pizzanu Kanongchaiyos\\[4pt]
+% Advisor email verified 2026-07-09 from the official faculty page
+% (cp.eng.chula.ac.th/en/about/faculty/pizzanuk). First-author address is the
+% personal one on file — swap for an institutional address if preferred.
+\author{Viritphon Chongpermwattanapol\thanks{Corresponding author:
+  \texttt{viritphon.1234@gmail.com}} \qquad Pizzanu Kanongchaiyos\\[4pt]
   Department of Computer Engineering, Faculty of Engineering,\\
-  Chulalongkorn University, Bangkok, Thailand}
+  Chulalongkorn University, Bangkok, Thailand\\[2pt]
+  \texttt{viritphon.1234@gmail.com}\quad\texttt{pizzanu.k@chula.ac.th}}
 \date{\today}
 
 \begin{document}
