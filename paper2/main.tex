@@ -51,10 +51,11 @@
 % ----------------------------------------------------------------------------
 \begin{abstract}
 Resampling priors can steer \emph{where} a differentiable triangle-soup
-reconstruction spends its triangle budget, but our companion study found their
-topological value is carried largely by spatial \emph{width}, and that no
-prior shape repairs one-dimensional features: concentrated priors manufacture
-phantom handles, spread priors never beat a random control. We move topology
+reconstruction spends its triangle budget, but our companion study
+(summarized in Appendix~\ref{app:companion}) found their topological value
+is carried largely by spatial \emph{width}, and that no prior shape repairs
+one-dimensional features: concentrated priors manufacture phantom handles,
+spread priors never beat a random control. We move topology
 from the allocation channel into the \emph{objective}: a differentiable
 persistence loss $L=\mathrm{photometric}+\lambda(t)\,L_{\mathrm{topo}}$, where
 $L_{\mathrm{topo}}$ is an optimally-matched distance between the live surface's
@@ -88,6 +89,11 @@ combine.
 \input{sections/results}
 \input{sections/discussion}
 \input{sections/limitations}
+
+% Submit-first self-containment (2026-07-09): every companion-study fact this
+% paper relies on, restated with numbers. Moves to supplementary at venues
+% with strict page limits.
+\input{sections/appendix_companion}
 
 \bibliographystyle{unsrtnat}
 \bibliography{refs}

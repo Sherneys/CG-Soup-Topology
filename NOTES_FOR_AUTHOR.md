@@ -1,3 +1,42 @@
+# PAPER 2 (`paper2/`) — SUBMIT-FIRST PLAN (2026-07-09)
+
+**Your decision: submit paper 2 BEFORE paper 1.** The structural consequence — paper 2
+may not *depend* on an unpublished companion — is resolved: **Appendix A ("The
+allocation-channel study, in brief")** now restates, with numbers, every companion fact
+paper 2 uses: the 3-case blindness result (Chamfer-equal by construction; bottleneck
+35–40× apart), the prior arms + the void width-primacy table (B0/B2/B3/B4/B5, 5 paired
+seeds, `h2_unified`), the torus failure (B5 .0267 best; B2 phantom handles #sig 4.4 vs
+true 2, `crossover`), and the B4 definition C5 reuses. Every number carries a `% src:`.
+Abstract/intro/method/setup/results now point at the appendix; the companion stays cited
+as `@unpublished` ("in preparation") for provenance only. Build: tectonic exit 0,
+**14 pp, zero rendered TODOs, no unresolved citations** (3 cosmetic overfulls remain;
+they die at venue reformat).
+
+**Bib flags CLOSED (web-verified 2026-07-09, provenance comments in `paper2/refs.bib`):**
+`tojo2026diffsoup` re-checked against arXiv 2603.27151 (title+authors exact) and
+github.com/kenji-tojo/diffsoup ("(CVPR 2026)" in the title line) — if the entry you
+*meant* to paste back then differed, say so, otherwise treat it as confirmed;
+`held2025trianglesplatting` checked against arXiv 2505.19175 — title, year, and the
+10-author list match exactly, order included. Also added (verified): Leygonie et al.
+FoCM 22:1069–1131 (2022); Nigmetov & Morozov, DCG 2024, DOI 10.1007/s00454-023-00613-x.
+
+**Venue reality check (web, 2026-07-09):** SIGGRAPH Asia 2026 deadline has passed;
+EG 2027 CFP not yet published (conf. May 2027, Lucca); **3DV 2027: submissions due
+AUGUST 28, 2026** (conf. April 6–9, 2027, Thessaloniki) — the natural target: right
+scope (3D reconstruction), ~7 weeks out. 3DV is double-blind: strip the author block,
+anonymize the self-citation (marked spots in `main.tex` / `sections/intro.tex`), move
+Appendix A + the companion PDF to supplementary (marked in `appendix_companion.tex`).
+
+**Still yours (the only blockers left):**
+1. **Voice pass** — abstract, intro, related, discussion (`TODO(human)` comments mark them).
+2. **Say the venue** → the template + anonymization + 8-page compression pass gets done for you.
+3. **Author block**: OK with `viritphon.1234@gmail.com` in print, or give an institutional address.
+4. Paper 1's fate is now decoupled — arXiv it whenever; swap the companion entry's
+   `note` for the identifier when it exists.
+5. *Optional pre-empt:* C1-without-recruitment training ablation (~15 runs, ~30 min GPU).
+
+---
+
 # NOTES_FOR_AUTHOR — paper draft (`paper/`)
 
 **Status: framing decision made (you delegated it). The paper now carries the honest
