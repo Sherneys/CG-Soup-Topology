@@ -159,15 +159,26 @@ def make_plots(shape: str, series: dict, agg: dict, out_dir: str) -> None:
     plt.close(fig)
 
     fig, ax = plt.subplots(figsize=(7, 3.6))
+    peak = 0.0
     for cond, runs in sorted(series.items()):
         curves = np.array([r["nsig"] for r in runs.values()], dtype=float)
         steps = runs[min(runs)]["steps"]
+        peak = max(peak, float(curves.max()))
         ax.plot(steps, curves.mean(0), color=COLORS.get(cond, "k"),
                 label=LABELS.get(cond, cond))
     tgt_n = {"sphere": 1, "cube": 1, "torus": 2, "two_spheres": 1,
-             "double_torus": 2}.get(shape)
+             "double_torus": 2, "spot": 1, "bob": 2, "fandisk": 1}.get(shape)
     if tgt_n is not None:
         ax.axhline(tgt_n, color="k", ls="--", lw=0.8, alpha=0.6)
+    # The random-init transient (hundreds of sub-scale bars at step 0) swamps
+    # the ±1-around-target region the phantom check is about: clip the axis
+    # and annotate the peak rather than hide that the transient exists.
+    cap = max(8, (tgt_n or 0) + 6)
+    if peak > cap:
+        ax.set_ylim(-0.3, cap)
+        ax.annotate(f"init transient peaks at ~{int(round(peak))} (off-scale)",
+                    xy=(0.98, 0.92), xycoords="axes fraction", ha="right",
+                    fontsize=7, color="0.35")
     ax.set_xlabel("step")
     ax.set_ylabel(f"#sig H{SHAPE_DIM[shape]}")
     ax.set_title(f"{shape}: significant-feature count (phantom check)")

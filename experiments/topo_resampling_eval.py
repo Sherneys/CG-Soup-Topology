@@ -47,7 +47,11 @@ EXP_ROOT = os.path.join(DENTISTRY, "output", "synth", "topo2")
 # cube/cylinder = extra H2 (void) targets; double_torus/three_spheres/thick_shell
 # = dimensional-crossover targets (multi-loop H1 / more H0 components / thick void).
 SHAPE_DIM = {"torus": 1, "two_spheres": 0, "sphere": 2, "cube": 2, "cylinder": 2,
-             "double_torus": 1, "three_spheres": 0, "thick_shell": 2}
+             "double_torus": 1, "three_spheres": 0, "thick_shell": 2,
+             # Phase-3e generality meshes (external, genus-known, watertight):
+             # spot (genus 0) / bob (genus 1) from the Crane model repository
+             # (CC0); fandisk (genus 0 CAD) reuses the A-series scene.
+             "spot": 2, "bob": 1, "fandisk": 2}
 
 ENV = dict(os.environ, PYTHONUTF8="1", DIFFSOUP_ROOT=DIFFSOUP_ROOT, TOPO_ROOT=_TOPO_ROOT)
 

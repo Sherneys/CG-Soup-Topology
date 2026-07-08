@@ -67,8 +67,12 @@ improve $2.4\times$ with zero phantom handles across seeds, while the control
 collapses a loop. The two channels compose: loss plus the best resampling
 prior reaches $7.6\times$ below baseline at the best Chamfer. Component
 counting (H0) is again matched by the generic control --- a third channel
-agreeing that this class needs no topological information. Prescription:
-correct topology in the loss, allocate with a wide prior, and combine.
+agreeing that this class needs no topological information. All verdicts
+replicate, with no per-shape tuning, on three external genus-known meshes
+($2.0$--$10.3\times$ at equal-or-better Chamfer).
+% src: topo3/report/results.json (spot/bob/fandisk)
+Prescription: correct topology in the loss, allocate with a wide prior, and
+combine.
 \end{abstract}
 
 \input{sections/intro}

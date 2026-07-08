@@ -4,11 +4,12 @@
 % TODO(human): trim to venue length; keep the honesty.
 
 \textbf{Synthetic, closed, single-machine.} All quantitative claims are on
-synthetic closed-surface scenes with analytically known topology, rendered at
-$200{\times}200$, on one GPU. Generality on public shape sets and a real
-(open-surface, clinical) demonstration are future work; open surfaces add a
-genuine research obstacle --- scan boundaries contaminate H1, and no clean
-ground-truth diagram exists.
+synthetic renders of closed surfaces with known topology, on one GPU. The
+scene family is analytic plus three external genus-known meshes
+(\S\ref{sec:generality}) --- still short of a public shape-set benchmark ---
+and a real (open-surface, clinical) demonstration remains future work; open
+surfaces add a genuine research obstacle --- scan boundaries contaminate H1,
+and no clean ground-truth diagram exists.
 
 \textbf{Density floor.} The loss cannot see features below the significance
 threshold at its sampling density (torus void; two of four double-torus

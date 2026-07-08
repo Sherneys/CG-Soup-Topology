@@ -5,13 +5,24 @@
 % TODO(human): venue-dependent compression.
 
 \paragraph{Scenes and budgets.} Synthetic COLMAP scenes with analytically
-known topology, rendered at $200{\times}200$ from 21 views: sphere and cube
+known topology, rendered from 24--72 Fibonacci-sphere viewpoints at
+200--256\,px (the loader's standard every-8th test holdout leaves 21--63
+training views): sphere and cube
 (void class H2, $\beta{=}(1,0,1)$, budget $N{=}1200$), torus (loop class H1,
 $(1,2,1)$, $N{=}700$), two spheres (component class H0, $(2,0,2)$, $N{=}700$),
 and genus-2 double torus as a stretch case ($(1,4,1)$, $N{=}2000$). Budgets
 are the companion study's headroom points --- tight enough that the baseline's
 topology is imperfect, so there is something to win.
 % src: PHASE2B_CROSSOVER.md (headroom pilot); PHASE3_PLAN.md §6
+Three external, genus-known, watertight meshes probe generality beyond the
+analytic family (\S\ref{sec:generality}): \emph{spot} (genus 0) and
+\emph{bob} (genus 1) from the Crane model repository (CC0), and the
+\emph{fandisk} CAD benchmark (genus 0) --- rendered with the same pipeline
+(48 views, 200\,px), class budgets carried over unchanged ($N{=}1200$ voids,
+$N{=}700$ loops), and a seed-0 C0 pilot confirming baseline imperfection
+(tail bottleneck $.043$--$.054$, i.e.\ inside the analytic shapes' band).
+% src: output/synth/{spot,bob,fandisk} scene builds + topo3/quicklook.json
+% (pilot 2026-07-09); bundles topo3/fields/{spot,bob,fandisk}_diag.npz
 
 \paragraph{Protocol.} 2{,}500 steps; resampling every 100 steps (untouched);
 $\rho{=}0.1$, ramp $0.2{:}0.5$, refresh $K{=}10$, $M{=}2048$; decisive shapes
@@ -21,8 +32,12 @@ seeds. The torus restricts the loss to H1: its own void bar is sub-threshold
 at $M{=}2048$, and a loss must not act on features it cannot reliably measure
 at its sampling density. For the same reason the double torus targets its two
 measurable loops (of four) --- matching what the reconstruction itself can
-express at any feasible budget.
-% src: PHASE3_PLAN.md Appendix C (bundle preflights) + PHASE2B (2/4 loops)
+express at any feasible budget. The generality trio runs C0/C1/C2 with three
+seeds; bob, unlike the thin torus, has both its loop pair \emph{and} its void
+significant at $M{=}2048$ (fat tube), so it runs the full unrestricted
+bundle.
+% src: PHASE3_PLAN.md Appendix C (bundle preflights) + PHASE2B (2/4 loops);
+% spot/bob/fandisk bundle preflights 2026-07-09 (H bars printed at build)
 
 \paragraph{Metrics and verdict.} Primary: bottleneck distance to the target
 diagram in the shape's discriminating dimension, tail-averaged over the last

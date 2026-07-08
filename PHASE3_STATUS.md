@@ -1,11 +1,13 @@
 # Phase 3 — Topological Loss: implementation status & results
 
 **Status: implemented end-to-end and validated through the full C-matrix
-(stages 3a→3d complete). Headline: the differentiable topological loss gives
-topology-specific wins on voids (H2) AND loops (H1) — the class the Phase-2
-resampling channel failed — and the two channels stack.** Remaining: C4
-(curvature-weighted mask), dental showcase, ShapeNet generality (all deferred
-by design; see PHASE3_PLAN.md §9 + Appendix D).
+(stages 3a→3d complete), PLUS the 3e generality wave (2026-07-09): all
+verdicts replicate on three external genus-known meshes with zero per-shape
+tuning. Headline: the differentiable topological loss gives topology-specific
+wins on voids (H2) AND loops (H1) — the class the Phase-2 resampling channel
+failed — the two channels stack, and the result is not an artifact of the
+analytic scene family.** Remaining: C4 (curvature-weighted mask) and the
+dental showcase (deferred by design; see PHASE3_PLAN.md §9).
 
 Everything below is grounded in `PHASE3_PLAN.md` Appendices A–D and
 `output/synth/topo3/report/results.json` (regenerate:
@@ -88,6 +90,45 @@ Chamfer 0.96 vs C0's 0.98).
    safe is the gradient-ratio calibration, not scheduling — an evidence-based
    answer to the advisor's blow-up concern (แนวทาง item 2).
 
+## 3e generality wave (2026-07-09): external genus-known meshes — 3/3 PASS
+
+The plan's stretch item said "ShapeNet subset (genus-known meshes)".
+Substitution, for cause: ShapeNet needs a licensed account and its meshes are
+routinely non-watertight/non-manifold — no trustworthy ground-truth topology,
+which is the one property the generality claim needs. Used instead (the
+parenthetical's actual requirement): **spot** (genus 0, organic, CC0 Crane
+repository), **bob** (genus 1, organic, CC0), **fandisk** (genus 0, CAD,
+A-series scene reused). Both downloads seam-merged (`merge_vertices`) and
+verified watertight with the expected genus before export to
+`output/synth/_meshes/*_src.ply`; scenes built with the unchanged renderer
+(48 views, 200 px); bundles preflighted at M=2048 (spot/fandisk: exactly 1
+significant H2 bar; bob: its 2 loop bars AND a significant H2 void bar —
+fat tube, so bob runs the FULL unrestricted bundle, unlike the thin torus).
+Class budgets carried over blind (H2→1200, H1→700); a seed-0 C0 pilot landed
+every baseline inside the analytic shapes' imperfection band (.043–.054).
+
+Protocol: C0/C1/C2 × seeds {0,1,2}, ρ=0.1, ramp 0.2:0.5, 2,500 steps —
+27 runs, zero failures. Same verdict rule, same report.
+
+| shape (dim, N) | C0 | C1 topo loss | C2 control | verdict |
+|---|---|---|---|---|
+| spot (H2, 1200) | .0521±.0081 | **.0237±.0000 (2.2×)** | .0652, **b₂ 1→0** | PASS (6.1σ) |
+| bob (H1, 700) | .0426±.0012 | **.0208±.0008 (2.0×)** | .0437, **b₁ 2→1** | PASS (26.1σ) |
+| fandisk (H2, 1200) | .0538±.0022 | **.0052±.0008 (10.3×)** | .0571, **b₂ 1→0** | PASS (35.7σ) |
+
+C1's Chamfer is *better* than C0 on all three (parity trivially OK). The
+control's failure modes replicate exactly: void erased on both H2 shapes,
+loop collapsed on the genus-1 shape, all seeds. **The H1 claim survives the
+family change** (bob: #sig H1 = 2 in every seed — zero phantom handles,
+replicating torus); **fandisk's 10.3× is the largest effect in the study**.
+
+Caveats, honestly: spot's *baseline* manufactures a phantom void in 2/3
+seeds (final #sig H2 = 2,1,2); C1 clears it in two seeds but retains one
+spurious bar in the third (1,2,1) — value repair is reliable, count repair
+on sub-budget organic detail (legs/horns at N=1200) is an improvement, not a
+guarantee. Spot's C1 tail is pinned across seeds (sd 0 at .0237) — a
+geometric floor of the double-torus kind, far milder in degree.
+
 ### Honest caveats
 
 - **The loss can only enforce topology measurable at its sampling density**:
@@ -104,9 +145,10 @@ Chamfer 0.96 vs C0's 0.98).
   tuning.
 - CUDA non-reproducibility (3b): all claims are seed-averaged; no bit-level
   statements.
-- Single machine / single scene family: synthetic closed surfaces at
-  200×200 renders. ShapeNet generality and real dental data are Phase-3e+
-  items (PHASE3_PLAN.md §9).
+- Single machine, synthetic closed-surface renders (200–256 px, 24–72
+  views). The 3e wave (above) extends the analytic family with three
+  external genus-known meshes — still short of a public shape-set benchmark;
+  real dental data remains deferred (PHASE3_PLAN.md §9).
 
 ## How to reproduce
 
@@ -120,6 +162,13 @@ python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 3 4 `
 python experiments\topo_loss_eval.py --shapes torus --seeds 0 1 2 3 4 `
     --conditions C0 C1 C2 C3 C5 --rhos 0.1 --steps 2500 --max_faces 700 --loss_dims 1
 # … cube/two_spheres/double_torus per PHASE3_PLAN.md Appendix C/D …
+
+# 3e generality (scenes prebuilt under output/synth/{spot,bob,fandisk};
+# sources in output/synth/_meshes/; bundles in topo3/fields/; resumable):
+python experiments\topo_loss_eval.py --shapes spot fandisk --seeds 0 1 2 `
+    --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 1200
+python experiments\topo_loss_eval.py --shapes bob --seeds 0 1 2 `
+    --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 700
 
 # report:
 python experiments\topo_loss_report.py

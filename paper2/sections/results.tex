@@ -3,12 +3,11 @@
 
 % Every number: % src: topo3/report/results.json (regenerate via
 % experiments/topo_loss_report.py) unless marked otherwise.
-% TODO(human): swap the placeholder figure includes once report PNGs are
-% copied into paper2/figures/.
 
 \subsection{Gate: the loss alone repairs topology}
 Before integration, the loss (no photometric term, Adam directly on point
-positions) must repair defective clouds. It does, on all four probes:
+positions) must repair defective clouds. It does, on all four probes
+(Fig.~\ref{fig:toys}):
 % src: figures/phase3_toy/t{1..4}.json (PHASE3_PLAN.md Appendix A)
 a punctured sphere's void birth is pulled to target ($8.8\times$ bottleneck
 reduction; the hole closes), a spurious handle is pushed to the diagonal and
@@ -22,10 +21,33 @@ abandoned), while cutting the 1-D bridge raises the recruited bar's death
 monotonically toward target --- the runaway concentrates on the only
 profitable direction.
 
+\begin{figure}[t]
+\centering
+% src: figures/phase3_toy/t{1,2,4}.png (tests/test_topo_loss.py artifacts;
+% title bands cropped for print, panel data untouched; factors in t*.json)
+\includegraphics[width=\linewidth]{toy_t1.png}\\[2pt]
+\includegraphics[width=\linewidth]{toy_t2.png}\\[2pt]
+\includegraphics[width=\linewidth]{toy_t4.png}
+\caption{The stage-3a gate: the loss alone (Adam on raw point positions, no
+photometric term) repairs defective clouds. Each row shows the initial cloud,
+the final cloud, and the bottleneck-to-target trajectory in the
+discriminating dimension --- one row per mechanism of the matched loss
+(\S\ref{sec:method}). \emph{Top} (T1): punctured sphere; the matched birth
+term pulls the void closed ($8.8\times$ reduction). \emph{Middle} (T2):
+spurious handle; the diagonal term kills the extra H1 bar outright.
+\emph{Bottom} (T4): bridged merge with no significant live H0 bar;
+recruitment severs the bridge ($450\times$, $\beta_0\,1{\to}2$) --- the case
+where plain optimal matching provably has zero gradient. The mis-spaced
+components probe (T3, $1229\times$) is omitted for space.}
+\label{fig:toys}
+\end{figure}
+
 \subsection{The C-matrix}
 \label{sec:cmatrix}
 Table~\ref{tab:main} reports tail bottleneck (mean$\pm$sd over seeds) in each
-shape's discriminating dimension; Chamfer in the text where it matters.
+shape's discriminating dimension; Chamfer in the text where it matters;
+Fig.~\ref{fig:series} shows the full training trajectories for the two
+decisive shapes.
 
 \begin{table}[t]
 \centering\small
@@ -46,6 +68,22 @@ double\_torus (H1)& .0264$\pm$.0000 & .0264$\pm$.0000 (saturated)           & .0
 \end{tabular}
 \end{table}
 
+\begin{figure}[t]
+\centering
+% src: topo3/report/{sphere,torus}_series.png (topo_loss_report.py; line =
+% seed mean, band = seed min-max; underlying numbers in results.json)
+\includegraphics[width=0.495\linewidth]{sphere_series.png}\hfill
+\includegraphics[width=0.495\linewidth]{torus_series.png}
+\caption{Topology error over training: bottleneck to target in the
+discriminating dimension (line = seed mean, band = seed min--max).
+\emph{Left}, sphere (H2): every loss arm --- C1, C3, C5, and both $\rho$
+ablation variants --- converges to a fraction of baseline, while the
+norm-matched repulsion control C2 is \emph{destructive} and even its gentle
+variant C2g ends worse than baseline. \emph{Right}, torus (H1), the class no
+resampling prior won: same ordering, with C5 (loss $+$ spread prior) best.}
+\label{fig:series}
+\end{figure}
+
 \paragraph{Voids (H2): topology-specific, large.} Sphere $4.0\times$
 ($16.2\sigma$ Welch vs C0), cube $7.9\times$ ($18.5\sigma$), both at
 equal-or-better Chamfer (sphere $0.46$ vs $0.50$; cube $0.92$ vs $1.05$). The
@@ -55,16 +93,43 @@ worse than baseline, identical across seeds) and on the cube erases the void
 outright. Nor is this an artifact of control strength: a gentle variant at
 half the push radius still lands $1.6\times$ \emph{worse} than baseline
 (.0972 vs .0623) --- the sphere ordering is C1 $<$ C2g $<$ C0 $<$ C2, so no
-tested repulsion strength reproduces any of the gain.
+tested repulsion strength reproduces any of the gain
+(Fig.~\ref{fig:tails}).
 % src: topo3/report/results.json (sphere: C2g 0.0972±0.0169)
+
+\begin{figure}[t]
+\centering
+% src: topo3/report/sphere_tail.png (per-seed tail means; results.json)
+\includegraphics[width=0.62\linewidth]{sphere_tail.png}
+\caption{Sphere, per-seed tail bottlenecks (dots) with arm means (bars).
+Every loss arm sits far below baseline with tight seed spread; the two
+control strengths bracket baseline from \emph{above}, so no tested repulsion
+strength reproduces any of the gain; the $\rho$ ablation arms are
+indistinguishable from $\rho{=}0.1$.}
+\label{fig:tails}
+\end{figure}
 
 \paragraph{Loops (H1): the channel's distinguishing result.} In the
 companion study no prior shape won this class --- concentration manufactured
 phantom handles; spreading never beat a random control. The loss cuts torus
 H1 error $2.4\times$ with \emph{zero phantom handles in all five seeds}
-(significant-count trajectories flat at the true $\beta_1{=}2$), while the
-control collapses one loop. Metric pressure on birth/death values suits 1-D
-features in a way budget allocation does not.
+(significant-count trajectories flat at the true $\beta_1{=}2$,
+Fig.~\ref{fig:nsig}), while the control collapses one loop. Metric pressure
+on birth/death values suits 1-D features in a way budget allocation does not.
+
+\begin{figure}[t]
+\centering
+% src: topo3/report/torus_nsig.png (seed-mean significant-H1 count; axis
+% clipped near target, off-scale init transient annotated on-plot)
+\includegraphics[width=0.62\linewidth]{torus_nsig.png}
+\caption{Torus phantom check: significant-H1 count over training (seed
+means; dashed line: true $\beta_1{=}2$). After a brief resampling transient
+near step 100, every loss arm sits exactly on two significant loops for the
+rest of training --- zero phantom handles --- while the repulsion control
+(C2) collapses a loop by step ${\sim}800$ and never recovers it. All arms
+share the off-scale random-init transient (annotated).}
+\label{fig:nsig}
+\end{figure}
 
 \paragraph{Components (H0): not topological --- third channel, same answer.}
 C1 reduces the (already small) baseline error $9.3\times$, but the generic
@@ -97,3 +162,63 @@ channel's.
 decisive shapes. Overhead: ${\approx}45$--$55$\,s per 2{,}500-step run
 (refresh 174\,ms at $M{=}2048$, every 10 steps).
 % src: PHASE3_PLAN.md Appendices B-D
+
+\subsection{Generality: external genus-known meshes}
+\label{sec:generality}
+Everything above is on one analytic scene family. We therefore repeat the
+verdict protocol --- C0/C1/C2, three seeds, class budgets, $\rho$, ramp and
+sampling unchanged --- on three external watertight meshes of known genus
+(\S\ref{sec:setup}): \emph{spot} (genus 0, organic), \emph{bob} (genus 1,
+organic), and the \emph{fandisk} CAD benchmark (genus 0). No per-shape
+tuning of any kind: the headroom budgets transfer from the feature class,
+and bob runs the full unrestricted bundle.
+% src: topo3/report/results.json (spot/bob/fandisk aggregates + verdicts)
+All three \textbf{pass} the verdict rule at equal-or-\emph{better} Chamfer
+(Table~\ref{tab:gen}, Fig.~\ref{fig:gen}), and the control's failure modes
+replicate exactly: repulsion erases the void on both H2 shapes
+($\beta_2\,1{\to}0$, all seeds) and collapses a loop on the genus-1 shape
+($\beta_1\,2{\to}1$, all seeds).
+
+\begin{table}[t]
+\centering\small
+\caption{Generality wave: tail bottleneck to target (mean$\pm$sd, 3 seeds);
+$\times$ = reduction vs C0; $\sigma$ = Welch. Same verdict rule as
+Table~\ref{tab:main}.}
+\label{tab:gen}
+\begin{tabular}{lllll}
+\toprule
+shape (dim) & C0 & C1 loss & C2 control & verdict \\
+\midrule
+% src: topo3/report/results.json
+spot (H2)    & .0521$\pm$.0081 & \textbf{.0237$\pm$.0000} (2.2$\times$) & .0652 ($\beta_2\,1{\to}0$) & PASS (6.1$\sigma$) \\
+bob (H1)     & .0426$\pm$.0012 & \textbf{.0208$\pm$.0008} (2.0$\times$) & .0437 ($\beta_1\,2{\to}1$) & PASS (26.1$\sigma$) \\
+fandisk (H2) & .0538$\pm$.0022 & \textbf{.0052$\pm$.0008} (10.3$\times$) & .0571 ($\beta_2\,1{\to}0$) & PASS (35.7$\sigma$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+% src: topo3/report/{bob,fandisk}_series.png (topo_loss_report.py)
+\includegraphics[width=0.495\linewidth]{bob_series.png}\hfill
+\includegraphics[width=0.495\linewidth]{fandisk_series.png}
+\caption{Generality trajectories (line = seed mean, band = seed min--max).
+\emph{Left}: bob (genus 1) --- the H1 result off the analytic family: the
+loss halves the loop error with $\#$sig H1 $= 2$ in every seed, while the
+control rides the baseline after collapsing a loop. \emph{Right}: fandisk
+(CAD) --- the largest effect measured in this study ($10.3\times$).}
+\label{fig:gen}
+\end{figure}
+
+Three observations. \emph{The H1 claim survives the family change}: bob
+halves loop error with zero phantom handles in every seed ($26.1\sigma$),
+replicating torus. \emph{Sharp-featured CAD benefits most}: fandisk's
+$10.3\times$ exceeds every analytic-family effect. \emph{Complex organic
+geometry exposes a count-level limit}: spot's \emph{baseline} manufactures a
+phantom void in two of three seeds (final $\#$sig H2 $= 2,1,2$); the loss
+clears it in two seeds but retains one spurious bar in the third ($1,2,1$)
+--- value repair is reliable, count repair on sub-budget organic detail
+(legs, horns at $N{=}1200$) is an improvement, not a guarantee. Spot's C1
+tail is also pinned across seeds (sd $0$ at $.0237$), suggesting a geometric
+floor of the same kind as the double torus, far milder in degree.
+% src: topo3/report/results.json (nsig_final; tails)

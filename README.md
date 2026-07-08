@@ -56,8 +56,11 @@ directory.)
    phantom handles** — the class every prior shape failed. The two channels
    stack (loss + B4 prior: 7.6× below baseline at the best Chamfer), H0 stays
    non-topological for a third consecutive channel, and a curriculum schedule
-   proved unnecessary once λ is calibrated. See `PHASE3_STATUS.md` and the
-   paper-2 skeleton in `paper2/`.
+   proved unnecessary once λ is calibrated. The verdicts replicate, with no
+   per-shape tuning, on three external genus-known meshes (spot genus 0 /
+   bob genus 1 / fandisk CAD: 2.0–10.3× at equal-or-better Chamfer; zero
+   phantom handles on the genus-1 case). See `PHASE3_STATUS.md` and the
+   paper-2 draft in `paper2/`.
 
 ## Experimental conditions (the vocabulary used everywhere)
 
