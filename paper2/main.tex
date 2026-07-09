@@ -79,7 +79,9 @@ prior reaches $7.6\times$ below baseline at the best Chamfer. Component
 counting (H0) is again matched by the generic control --- a third channel
 agreeing that this class needs no topological information. All verdicts
 replicate, with no per-shape tuning, on three external genus-known meshes
-($2.1$--$10.4\times$ at equal-or-better Chamfer).
+($2.1$--$10.4\times$ at equal-or-better Chamfer), and the loss degrades
+gracefully --- never below baseline --- under sensor noise up to one
+sample spacing.
 % src: topo3/report/results.json (spot/bob/fandisk)
 Prescription: correct topology in the loss, allocate with a wide prior, and
 combine.

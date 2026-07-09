@@ -36,8 +36,9 @@ no gradient through that simplex --- an exactness failure can therefore
 never inject a wrong gradient or destabilize training; the worst case is a
 missing tug for one refresh interval, re-tested at the next re-pairing. On
 all six benchmark shapes 100\% of significant pairs are Gabriel-exact on
-clean clouds; the sensor-noise stress test (\S\ref{sec:setup}) probes the
-detachment path under perturbation.
+clean clouds, and the sensor-noise stress test (\S\ref{sec:setup}) never
+triggered the fallback --- zero failures across $2{,}400$ noisy refreshes
+(\S\ref{sec:results}).
 % src: PHASE3_PLAN.md Appendix A (mapping + Gabriel gates, 22/22)
 The pairing is treated as locally constant --- the standard pair-frozen
 device~\citep{gabrielsson2020topologylayer,carriere2021optimizing} --- and

@@ -63,6 +63,9 @@ directory.)
    **recruitment term carries the loop win**: one torus loop is chronically
    sub-threshold at the loss's density, recruitment is its only gradient
    path, and removing it collapses H1 to baseline (.0411 ≈ C0's .0424).
+   Under sensor noise up to one sample spacing the loss degrades gracefully
+   and never harms (torus 2.0×/1.6× at σ=0.5%/1%; zero Gabriel failures in
+   2,400 noisy refreshes; recruitment absorbs the noise).
    See `PHASE3_STATUS.md` and the paper-2 draft in `paper2/`.
 
 ## Experimental conditions (the vocabulary used everywhere)
@@ -88,6 +91,7 @@ Phase 3 — the **loss** channel (C-arms; same control discipline):
 | C3 | C1 with constant λ (no ramp) | is the curriculum needed? |
 | C5 | C1 + the B4 spread prior | do the two channels stack? |
 | C6 | C1 without the recruitment term | is recruitment load-bearing in-loop? |
+| C7 / C7h | C1 + Gaussian noise on the cloud the plan sees (σ = 0.5% / 1% of the diagonal) | robustness: does the loss harm under sensor noise? |
 
 ## Layout
 

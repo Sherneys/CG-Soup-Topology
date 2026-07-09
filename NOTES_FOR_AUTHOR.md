@@ -1,3 +1,18 @@
+# PAPER 2 — ADVISOR REVISION RESPONSE (Revision list Paper KinKin.pdf, answered 2026-07-09)
+
+All six items addressed the same day; use this table when you reply to อาจารย์:
+
+| # | Advisor's item | What was done | Where |
+|---|---|---|---|
+| 1 | Companion-study dependence; B4 unverifiable | Paper 1 no longer referenced AT ALL (your instruction); the allocation study is reported first-hand in **Appendix A**, now including the **field's equations** (splat kernel, mass-preserving spread σ→sσ, w→w/s², both budget-parity levers) | `appendix_companion.tex` |
+| 2 | `L_recruit` had no math | Explicit numbered equation: greedy argmin over the unclaimed pool (significant **+ sub-threshold** bars), same squared birth–death metric, without replacement, decreasing target persistence; recruited bars excluded from the diagonal term | `method.tex` §matching |
+| 3 | Gabriel 100% is empirical; what if it fails? | Detachment policy stated: failing pair contributes **value but no gradient** → cannot inject wrong gradients or diverge; worst case one refresh without a tug. Stress test (item 4) then showed **zero failures in 2,400 noisy refreshes** — fallback exists but was never needed | `method.tex` §3.2 + results stress ¶ |
+| 4 | No real/noisy data → suggested Gaussian-noise stress | **Ran it** (C7/C7h: σ = 0.5%/1% of diagonal ≈ 0.5/1.0 sample spacings, on the cloud the plan sees, every refresh; 12 runs): torus 2.0×/1.6× below baseline (C1: 2.3×), sphere 2.7×/1.9× (C1: 4.0×), correct #sig everywhere, Chamfer parity; recruitment absorbs the noise. Real open-surface data remains future work (limitations unchanged) | `setup.tex` protocol + `results.tex` stress ¶ |
+| 5 | Draft remnants ("Deferred arms", dental) | Deleted from the paper | `limitations.tex` |
+| 6 | Double-torus saturation lacks theory | Quantified floor: significant ⟺ lifetime > **6·r_med(M)**, r_med ∝ M^(−1/2) (measured 3.16 vs 3.13). Tube loops = 0.83–0.85× floor at M=2048 (need M≈3×10³; 3.1× at eval M=20000; binding constraint is the representation). Torus's 2nd loop clears by only 1.33× — the margin noise eats (links to the C6 recruitment finding). Reproducible: `experiments/density_bound.py` | `discussion.tex` measurability ¶ |
+
+---
+
 # PAPER 2 (`paper2/`) — SUBMIT-FIRST PLAN (2026-07-09)
 
 **Your decision: submit paper 2 BEFORE paper 1.** The structural consequence — paper 2

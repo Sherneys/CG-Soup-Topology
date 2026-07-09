@@ -76,13 +76,14 @@ double\_torus (H1)& .0264$\pm$.0000 & .0264$\pm$.0000 (saturated)           & .0
 \includegraphics[width=0.495\linewidth]{torus_series.png}
 \caption{Topology error over training: bottleneck to target in the
 discriminating dimension (line = seed mean, band = seed min--max).
-\emph{Left}, sphere (H2): every loss arm --- C1, C3, C5, C6, and both $\rho$
-ablation variants --- converges to a fraction of baseline, while the
-norm-matched repulsion control C2 is \emph{destructive} and even its gentle
-variant C2g ends worse than baseline. \emph{Right}, torus (H1), the class no
-resampling prior won: same ordering, with C5 (loss $+$ spread prior) best
---- except the no-recruitment ablation C6, which rides the baseline (see
-\emph{Ablations}).}
+\emph{Left}, sphere (H2): every loss arm --- C1, C3, C5, C6, both $\rho$
+variants, and the noise-stress pair C7/C7h --- converges to a fraction of
+baseline, while the norm-matched repulsion control C2 is \emph{destructive}
+and even its gentle variant C2g ends worse than baseline. \emph{Right},
+torus (H1), the class no resampling prior won: same ordering, with C5 (loss
+$+$ spread prior) best; the noise arms descend shallower with more noise
+but never approach baseline --- except the no-recruitment ablation C6,
+which rides it (see \emph{Ablations}).}
 \label{fig:series}
 \end{figure}
 
@@ -188,6 +189,26 @@ loss-identical to C1 by construction --- its tail ($.0166$ vs C1's $.0156$,
 $1.5\sigma$) doubles as a measurement of pure run-to-run (CUDA) noise.
 % src: topo3/report/results.json (C6 arms) + topo3/_train/*_C6_*/
 % topo_loss_log.json ("refreshes": per-refresh matched/target_unreached)
+
+\paragraph{Sensor-noise stress (C7/C7h).} With the plan's cloud perturbed
+at every refresh ($\sigma = 0.5\%$/$1\%$ of the diagonal ${\approx}$
+$0.5$/$1.0$ median sample spacings, \S\ref{sec:setup}), the loss degrades
+gradually and never harms: torus $.0210{\pm}.0018$ / $.0259{\pm}.0022$
+($2.0\times$/$1.6\times$ below baseline, vs C1's $2.3\times$), sphere
+$.0235{\pm}.0009$ / $.0328{\pm}.0013$ ($2.7\times$/$1.9\times$, vs
+$4.0\times$) --- at equal-or-better Chamfer, with the correct
+significant-feature count in every run (Fig.~\ref{fig:series}). The
+internals explain the grace: across all $2{,}400$ noisy refreshes
+\emph{not one} significant pair failed the Gabriel gate --- the detachment
+fallback of \S\ref{sec:method} was never needed --- and recruitment
+absorbed the noise: at $\sigma{=}1\%$ the torus's second loop is
+sub-threshold at every refresh and recruitment reaches it every time
+(zero unreached targets throughout). Calibration is the noisiest part
+($\lambda_{\mathrm{peak}}$ spreads ${\approx}3\times$ across seeds), yet
+tails stay tight --- consistent with the flat $\rho$ response.
+% src: topo3/report/results.json (C7/C7h arms) + topo3/_train/*_C7*/
+% topo_loss_log.json ("refreshes": n_gabriel_fail / recruit /
+% target_unreached per refresh; lam_peak per run)
 
 \subsection{Generality: external genus-known meshes}
 \label{sec:generality}

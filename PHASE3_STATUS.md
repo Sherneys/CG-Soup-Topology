@@ -69,7 +69,7 @@ loops at any feasible budget, replicating Phase 2b), not the guidance
 channel. The loss neither helps nor harms there (#sig H1 = 2 everywhere;
 Chamfer 0.96 vs C0's 0.98).
 
-### The five findings
+### The six findings
 
 1. **The loss channel succeeds where the prior channel failed: H1.** Phase 2's
    concentrated prior manufactured phantom handles; its spread prior never
@@ -103,6 +103,17 @@ Chamfer 0.96 vs C0's 0.98).
    On the sphere recruitment never fires (0/200, void always matched) ⇒
    sphere-C6 is loss-identical to C1; its tail (.0166 vs .0156, 1.5σ)
    measures pure run-to-run CUDA noise — a free replication control.
+6. **Graceful under sensor noise (C7/C7h, 2026-07-09 — advisor item 4).**
+   Gaussian noise on the cloud the PLAN sees, every refresh (σ = 0.5%/1% of
+   the diagonal ≈ 0.5/1.0 median spacings at M=2048; pulls apply to true
+   positions): torus .0210±.0018 / .0259±.0022 (2.0×/1.6× below C0; C1 is
+   2.3×), sphere .0235±.0009 / .0328±.0013 (2.7×/1.9×; C1 is 4.0×) — at
+   equal-or-better Chamfer, correct #sig in every run. **Zero Gabriel
+   failures in all 2,400 noisy refreshes** (the detachment fallback never
+   fired); recruitment absorbed the noise (torus second loop sub-threshold
+   at every σ=1% refresh, unreached=0 throughout). λ_peak calibration
+   spreads ≈3× across seeds under noise, tails stay tight (flat-ρ
+   robustness extends to noisy calibration).
 
 ## 3e generality wave (2026-07-09): external genus-known meshes — 3/3 PASS
 
@@ -176,6 +187,12 @@ python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 3 4 `
 python experiments\topo_loss_eval.py --shapes torus --seeds 0 1 2 3 4 `
     --conditions C0 C1 C2 C3 C5 --rhos 0.1 --steps 2500 --max_faces 700 --loss_dims 1
 # … cube/two_spheres/double_torus per PHASE3_PLAN.md Appendix C/D …
+
+# C7/C7h sensor-noise stress (decisive shapes only):
+python experiments\topo_loss_eval.py --shapes torus --seeds 0 1 2 `
+    --conditions C7 C7h --rhos 0.1 --steps 2500 --max_faces 700 --loss_dims 1
+python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 `
+    --conditions C7 C7h --rhos 0.1 --steps 2500 --max_faces 1200
 
 # C6 recruitment ablation (decisive shapes only):
 python experiments\topo_loss_eval.py --shapes torus --seeds 0 1 2 3 4 `
