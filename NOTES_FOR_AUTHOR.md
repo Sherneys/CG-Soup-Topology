@@ -33,7 +33,7 @@ Appendix A + the companion PDF to supplementary (marked in `appendix_companion.t
 **Still yours (the only blockers left):**
 1. **Voice pass** — abstract, intro, related, discussion (`TODO(human)` comments mark them).
 2. **Say the venue** → the template + anonymization + 8-page compression pass gets done for you.
-3. **Author block**: OK with `viritphon.1234@gmail.com` in print, or give an institutional address.
+3. ~~Author block~~ **DECIDED 2026-07-09: `viritphon.1234@gmail.com` stays in print** (corresponding author).
 4. Paper 1 is now FULLY decoupled (not even cited). If you ever submit it separately,
    disclose the Appendix-A overlap to both venues.
 5. *Optional pre-empt:* C1-without-recruitment training ablation (~15 runs, ~30 min GPU).
