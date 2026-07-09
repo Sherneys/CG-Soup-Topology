@@ -13,9 +13,13 @@ differentiable *topological loss* (Phase 3), and both paper drafts.
 - Paper 1 — *Concentrate or Spread? Shaping Topological Resampling Priors for
   Differentiable Triangle-Soup Reconstruction* — prebuilt at `paper/main.pdf`.
   Author notes, grounding log, open items: `NOTES_FOR_AUTHOR.md`.
-- Paper 2 (skeleton) — *Topology-Correcting Differentiable Triangle-Soup
-  Reconstruction via Persistent Homology* — prebuilt at `paper2/main.pdf`.
-  Numbers and citations are wired; voice pass + venue pending.
+- Paper 2 — *Topology-Correcting Differentiable Triangle-Soup
+  Reconstruction via Persistent Homology* — prebuilt at `paper2/main.pdf`
+  (19 pp preprint). Complete and fully self-contained (the allocation study
+  is reported first-hand in its Appendix A; no dependence on paper 1), with
+  two advisor revision rounds folded in. Goes out FIRST; target venue
+  3DV 2027 (deadline 2026-08-28). Remaining: author voice pass + venue
+  template/compression. Plan + revision-response logs: `NOTES_FOR_AUTHOR.md`.
 
 (Both build with `latexmk -pdf main.tex` or `tectonic main.tex` inside their
 directory.)
@@ -65,7 +69,13 @@ directory.)
    path, and removing it collapses H1 to baseline (.0411 ≈ C0's .0424).
    Under sensor noise up to one sample spacing the loss degrades gracefully
    and never harms (torus 2.0×/1.6× at σ=0.5%/1%; zero Gabriel failures in
-   2,400 noisy refreshes; recruitment absorbs the noise).
+   2,400 noisy refreshes; recruitment absorbs the noise). The knobs are
+   insensitive across the board — ρ flat over a 10× range, the ramp window
+   immaterial (a real pilot: 10–40% / 30–60% land within seed noise of the
+   default), and curriculum-free replicates on the external mesh — and the
+   method's floors are quantified: a bar is measurable iff its lifetime
+   exceeds 6·r_med(M) ∝ M^(−1/2) (the double torus's four loops clear it at
+   M=4096), while budget N remains the binding representation ceiling.
    See `PHASE3_STATUS.md` and the paper-2 draft in `paper2/`.
 
 ## Experimental conditions (the vocabulary used everywhere)
@@ -112,15 +122,18 @@ experiments/
   dimensional_crossover.py   Phase-2b orchestrator (feature-dim x concentrate/spread)
   crossover_report.py        Phase-2b analysis
   make_crossover_scenes.py   builds the Phase-2b COLMAP scenes
-  topo_loss_eval.py          Phase-3 C-matrix runner (C0..C5) + quicklook
+  topo_loss_eval.py          Phase-3 C-matrix runner (C0..C7h incl. ablations) + quicklook
   topo_loss_report.py        Phase-3 report: series/tail/nsig plots, verdicts
+  density_bound.py           the measurement floor 6*r_med(M) vs actual bar
+                             lifetimes (source of the paper's density bounds)
 tests/test_betti.py    9/9: Betti recovery on 6 deterministic shapes + determinism checks
 tests/test_topo_loss.py  10/10: Phase-3 stage-3a gate (gradchecks, alpha-complex
                        assumption gates, defect-repair toys -> figures/phase3_toy/)
 scripts/               builders for the Thai .docx reports (Phases 1, 2 & 3)
 paper/                 paper 1 ("Concentrate or Spread?"): LaTeX, figures, prebuilt main.pdf
-paper2/                paper 2 skeleton ("Topology-Correcting ... via Persistent
-                       Homology"): LaTeX, report figures, prebuilt main.pdf
+paper2/                paper 2 ("Topology-Correcting ... via Persistent Homology"):
+                       LaTeX, figures, appendices (allocation study + diagnostics),
+                       prebuilt main.pdf — the submit-first paper
 figures/  docs/        Phase-1 outputs + Phase-3 toy artifacts (phase3_toy/);
                        Thai reports (CG-Soup_Topology_Phase{1,2,3}_TH.docx)
 ```
@@ -130,7 +143,8 @@ exploration), `PHASE2_STATUS.md` (implementation + full-sweep results),
 `PHASE2B_CROSSOVER.md` (spread-vs-concentrate experiment), `PHASE3_PLAN.md`
 (differentiable topological loss: plan + appendices A–D with all gate/matrix
 results), `PHASE3_STATUS.md` (Phase-3 summary + how to reproduce),
-`NOTES_FOR_AUTHOR.md` (paper-1 narrative and checklist).
+`NOTES_FOR_AUTHOR.md` (paper-2 submit-first plan + both advisor
+revision-response tables, then the paper-1 narrative and checklist).
 
 ## Import quirk (standalone checkout)
 
@@ -159,7 +173,8 @@ sibling checkouts, located via env vars (defaults in parentheses):
   --lambda_topo / --importance_npz / --topo_init / --topo_dim`) and the
   Phase-3 one-line loss hook (`--topo_loss_npz / --topo_rho /
   --topo_loss_every / --topo_loss_pts / --topo_loss_dims / --topo_ramp /
-  --topo_loss_mode / --topo_rep_scale`; flag off ⇒ zero Phase-3 code runs) —
+  --topo_loss_mode / --topo_rep_scale / --topo_recruit / --topo_noise`;
+  flag off ⇒ zero Phase-3 code runs) —
   plus `src/make_synthetic_scene.py`, prebuilt `output/synth/*` scenes, and
   the `.venv` the harness invokes (needs gudhi, POT, torch + CUDA, diffsoup,
   trimesh, open3d).
@@ -191,7 +206,11 @@ python experiments\crossover_report.py
 # Phase-3 loss matrix (bundle preflight is automatic; resumable)
 python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 3 4 `
     --conditions C0 C1 C2 C3 C5 --rhos 0.1 --steps 2500 --max_faces 1200
+# ablations / stress: C6 = no recruitment, C7/C7h = sensor noise
+python experiments\topo_loss_eval.py --shapes torus --seeds 0 1 2 3 4 `
+    --conditions C6 C7 C7h --rhos 0.1 --steps 2500 --max_faces 700 --loss_dims 1
 python experiments\topo_loss_report.py                         # verdicts + plots
+python experiments\density_bound.py                            # measurement-floor numbers
 ```
 
 Reproducibility caveat (documented in `PHASE2_STATUS.md`; sharpened in
