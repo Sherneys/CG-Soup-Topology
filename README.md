@@ -76,6 +76,12 @@ directory.)
    method's floors are quantified: a bar is measurable iff its lifetime
    exceeds 6·r_med(M) ∝ M^(−1/2) (the double torus's four loops clear it at
    M=4096), while budget N remains the binding representation ceiling.
+   Post-freeze (2026-07-10), a **fourth external replication** on `tomyum` —
+   a constructed Thai hot-pot mesh whose genus (9) is *proven by construction*
+   rather than trusted from a download — lands **2.3× (5.8σ) at Chamfer
+   parity with the control 1.4× worse than baseline** under bob's config
+   carried over blind, correct #sig H1 in every seed; held out of paper 2
+   pending the advisor's call.
    See `PHASE3_STATUS.md` and the paper-2 draft in `paper2/`.
 
 ## Experimental conditions (the vocabulary used everywhere)

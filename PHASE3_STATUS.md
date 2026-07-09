@@ -13,6 +13,10 @@ ingredient is recruitment.** Everything is written into paper 2 (`paper2/`,
 19 pp, both advisor revision rounds answered — see `NOTES_FOR_AUTHOR.md`).
 Remaining (deferred by design, out of the paper): C4 curvature-weighted mask
 and the dental showcase (Phase-4 items; see PHASE3_PLAN.md §9).
+**Post-freeze addition (2026-07-10, additive `topo3/` tags only — nothing
+frozen was touched): the constructed genus-9 `tomyum` mesh replicates the
+C-matrix as a 4th external shape (2.3×, 5.8σ, control 1.4× worse); see the
+"Post-3e" section — held out of paper 2 pending the advisor's call.**
 
 Everything below is grounded in `PHASE3_PLAN.md` Appendices A–D and
 `output/synth/topo3/report/results.json` (regenerate:
@@ -208,6 +212,46 @@ geometric floor of the double-torus kind, far milder in degree.
   external genus-known meshes — still short of a public shape-set benchmark;
   real dental data remains deferred (PHASE3_PLAN.md §9).
 
+## Post-3e (2026-07-10): tomyum — a constructed genus-9 mesh, 4th external replication
+
+New asset (commit `384181f`): the Thai tom-yum hot pot, the first suite mesh
+whose ground-truth topology is PROVEN by construction rather than trusted from
+a download — a manifold3d CSG tree (revolved moat+chimney+pedestal body,
+genus 1; + 2 torus handles; − 6 pedestal vent holes ⇒ genus 9, exact mesh
+homology b = (1, 18, 1)), triple-certified (kernel genus asserted after every
+boolean / numpy edge certificate χ=−16 / exact GUDHI homology), bit-identical
+builds, 24,312 verts / 48,656 faces. Its POINT-CLOUD reading is the metal
+SOLID (10 mm walls merge below sample spacing): a genus-9 handlebody that
+reads (1,1,0) at M=2048–30k — only the Ø104 chimney cycle clears 6·r_med
+(margin 1.17–1.25× over seeds 0–4) — and (1,9,0) at M≈50k: the
+density_bound.py floor story in one object. Generator
+`topology/meshes.tomyum_pot_mesh` + `scripts/make_tomyum_asset.py`;
+tests/test_betti.py 11/11 (mesh + cloud gates); scene 48 views / 200 px;
+SHAPE_DIM/CORRECT_BETTI wired in both eval scripts.
+
+Protocol: identical to 3e, config carried over from bob blind (C0/C1/C2 ×
+seeds {0,1,2}, ρ=0.1, ramp 0.2:0.5, 2,500 steps, N=700, H1-only like the
+torus — the M=2048 bundle holds exactly 1 significant H1 bar). 9 runs, zero
+failures.
+
+| shape (dim, N) | C0 | C1 topo loss | C2 control | verdict |
+|---|---|---|---|---|
+| tomyum (H1, 700) | .0211±.0030 | **.0090±.0020 (2.3×)** | .0299±.0045, **1.4× WORSE than C0** | PASS (5.8σ) |
+
+Chamfer parity clean (C1/C0 = 0.98; C2/C0 = 1.04 — the control hurts geometry
+too); #sig H1 = 1 correct in every seed of every arm — zero phantom handles.
+The H1 effect sizes now cluster tightly: torus 2.3×, bob 2.1×, tomyum 2.3×.
+
+Caveats, honestly: (1) C2's failure mode here is DEGRADE-not-destroy — the
+count survives (the Ø104 chimney is too fat for ρ=0.1 repulsion to sever,
+unlike bob's b₁ 2→1), and its separation from C0 is 2.8σ at n=3 (two more
+seeds would firm it up). (2) C0 already gets the count right, so as with bob
+this is a value-accuracy win, not count repair. (3) NOT in paper 2: the 3e
+table is frozen and the recorded decision is to broaden the shape set only if
+reviewers ask — the advisor brief with the inclusion question is
+`docs/CG-Soup_Tomyum_Brief_TH.docx` (commit `e8ed503`). All runs are additive
+new tags under `topo3/` — no published number changed.
+
 ## How to reproduce
 
 ```powershell
@@ -248,6 +292,17 @@ python experiments\topo_loss_eval.py --shapes spot fandisk --seeds 0 1 2 `
     --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 1200
 python experiments\topo_loss_eval.py --shapes bob --seeds 0 1 2 `
     --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 700
+
+# tomyum (post-3e): constructed genus-9 asset + its C-matrix
+python scripts\make_tomyum_asset.py            # build + certify + export + preflight
+#   scene (dentistry repo): src\make_synthetic_scene.py --shape tomyum `
+#       --mesh output\synth\_meshes\tomyum_src.ply --out output\synth\tomyum `
+#       --views 48 --res 200
+python experiments\topo_loss_eval.py --shapes tomyum --seeds 0 1 2 `
+    --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 700 --loss_dims 1
+python experiments\topo_loss_eval.py --quicklook --shapes tomyum `
+    --conditions C0 C1 C2 --seeds 0 1 2 --rhos 0.1
+python scripts\make_tomyum_brief_docx.py                         # Thai advisor brief
 
 # report:
 python experiments\topo_loss_report.py
