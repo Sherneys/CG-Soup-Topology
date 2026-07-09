@@ -54,6 +54,13 @@ trajectory dumps, seed-averaged (20k evaluation samples, target-normalized).
 Secondary: significant-feature counts (phantom check) and Chamfer parity.
 \emph{Verdict rule:} C1 must beat C0 \textbf{and} every norm-matched control
 at Chamfer parity --- a topological win a dumb regularizer can match is not a
-topological win. CUDA training is not bit-reproducible (baseline re-runs
+topological win. \emph{Chamfer parity}, formally: the passing arm's
+seed-mean Chamfer must satisfy
+$\mathrm{Ch}(\mathrm{C1})\le 1.15\,\mathrm{Ch}(\mathrm{C0})$; the $15\%$
+headroom absorbs seed variance and CUDA nondeterminism, and in practice it
+never did any work --- every passing arm's Chamfer was at or below the
+baseline's.
+% src: experiments/topo_loss_report.py PARITY_MULT = 1.15; per-arm
+% chamfer_mean in topo3/report/results.json (all passing arms <= C0) CUDA training is not bit-reproducible (baseline re-runs
 diverge at the first resample), so no bit-level claims are made anywhere.
 % src: experiments/topo_loss_report.py verdict rule; PHASE3_PLAN.md App. B

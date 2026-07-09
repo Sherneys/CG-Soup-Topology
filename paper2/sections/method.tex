@@ -6,7 +6,9 @@
 
 \subsection{Objective}
 DiffSoup trains with a photometric objective $L_{\mathrm{photo}}$ (opacity
-auxiliary + $0.8\,L_1 + 0.2\,\mathrm{SSIM}$)~\citep{tojo2026diffsoup}. We add
+auxiliary + $0.8\,L_1 + 0.2\,\mathrm{SSIM}$)~\citep{tojo2026diffsoup}, which
+we adopt \emph{unchanged}: every ablation below isolates the topology
+channel, never photometric tuning. We add
 \begin{equation}
 L \;=\; L_{\mathrm{photo}} \;+\; \lambda(t)\, L_{\mathrm{topo}}(V),
 \end{equation}
@@ -26,9 +28,19 @@ $X$ is recomputed from live $V$ every step, so gradients reach vertices while
 the combinatorics stay fixed. The alpha complex of $X$ yields persistence
 pairs (birth simplex, death simplex) per dimension. For a Gabriel simplex the
 alpha filtration value is its squared circumradius, so each paired bar's
-coordinates are closed-form functions of a few sample positions ---
-half edge length (H0 deaths), triangle circumradius (H1 deaths, H2 births),
-tetrahedron circumradius (H2 deaths) --- all exactly differentiable. We
+coordinates are closed-form functions of a few sample positions, all
+exactly differentiable:
+\begin{equation}
+R_{\mathrm{edge}}=\tfrac12\lVert p_1{-}p_0\rVert,\qquad
+R_{\mathrm{tri}}=\frac{\lVert u\rVert\,\lVert v\rVert\,\lVert u{-}v\rVert}
+                      {2\,\lVert u\times v\rVert},\qquad
+R_{\mathrm{tet}}=\lVert y\rVert\ \text{with}\
+A\,y=\tfrac12\operatorname{diag}\!\big(AA^{\!\top}\big),
+\end{equation}
+where $u=p_1{-}p_0$, $v=p_2{-}p_0$, and $A$ stacks the rows $p_i{-}p_0$
+(the circumcenter is $p_0{+}y$). Edges carry H0 deaths and H1 births,
+triangles H1 deaths and H2 births, tetrahedra H2 deaths.
+% src: methods/topological_loss.py circumradius_{edge,triangle,tetra} We
 verify, per pairing, that the re-expressed value matches the filtration value
 (relative $10^{-6}$). A pair failing this Gabriel test is \emph{detached}:
 its term keeps contributing its (correct) value to the loss but propagates
@@ -38,7 +50,11 @@ missing tug for one refresh interval, re-tested at the next re-pairing. On
 all six benchmark shapes 100\% of significant pairs are Gabriel-exact on
 clean clouds, and the sensor-noise stress test (\S\ref{sec:setup}) never
 triggered the fallback --- zero failures across $2{,}400$ noisy refreshes
-(\S\ref{sec:results}).
+(\S\ref{sec:results}). Alternatives compatible with the same gate ---
+dropping failing pairs outright, subgradient surrogates, or locally
+raising $M$ near degeneracies --- exist; detachment is the most
+conservative, and the per-refresh failure count is logged so practitioners
+can judge when a stronger fallback is warranted.
 % src: PHASE3_PLAN.md Appendix A (mapping + Gabriel gates, 22/22)
 The pairing is treated as locally constant --- the standard pair-frozen
 device~\citep{gabrielsson2020topologylayer,carriere2021optimizing} --- and
@@ -93,6 +109,13 @@ $\rho\in\{0.03,0.1,0.3\}$, and an uncalibrated-schedule ablation (constant
 $\lambda$ from step one) matches the ramped version --- calibration, not
 scheduling, is what makes the knob safe.
 % src: PHASE3_PLAN.md Appendix C (rho sweep) + Appendix D (C3 vs C1)
+The window itself carries no measurable sensitivity either: alternative
+ramps ($10$--$40\%$ and $30$--$60\%$ of training; sphere, three seeds) land
+at $.0154{\pm}.0017$ and $.0179{\pm}.0019$ against the default window's
+$.0156{\pm}.0013$ --- within seed noise. The $20{:}50$ default is a
+conservative choice (let photometric pressure establish coarse geometry
+before topology guidance activates), not a tuned hyperparameter.
+% src: ramp_1040/quicklook.json + ramp_3060/quicklook.json (2026-07-09)
 
 \subsection{Conditions}
 \label{sec:conditions}

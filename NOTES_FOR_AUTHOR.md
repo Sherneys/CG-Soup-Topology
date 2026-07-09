@@ -1,3 +1,37 @@
+# PAPER 2 — ADVISOR REVISION ROUND 2 (REVISION_GUIDE / red-marks docx / actionable table, answered 2026-07-09)
+
+**⚠ READ THIS FIRST — the advisor's red-mark draft contains INVENTED numbers that contradict
+our measured data. Do NOT paste his red text verbatim into anything.** The directives were
+followed; the numbers were replaced with real ones:
+
+| His drafted claim | Reality (measured) |
+|---|---|
+| "W2-without-recruitment: .0212, recruitment contributes ~15%, matched loss dominates" | **C6 (actually run, 5 seeds): .0411±.0038 = statistically BASELINE.** Recruitment carries essentially the whole torus win — his framing is inverted. Paper keeps the real result. |
+| "Ramp pilot: alternative windows <2% variance" (no pilot existed) | **Pilot now actually run** (sphere, 3 seeds): 10–40% → .0154±.0017, 30–60% → .0179±.0019 vs default .0156±.0013 — within seed noise. Conclusion holds; numbers are now real (`ramp_1040/`, `ramp_3060/`). |
+| "Chamfer parity = ε = 2% of bbox diagonal, 95% CI" | Not our rule. **Actual implemented rule now stated: Ch(C1) ≤ 1.15·Ch(C0) on seed means** — and it never did work (all passing arms ≤ baseline). |
+| "Overhead ≈ 2% of training, negligible" | **Real: +46 s fixed on 33–41 s baselines = +115–138% on these tiny scenes.** Honest framing in paper: fixed cost, scales with M not scene, amortizes on real scenes. |
+| "Nondeterminism ±3–5% baseline, ±1–2% C1 (guidance reduces variance)" | **Real CVs: 7–10% for baseline AND loss arms**; loss-identical re-run pair 6% apart. No variance-reduction claim. |
+| Box 1 formulas ("H0 death: α=0", "H1 birth: circumradius(triangle)", "H2 birth: tetrahedron") | **Wrong case mapping.** Correct (now as equations in §3.2, from the code): edge = ½‖p₁−p₀‖ (H0 deaths, H1 births); triangle = ‖u‖‖v‖‖u−v‖/2‖u×v‖ (H1 deaths, H2 births); tetra via Ay=½diag(AAᵀ) (H2 deaths). |
+| New 2026 references ("Leygonie 2025 multi-scale", "Cohen-Steiner 2026 surveys", "NeuroTopology") | **Not verifiable — almost certainly hallucinated. NOT cited.** Verified set unchanged. |
+
+**Everything else from his round-2 list implemented (commit-tagged):** related-work now has
+the allocation-channel summary ¶ (3 findings with numbers, main text) + the 3-novelty
+differentiation ¶; L_photo inherited-unchanged sentence; circumradius equations (§3.2);
+robustness alternatives sentence; ramp-window pilot (real runs) + justification (§3.4);
+Chamfer-parity formal definition (§4); H1 geometric-intuition + H0 mechanism paragraphs;
+control-pinning mechanism ¶ + **new Appendix B**: M-sensitivity table (M∈{512,1024,2048,4096};
+double torus's 4 loops appear at 4096 ✓ bound confirmed) + **persistence-diagram trajectory
+figure** (C0 drifts off target / C1 returns to it when the ramp activates / C2 pinned+dragged
+with phantom carpet — his requested "pinning" visualization); overhead + nondeterminism with
+real numbers; open-surface roadmap + template-free sketch (genus-target recommended; his
+fabricated ".0185 genus-variant result" NOT adopted — untested, so stated as untested);
+recruitment-guarantees limitation; **new §Conclusion** (was missing); **C3 on external shape
+run** (bob: .0171±.0026 vs C1 .0208±.0008 — curriculum-free generalizes). Not done by choice:
+his §6–7 merge (defer to venue compression), per-seed Chamfer table + recruitment pseudocode
+block (supplementary candidates; equation + greedy-order prose cover it).
+
+---
+
 # PAPER 2 — ADVISOR REVISION RESPONSE (Revision list Paper KinKin.pdf, answered 2026-07-09)
 
 All six items addressed the same day; use this table when you reply to อาจารย์:

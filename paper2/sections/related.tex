@@ -18,6 +18,25 @@ here the resampler stays untouched and the objective changes instead. Vertex-dom
 preconditioning~\citep{nicolet2021largesteps} are complementary --- they change
 \emph{how} vertices move, we change \emph{why}.
 
+\paragraph{The allocation channel: why priors alone fail.}
+% Round-2 self-containment: the three findings in the MAIN text (full
+% detail + tables stay in Appendix A). src: Appendix A sources.
+Three findings of our allocation-channel study set this paper's problem.
+(1)~Geometric metrics are topology-blind: on bisection-matched probes with
+Chamfer equal \emph{by construction}, the discriminating-dimension
+bottleneck separates correct from broken topology by $35$--$40\times$
+(Table~\ref{tab:blindness}). (2)~For voids, a spread topological prior
+cuts the bottleneck $33$--$53\%$ below baseline --- but a width-matched
+\emph{random} control recovers most of that gain, leaving only a small,
+shape-dependent topological residual: the prior's value is carried largely
+by its width. (3)~No prior shape repairs loops: the best torus arm is the
+\emph{non-topological} wide control ($.0267$ vs the topological spread
+prior's $.0316$), and the concentrated topological field manufactures
+phantom handles ($4.4$ significant loops against the true $2$). The
+composition condition C5 reuses that study's strongest field (B4, defined
+in Appendix~\ref{app:companion}), but the mechanism is not specific to its
+construction --- any width-matched allocation prior can fill the slot.
+
 \paragraph{Persistence in learning objectives.}
 Persistent homology~\citep{edelsbrunner2002persistence} with its stability
 guarantees~\citep{cohensteiner2007stability} has been used as a trainable
@@ -30,12 +49,23 @@ analysis~\citep{carriere2021optimizing}; barcode-valued maps have since been
 given a general differential framework~\citep{leygonie2022framework}, and the
 per-step cost of persistence-guided descent attacked
 directly~\citep{nigmetov2024bigsteps}. Our backward pass is in this family
---- gradients through the filtration values of paired simplices --- with three
-pipeline-specific ingredients: an \emph{alpha-complex} pairing over
-$\alpha$\,$\times$\,area surface samples of a live triangle soup (rather than
-image grids or raw clouds), a Gabriel-exactness gate that certifies the
-circumradius re-expression, and the recruitment term for missing target
-features, which pure optimal matching cannot see.
+--- unlike work that back-propagates through filtration-value sorting or
+barcode coordinates in general position, we re-express each paired
+simplex's birth/death as a closed-form circumradius of live surface
+samples --- with three pipeline-specific ingredients.
+(i)~\emph{Alpha-complex pairing over $\alpha{\times}$area surface samples}
+of a live triangle soup, rather than image grids or raw clouds, couples
+the diagram to the geometry the renderer is actually training.
+(ii)~A \emph{Gabriel-exactness gate}: the circumradius re-expression
+equals the filtration value only for Gabriel simplices, so we verify it
+per pairing (relative $10^{-6}$) --- the gate is orthogonal to the
+standard pair-frozen device and certifies when the frozen gradient
+\emph{is} the true gradient, rather than assuming it.
+(iii)~\emph{Recruitment for missing features}: optimal partial matching
+has zero gradient exactly when a target feature is entirely absent --- the
+worst failure mode --- so we deliberately trade metric fidelity for a
+restored descent direction (\S\ref{sec:method}), and quantify both its
+known pathology and its necessity (\S\ref{sec:results}).
 % Leygonie/Nigmetov entries web-verified 2026-07-09 (Springer/arXiv); see
 % refs.bib provenance comments.
 

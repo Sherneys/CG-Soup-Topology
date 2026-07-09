@@ -1,0 +1,64 @@
+\section{Diagnostics: density sensitivity and diagram trajectories}
+\label{app:diagnostics}
+
+% Advisor round-2 items: M-sensitivity table + persistence-diagram
+% trajectory visualization. All numbers regenerable:
+% src: experiments/density_bound.py-style sweep (M in {512,1024,2048,4096},
+% seed 0, floor = 6*r_med(M)); figure from the committed run dumps
+% (sphere_{C0,C1_r0.1,C2_r0.1}_s0 at steps {0,400,1200,2500}).
+
+\paragraph{Sampling density vs.\ measurability.}
+Table~\ref{tab:msens} counts the significant bars of the clean target
+surfaces across sampling densities under the self-calibrating floor
+$6\,r_{\mathrm{med}}(M)$ of \S\ref{sec:discussion}. It confirms the three
+density claims made in the paper: the sphere's void clears the floor at
+every tested density; the torus needs $M{=}2048$ before its \emph{second}
+loop is measurable, and its own void becomes measurable only at $M{=}4096$
+(hence the H1 restriction at $M{=}2048$); and the double torus's tube
+loops cross the floor between $M{=}2048$ and $M{=}4096$ --- consistent
+with the $M\gtrsim3{\times}10^{3}$ estimate of \S\ref{sec:discussion} ---
+so all four loops are measurable at $M{=}4096$.
+
+\begin{table}[h]
+\centering\small
+\caption{Significant bars (H1 / H2) on the clean target surfaces vs.\
+sampling density $M$; floor $=6\,r_{\mathrm{med}}(M)$, seed 0.}
+\label{tab:msens}
+\begin{tabular}{lcccc}
+\toprule
+ & $M{=}512$ & $M{=}1024$ & $M{=}2048$ & $M{=}4096$ \\
+\midrule
+% src: density sweep 2026-07-09 (floors .1261/.0895/.0644/.0458 sphere;
+% .1228/.0843/.0623/.0437 torus; .1107/.0739/.0539/.0382 double_torus)
+sphere       & 0 / 1 & 0 / 1 & 0 / 1 & 0 / 1 \\
+torus        & 1 / 0 & 1 / 0 & 2 / 0 & 2 / 1 \\
+double torus & 0 / 0 & 2 / 0 & 2 / 0 & 4 / 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Diagram trajectories: the pinning mechanism, visualized.}
+Fig.~\ref{fig:pdtraj} shows the live H2 diagrams of one sphere seed under
+C0/C1/C2 at four training steps. All three arms start with the void
+essentially on target (initialization samples the SfM point cloud), and
+photometric training alone drags it away (the baseline settles
+${\approx}.06$ below). The loss arm dips identically while the ramp is
+inactive, then pulls the void back to within ${\approx}.016$ of target ---
+matching its measured tail. The control arm is qualitatively different:
+the void's death is dragged progressively down (${\approx}.23 \to .15 \to
+.13$) while a carpet of phantom mid-persistence bars accumulates near the
+diagonal --- the repulsion-equilibrium signature discussed in
+\S\ref{sec:discussion}.
+
+\begin{figure}[h]
+\centering
+% src: figures/pd_trajectories.png (generated from committed dumps)
+\includegraphics[width=\linewidth]{pd_trajectories.png}
+\caption{Live H2 persistence diagrams over training (one sphere seed; 20k
+samples, target-normalized; star $=$ target void bar, circle $=$ most
+persistent live bar). \emph{Top}, baseline: the void drifts off target.
+\emph{Middle}, loss: the void returns to the target once the ramp
+activates. \emph{Bottom}, repulsion control: the void is pinned and
+dragged away while near-diagonal phantom bars accumulate.}
+\label{fig:pdtraj}
+\end{figure}

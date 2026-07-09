@@ -4,9 +4,11 @@
 % TODO(human): voice pass; consider merging with results at venue length.
 
 \paragraph{Sparse tugs vs.\ budget allocation.} Each significant pair
-back-propagates through at most a handful of sampled points, so the loss
-delivers \emph{precise but sparse} pulls, iterated by re-pairing --- the toy
-probes show surgery ``walking'' around a defect a few points at a time. The
+back-propagates through the $3$--$7$ sample positions of its birth and
+death simplices, so the loss delivers \emph{precise but sparse} pulls,
+iterated by re-pairing --- the toy probes show surgery ``walking'' around a
+defect a few points at a time; the prior, by contrast, biases every
+respawn decision diffusely across a feature's whole support. The
 resampling prior is the opposite: broad, indirect, budget-limited. The
 results sort cleanly along this axis: 1-D loops, which the prior could only
 over- or under-tessellate, respond to precise value pressure (H1 win); wide
@@ -17,10 +19,16 @@ suffices (H0 null, three channels).
 \paragraph{Why the control damages topology.} The norm-matched repulsion
 imposes a length-scale floor on the sampled surface; the void's death time
 pins at that equilibrium (identical across seeds) and thin structures
-collapse ($\beta_2$ loss on the cube, $\beta_1$ loss on the torus). This
-sharpens the control argument: spending the same gradient budget through the
-same channel \emph{without} topological information is not neutral --- it is
-harmful --- so C1's wins cannot be an artifact of extra regularization.
+collapse ($\beta_2$ loss on the cube, $\beta_1$ loss on the torus).
+Fig.~\ref{fig:pdtraj} makes this visible: once the repulsed cloud reaches
+its equilibrium spacing, no refinement can tighten the void closure --- the
+death coordinate is pinned, then dragged, while near-diagonal phantom bars
+accumulate. The loss has no such length-scale constraint: it pulls the
+death coordinate itself and the geometry follows, rather than the other
+way around. This sharpens the control argument: spending the same gradient
+budget through the same channel \emph{without} topological information is
+not neutral --- it is harmful --- so C1's wins cannot be an artifact of
+extra regularization.
 
 \paragraph{Measurability at the loss's density.} A persistence loss can only
 enforce features that clear the significance floor at its sampling density
@@ -50,8 +58,13 @@ reconstruction noise: its second loop clears the clean-surface floor by
 only $1.33\times$, a margin the live cloud's noise consumes --- which is
 exactly why that loop is chronically sub-threshold during training and
 recruitment becomes its only gradient path (the C6 ablation).
+Appendix~\ref{app:diagnostics} tabulates the counts across $M$; at
+$M{=}4096$ all four double-torus loops clear the floor. Adaptive or
+multi-scale density --- raising $M$ where features sit near the floor, or
+hierarchical floors --- is the natural extension; the trade is explicit,
+since persistence cost grows $O(M\log M)$.
 % src: experiments/density_bound.py — persistence_from_target on the GT
-% meshes at M in {2048, 20000}, seed 0 (2026-07-09)
+% meshes at M in {2048, 20000}, seed 0 (2026-07-09); M-sweep in App. B
 
 \paragraph{Recruitment is landscape-guided in practice --- and it is the
 mechanism for loops.} Its location blindness --- pull the nearest bar

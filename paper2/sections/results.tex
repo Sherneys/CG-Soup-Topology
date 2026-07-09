@@ -97,7 +97,9 @@ outright. Nor is this an artifact of control strength: a gentle variant at
 half the push radius still lands $1.6\times$ \emph{worse} than baseline
 (.0972 vs .0623) --- the sphere ordering is C1 $<$ C0 $<$ C2g $<$ C2, so no
 tested repulsion strength reproduces any of the gain
-(Fig.~\ref{fig:tails}).
+(Fig.~\ref{fig:tails}); Appendix~\ref{app:diagnostics} visualizes the
+mechanism as diagram trajectories --- the control \emph{pins and drags}
+the void's death while phantom bars accumulate.
 % src: topo3/report/results.json (sphere: C2g 0.0972±0.0169)
 
 \begin{figure}[t]
@@ -119,7 +121,14 @@ beat a random control. The loss cuts torus
 H1 error $2.3\times$ with \emph{zero phantom handles in all five seeds}
 (significant-count trajectories flat at the true $\beta_1{=}2$,
 Fig.~\ref{fig:nsig}), while the control collapses one loop. Metric pressure
-on birth/death values suits 1-D features in a way budget allocation does not.
+on birth/death values suits 1-D features in a way budget allocation does
+not, and the reason is dimensional: a loop has minimal spatial support ---
+it is characterized almost entirely by its birth/death values --- so
+allocation can only over- or under-tessellate its neighbourhood
+(manufacturing phantoms or thinning the tube), while value pressure moves,
+merges, or tightens the loop directly. Voids, whose support is the whole
+shell, respond to both channels --- which is why the composition (C5) wins
+everywhere.
 
 \begin{figure}[t]
 \centering
@@ -141,7 +150,11 @@ control matches it on the diagram metric (.0008 vs .0007); the topological
 increment appears only in Chamfer ($0.54$ vs $1.94$). Together with the
 allocation-channel results this is now a statement about the feature class:
 component structure is helped by any spreading pressure, not by topological
-information.
+information. The mechanism is that $\beta_0$ structure is carried entirely
+by the count and spatial separation of shells --- a property \emph{any}
+spreading pressure improves by default, and one the photometric term
+already infers from images. Topological guidance earns its keep where
+geometry and topology decouple: loops and voids.
 
 \paragraph{Composition (C5).} Loss $+$ spread prior is best everywhere
 tested --- sphere $.0082$ ($7.6\times$ vs C0, ${\approx}2\times$ vs C1 alone,
@@ -167,9 +180,18 @@ in \S\ref{sec:discussion}.
 
 \paragraph{Ablations.} $\rho$-response flat over $\{0.03,0.1,0.3\}$
 (.0181/.0172/.0177 on sphere); C3 (no curriculum) $\approx$ C1 on both
-decisive shapes. Overhead: ${\approx}45$--$55$\,s per 2{,}500-step run
-(refresh 174\,ms at $M{=}2048$, every 10 steps).
-% src: PHASE3_PLAN.md Appendices B-D
+decisive shapes \emph{and} off the analytic family --- on the genus-1
+external mesh C3 lands at $.0171{\pm}.0026$ vs C1's $.0208{\pm}.0008$,
+so the curriculum-free finding generalizes.
+% src: topo3/report/results.json (bob C3, 3 seeds, 2026-07-09) Overhead, honestly: the loss adds a \emph{fixed}
+${\approx}46$\,s per 2{,}500-step run (refresh $174$\,ms at $M{=}2048$
+every 10 steps) --- on these deliberately tiny scenes that exceeds the
+$33$--$41$\,s photometric baseline itself, but the cost scales with $M$
+($O(M\log M)$ per refresh), not with scene or image complexity, so it
+amortizes on realistic scenes where rendering dominates; the loss adds no
+trainable parameters.
+% src: PHASE3_PLAN.md Appendices B-D; wall-clock from dump mtimes
+% (sphere C0 33s / C1 79s; torus C0 41s / C1 88s, 5 seeds each)
 
 \paragraph{Recruitment is load-bearing for loops (C6).} Removing the
 recruitment term (pure matching $+$ diagonal, all else identical) collapses
