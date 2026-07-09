@@ -2,34 +2,52 @@
 \section{The allocation-channel study, in brief}
 \label{app:companion}
 
-% Added 2026-07-09 for submit-first self-containment: the three facts this
-% paper uses from the companion manuscript are restated here WITH their
-% numbers, so reviewers can audit the argument from this document alone.
+% The allocation-channel study is OUR OWN prior experiments, reported
+% first-hand here — no external reference, per the author's decision
+% 2026-07-09. If that study is ever submitted as its own paper, disclose
+% the overlap to both venues.
 % src: figures/summary.md a.k.a. blindness_results.json (Phase 1);
 %      h2_unified/report/results.json (voids, 5 paired seeds);
 %      crossover/report/results.json (torus incl. B5).
 % NOTE(author): at venues with strict page limits this appendix moves to the
-% supplementary material unchanged, alongside the companion PDF itself.
+% supplementary material unchanged.
 
-This appendix restates, with their numbers, the three facts of the companion
-study~\citep{chongpermwattanapol2026spread} that this paper builds on.
+This appendix reports, with their numbers, the three findings of our
+allocation-channel study --- controlled resampling-prior experiments on the
+same pipeline, scenes, and budgets, conducted before moving topology into
+the objective --- that this paper builds on.
 
 \paragraph{(1) Geometric metrics are topology-blind.} Three constructed
 cases each pit a topologically correct candidate A against a wrong one B
 whose geometry is bisection-matched, making Chamfer \emph{equal by
 construction} (40k samples, metrics normalized by the ground-truth bounding
-diagonal). A thin handle (genus $0{\to}1$): Chamfer $0.916\%$ for both,
-discriminating bottleneck $0.030$ vs ${\approx}0$. A thin bridge merging two
-components: Chamfer $0.628\%$ both, bottleneck $40\times$ apart ($.0574$ vs
-$.0014$). A punctured void: Chamfer $0.977\%$ both, bottleneck $35\times$
-apart ($.1385$ vs $.0040$). In the first two cases Hausdorff$_{95}$ actually
-\emph{prefers} the wrong candidate. Chamfer cannot tell a benign bump from a
-destroyed void; the persistence metric separates them by more than an order
-of magnitude.
+diagonal; Table~\ref{tab:blindness}). The discriminating-dimension
+bottleneck separates every pair --- by $35$--$40\times$ in the H0/H2 cases
+--- while in the first two cases Hausdorff$_{95}$ actually \emph{prefers}
+the topologically wrong candidate. Chamfer cannot tell a benign bump from a
+destroyed void; the persistence metric can.
 % src: figures/summary.md (Phase-1 result table, 3/3 gate)
 
+\begin{table}[h]
+\centering\small
+\caption{Blindness probes: A topologically correct, B wrong, geometry
+bisection-matched so Chamfer is equal by construction. Bottleneck to ground
+truth in the discriminating dimension.}
+\label{tab:blindness}
+\begin{tabular}{lcccc}
+\toprule
+case (disc.\ dim) & Chamfer\% A $=$ B & bott.\ A & bott.\ B & ratio \\
+\midrule
+% src: figures/summary.md (Phase-1 result table)
+thin handle, genus $0{\to}1$ (H1) & 0.916 & ${\approx}0$ & .0302 & --- \\
+bridge merges two components (H0) & 0.628 & .0014 & .0574 & $40\times$ \\
+punctured enclosed void (H2)      & 0.977 & .0040 & .1385 & $35\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \paragraph{(2) The prior arms, and why voids are ``width-primary''.} The
-companion study biases DiffSoup's own resampler with a precomputed importance
+study biases DiffSoup's own resampler with a precomputed importance
 field: persistence-localized Gaussian splats at each target feature's
 death-simplex location ($\sigma_f=\sqrt{\mathrm{death}_f}$), applied at
 budget parity as prune protection plus respawn bias. Arms: B0 baseline; B2
@@ -43,7 +61,7 @@ bottleneck $33$--$53\%$ below baseline --- but the width-matched random
 control B5 recovers most of that gain, leaving only a small, shape-dependent
 topological residual (cylinder $4.6\sigma$, sphere $2.2\sigma$, cube tie);
 one-shot placement washes out entirely (B1 $\approx$ B0, $.0546$ vs $.0535$
-on the sphere). Hence the companion verdict quoted in
+on the sphere). Hence the verdict quoted in
 \S\ref{sec:intro}: the prior's topological value is carried largely by its
 spatial \emph{width}.
 % src: h2_unified/report/results.json (all five arms, paired seeds)

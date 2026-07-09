@@ -12,8 +12,8 @@ nvdiffrast~\citep{laine2020nvdiffrast} established gradient flow from pixels
 to geometry; Gaussian splatting~\citep{kerbl2023gaussians} and triangle
 splatting~\citep{held2025trianglesplatting} trade connectivity for speed. The
 pipeline we build on is DiffSoup~\citep{tojo2026diffsoup}, whose in-loop
-prune/respawn resampler is exactly the mechanism our companion
-study~\citep{chongpermwattanapol2026spread} steered with importance priors;
+prune/respawn resampler is exactly the mechanism our allocation-channel
+study (Appendix~\ref{app:companion}) steered with importance priors;
 here the resampler stays untouched and the objective changes instead. Vertex-domain optimizers such as large-steps
 preconditioning~\citep{nicolet2021largesteps} are complementary --- they change
 \emph{how} vertices move, we change \emph{why}.

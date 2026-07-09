@@ -7,9 +7,11 @@
 %   * every numeric result carries a "% src:" comment naming the results file
 %     it was read from (PHASE3_PLAN.md appendices A-D and
 %     output/synth/topo3/report/results.json). No number without a source.
-%   * citations: paper-1 verified set + three additions (companion manuscript,
-%     leygonie2022framework, nigmetov2024bigsteps — the latter two web-verified
-%     2026-07-09, provenance comments in refs.bib). Never a guessed entry.
+%   * citations: paper-1 verified set + two web-verified additions
+%     (leygonie2022framework, nigmetov2024bigsteps — provenance comments in
+%     refs.bib). Never a guessed entry. The allocation study is UNCITED by
+%     design: it is reported first-hand in Appendix A (author decision
+%     2026-07-09).
 %   * author-only spots are marked % TODO(human).
 % ============================================================================
 \documentclass[11pt]{article}
@@ -51,9 +53,10 @@
 % ----------------------------------------------------------------------------
 \begin{abstract}
 Resampling priors can steer \emph{where} a differentiable triangle-soup
-reconstruction spends its triangle budget, but our companion study
-(summarized in Appendix~\ref{app:companion}) found their topological value
-is carried largely by spatial \emph{width}, and that no prior shape repairs
+reconstruction spends its triangle budget, but our controlled study of that
+channel (reported in Appendix~\ref{app:companion}) found their topological
+value is carried largely by spatial \emph{width}, and that no prior shape
+repairs
 one-dimensional features: concentrated priors manufacture phantom handles,
 spread priors never beat a random control. We move topology
 from the allocation channel into the \emph{objective}: a differentiable
@@ -90,9 +93,9 @@ combine.
 \input{sections/discussion}
 \input{sections/limitations}
 
-% Submit-first self-containment (2026-07-09): every companion-study fact this
-% paper relies on, restated with numbers. Moves to supplementary at venues
-% with strict page limits.
+% The allocation-channel study (our own prior experiments), reported
+% first-hand with numbers. Moves to supplementary at venues with strict
+% page limits.
 \input{sections/appendix_companion}
 
 \bibliographystyle{unsrtnat}

@@ -1,8 +1,8 @@
 \section{Introduction}
 \label{sec:intro}
 
-% Framing continues the companion paper's arc: measurement -> prior -> loss.
-% TODO(human): voice pass; harmonize with the final framing of paper 1.
+% Framing: measurement -> prior (Appendix A) -> loss.
+% TODO(human): voice pass.
 
 Differentiable rasterization reconstructs a triangle soup from images by
 following photometric gradients~\citep{tojo2026diffsoup}, periodically
@@ -11,14 +11,11 @@ topologically blind: reconstructions that differ in genus, connectivity, or
 enclosed-void structure can be indistinguishable to Chamfer and Hausdorff
 distances while the bottleneck distance between persistence diagrams separates
 them by an order of magnitude
-(Appendix~\ref{app:companion}). Our companion
-study~\citep{chongpermwattanapol2026spread}, summarized with its key numbers
-in Appendix~\ref{app:companion},
-% src: figures/summary.md (Phase 1); paper/ (Concentrate or Spread?)
-% NOTE(author): the companion entry cites "in preparation" — swap in the
-% arXiv/venue id once it exists; anonymize if the venue is double-blind.
+(Appendix~\ref{app:companion}). We first
+% src: figures/summary.md (Phase 1); h2_unified + crossover reports (App. A)
 attacked this through the \emph{allocation} channel --- biasing where the
-resampler spends triangles --- and returned a mixed verdict: a topological
+resampler spends triangles --- in a controlled study reported with its key
+numbers in Appendix~\ref{app:companion}. The verdict was mixed: a topological
 prior helps enclosed voids, but most of the gain is reproduced by any
 equally-wide non-topological prior, and no prior shape repairs
 one-dimensional features: concentrating manufactures phantom handles, and

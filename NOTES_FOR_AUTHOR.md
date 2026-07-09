@@ -2,15 +2,18 @@
 
 **Your decision: submit paper 2 BEFORE paper 1.** The structural consequence — paper 2
 may not *depend* on an unpublished companion — is resolved: **Appendix A ("The
-allocation-channel study, in brief")** now restates, with numbers, every companion fact
-paper 2 uses: the 3-case blindness result (Chamfer-equal by construction; bottleneck
-35–40× apart), the prior arms + the void width-primacy table (B0/B2/B3/B4/B5, 5 paired
-seeds, `h2_unified`), the torus failure (B5 .0267 best; B2 phantom handles #sig 4.4 vs
-true 2, `crossover`), and the B4 definition C5 reuses. Every number carries a `% src:`.
-Abstract/intro/method/setup/results now point at the appendix; the companion stays cited
-as `@unpublished` ("in preparation") for provenance only. Build: tectonic exit 0,
-**14 pp, zero rendered TODOs, no unresolved citations** (3 cosmetic overfulls remain;
-they die at venue reformat).
+allocation-channel study, in brief")** reports, with numbers, every allocation-study fact
+paper 2 uses: the 3-case blindness result (now an explicit table; Chamfer-equal by
+construction; bottleneck 35–40× apart), the prior arms + the void width-primacy table
+(B0/B2/B3/B4/B5, 5 paired seeds, `h2_unified`), the torus failure (B5 .0267 best; B2
+phantom handles #sig 4.4 vs true 2, `crossover`), and the B4 definition C5 reuses. Every
+number carries a `% src:`. **Per your instruction (2026-07-09): paper 1 is NOT referenced
+at all** — the `@unpublished` companion entry was removed; the study is presented
+first-hand as our own prior experiments in Appendix A. ⚠ One obligation this creates:
+if you later submit paper 1 as its own paper, disclose the overlap to both venues (a
+non-rendered comment marks this in `appendix_companion.tex` and `refs.bib`). Build:
+tectonic exit 0, zero rendered TODOs, no unresolved citations (3 cosmetic overfulls
+remain; they die at venue reformat).
 
 **Bib flags CLOSED (web-verified 2026-07-09, provenance comments in `paper2/refs.bib`):**
 `tojo2026diffsoup` re-checked against arXiv 2603.27151 (title+authors exact) and
@@ -31,8 +34,8 @@ Appendix A + the companion PDF to supplementary (marked in `appendix_companion.t
 1. **Voice pass** — abstract, intro, related, discussion (`TODO(human)` comments mark them).
 2. **Say the venue** → the template + anonymization + 8-page compression pass gets done for you.
 3. **Author block**: OK with `viritphon.1234@gmail.com` in print, or give an institutional address.
-4. Paper 1's fate is now decoupled — arXiv it whenever; swap the companion entry's
-   `note` for the identifier when it exists.
+4. Paper 1 is now FULLY decoupled (not even cited). If you ever submit it separately,
+   disclose the Appendix-A overlap to both venues.
 5. *Optional pre-empt:* C1-without-recruitment training ablation (~15 runs, ~30 min GPU).
 
 ---
