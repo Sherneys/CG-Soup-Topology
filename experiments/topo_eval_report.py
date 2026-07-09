@@ -45,10 +45,15 @@ import matplotlib.pyplot as plt  # noqa: E402
 DENTISTRY = os.environ.get("CGSOUP_ROOT", r"D:\Project\CG-Soup-for-Digital-Dentistry")
 EXP_ROOT = os.path.join(DENTISTRY, "output", "synth", "topo2")
 SHAPE_DIM = {"torus": 1, "two_spheres": 0, "sphere": 2, "cube": 2, "cylinder": 2,
-             "double_torus": 1, "three_spheres": 0, "thick_shell": 2}
+             "double_torus": 1, "three_spheres": 0, "thick_shell": 2,
+             "tomyum": 1}
+# tomyum: genus 9 mesh, but the SIGNIFICANT cloud reading at eval densities is
+# the metal solid's chimney cycle only — (1,1,0) holds for M in [2048, 30000];
+# the full handlebody rank (1,9,0) needs M~50000 (see scripts/make_tomyum_asset).
 CORRECT_BETTI = {"torus": (1, 2, 1), "two_spheres": (2, 0, 2), "sphere": (1, 0, 1),
                  "cube": (1, 0, 1), "cylinder": (1, 0, 1),
-                 "double_torus": (1, 4, 1), "three_spheres": (3, 0, 3), "thick_shell": (1, 0, 1)}
+                 "double_torus": (1, 4, 1), "three_spheres": (3, 0, 3), "thick_shell": (1, 0, 1),
+                 "tomyum": (1, 1, 0)}
 COND_COLOR = {"B0": "#555555", "B1": "#1f77b4", "B2": "#d62728", "B3": "#2ca02c",
               "B4": "#ff7f0e", "B5": "#9467bd"}
 COND_LABEL = {"B0": "B0 baseline", "B1": "B1 topo@init", "B2": "B2 topo concentrate",

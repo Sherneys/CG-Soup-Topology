@@ -51,7 +51,12 @@ SHAPE_DIM = {"torus": 1, "two_spheres": 0, "sphere": 2, "cube": 2, "cylinder": 2
              # Phase-3e generality meshes (external, genus-known, watertight):
              # spot (genus 0) / bob (genus 1) from the Crane model repository
              # (CC0); fandisk (genus 0 CAD) reuses the A-series scene.
-             "spot": 2, "bob": 1, "fandisk": 2}
+             "spot": 2, "bob": 1, "fandisk": 2,
+             # Thai signature mesh (topology/meshes.tomyum_pot_mesh): tom-yum
+             # hot pot, genus 9 BY CONSTRUCTION (chimney + 2 handles + 6
+             # vents); its cloud reads the metal SOLID, and at M=2048 exactly
+             # the chimney H1 cycle is significant (seed-robust preflight).
+             "tomyum": 1}
 
 ENV = dict(os.environ, PYTHONUTF8="1", DIFFSOUP_ROOT=DIFFSOUP_ROOT, TOPO_ROOT=_TOPO_ROOT)
 

@@ -384,6 +384,210 @@ def thick_shell_cloud(n: int, r_inner: float = 0.40, r_outer: float = 0.70,
     return pts[:n] + center
 
 
+# ── Thai signature mesh: the tom-yum hot pot / หม้อไฟ ────────────────
+#   A culturally Thai counterpart to spot/bob/fandisk for the external-mesh
+#   suite: the traditional charcoal hot pot that tom yum is served in — an
+#   annular soup moat around a central chimney, on a pedestal with air vents.
+#   Unlike downloaded meshes its topology is known BY CONSTRUCTION:
+#
+#       revolved moat+chimney+pedestal body            genus 1
+#     + `handles` side loop-handles (torus unions)     +1 each  (one contact
+#          blob buried 3 mm into the 10 mm wall -> boundary connected sum)
+#     - `vents` radial air holes through the pedestal  +1 each  (each drills
+#          one tunnel through the skirt wall)
+#
+#   Default (2 handles, 6 vents): genus 9 -> exact mesh homology (1, 18, 1).
+#
+#   The POINT-CLOUD (alpha-complex) reading is different, and deliberately so:
+#   the 10 mm walls merge below any practical sample spacing, so the cloud
+#   reads the METAL SOLID — a genus-9 handlebody: b1 -> 9 (= genus, one cycle
+#   per tunnel: chimney + 2 handles + 6 vents), b2 = 0 (an open vessel encloses
+#   no void). And because feature scales span an order of magnitude (chimney
+#   bore Ø104 vs handle/vent openings Ø22-24), WHICH of those 9 cycles are
+#   significant depends on M: at M=2048 the pot reads as a solid torus
+#   (1,1,0) — a coffee mug — and the full rank 9 only emerges at high M. The
+#   measurement-floor story of experiments/density_bound.py in one object.
+#
+#   Built with the manifold3d kernel (lazy import, mirroring the skimage rule
+#   above): booleans are guaranteed watertight / oriented / self-intersection
+#   free, and the kernel's genus() is asserted after every construction step.
+#   DETERMINISTIC: fixed profile constants, no rng; the output arrays are
+#   canonicalized (lexicographic vertex + face order) so the result is
+#   bit-identical run-to-run regardless of kernel thread scheduling.
+
+def _catmull_rom(pts, subdiv: int) -> np.ndarray:
+    """Uniform Catmull-Rom through `pts` ((K,2), K>=3), endpoints included.
+    Deterministic densifier for the curved profile sections."""
+    P = np.asarray(pts, dtype=float)
+    if len(P) < 3 or subdiv <= 1:
+        return P
+    ext = np.vstack([2.0 * P[0] - P[1], P, 2.0 * P[-1] - P[-2]])
+    out = [P[0]]
+    for i in range(1, len(ext) - 2):
+        p0, p1, p2, p3 = ext[i - 1], ext[i], ext[i + 1], ext[i + 2]
+        for j in range(1, subdiv + 1):
+            s = j / subdiv
+            out.append(0.5 * ((2.0 * p1) + (-p0 + p2) * s
+                              + (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * s * s
+                              + (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * s ** 3))
+    return np.asarray(out)
+
+
+def _tomyum_profile(subdiv: int = 6) -> np.ndarray:
+    """The pot's metal cross-section in the (r, z) half-plane, millimetres —
+    ONE simple polygon (T-junctions where the moat floor meets the wall and the
+    chimney tube are interior to the region, so the boundary stays a single
+    closed curve). Revolving any simple polygon with r > 0 gives genus 1.
+    Wall thickness is a uniform ~10 mm; overall pot: Ø240 x 200 mm (real
+    charcoal-pot proportions, stylized thick so coarse point samples still
+    resolve the two wall sides)."""
+    seg = []                                       # boundary pieces, in order
+    # outer surface, ground -> rim: pedestal skirt, then the bowl bulge
+    seg.append([(100.0, 0.0), (91.0, 42.0)])       # skirt outer (straight)
+    seg.append(_catmull_rom([(91.0, 42.0), (101.0, 52.0), (112.0, 68.0),
+                             (119.0, 88.0), (117.0, 108.0), (112.0, 128.0),
+                             (111.0, 138.0), (113.0, 146.0)], subdiv))
+    seg.append([(113.0, 146.0), (103.0, 146.0)])   # rim cap (free-edge curl)
+    # moat inner wall, rim -> floor (10 mm inside the outer curve)
+    seg.append(_catmull_rom([(103.0, 146.0), (101.0, 138.0), (102.0, 128.0),
+                             (107.0, 108.0), (109.0, 88.0), (102.0, 68.0),
+                             (91.0, 52.0), (81.0, 50.0)], subdiv))
+    seg.append([(81.0, 50.0), (62.0, 48.0)])       # moat floor, top face
+    # chimney: a straight fat column (true to the aluminium originals). The
+    # narrowest bore radius (52 mm throat) sets the flue tunnel's H1 death
+    # scale, chosen so that bar clears the default 6*r_med floor at M=2048
+    # across seeds (measured margin 1.17-1.25x, seeds 0-4); the full k in
+    # [4,8] stability band is reached by M~8192 (margin 1.9x at k=8 there).
+    seg.append([(62.0, 48.0), (62.0, 200.0)])      # chimney outer face
+    seg.append([(62.0, 200.0), (52.0, 200.0)])     # chimney lip cap
+    seg.append([(52.0, 200.0), (52.0, 48.0),
+                (53.0, 20.0)])                     # flue inner face, to chamber
+    seg.append([(53.0, 20.0), (64.0, 20.0)])       # flue bottom cap
+    seg.append([(64.0, 20.0), (63.0, 38.0)])       # flue outer, below floor
+    seg.append([(63.0, 38.0), (81.4, 40.0)])       # moat floor, bottom face
+    seg.append([(81.4, 40.0), (90.0, 0.0)])        # chamber/skirt inner wall
+    seg.append([(90.0, 0.0), (100.0, 0.0)])        # ground cap -> closes
+    pts = np.vstack([np.asarray(s, dtype=float)[:-1] for s in seg])
+    _assert_simple_polygon(pts)
+    if _polygon_area(pts) < 0.0:                   # CrossSection needs CCW
+        pts = pts[::-1]
+    return pts
+
+
+def _polygon_area(P: np.ndarray) -> float:
+    x, y = P[:, 0], P[:, 1]
+    return 0.5 * float(np.dot(x, np.roll(y, -1)) - np.dot(y, np.roll(x, -1)))
+
+
+def _assert_simple_polygon(P: np.ndarray) -> None:
+    """Brute-force certificate that the closed polyline P is simple (no repeated
+    vertices, no proper or improper crossing between non-adjacent edges).
+    O(K^2) with K~150 — negligible, and it turns a silent CrossSection
+    'fix-up' of bad input into a loud error here."""
+    n = len(P)
+    if n < 3 or len(np.unique(P.round(9), axis=0)) != n:
+        raise ValueError("profile polygon has repeated vertices")
+    A, B = P, np.roll(P, -1, axis=0)
+    d = B - A
+    for i in range(n):
+        for j in range(i + 1, n):
+            if j == i or (j + 1) % n == i or (i + 1) % n == j:
+                continue                            # shared endpoint: adjacent
+            r, s = d[i], d[j]
+            denom = r[0] * s[1] - r[1] * s[0]
+            q_p = A[j] - A[i]
+            if abs(denom) < 1e-12:
+                continue                            # parallel; overlap would
+            t = (q_p[0] * s[1] - q_p[1] * s[0]) / denom   # trip vertex check
+            u = (q_p[0] * r[1] - q_p[1] * r[0]) / denom
+            if -1e-9 < t < 1 + 1e-9 and -1e-9 < u < 1 + 1e-9:
+                raise ValueError(
+                    f"profile polygon self-intersects: edge {i} x edge {j}")
+
+
+def _canonicalize_mesh(V: np.ndarray, F: np.ndarray):
+    """Lexicographically order vertices and faces (cyclic-rotating each face so
+    its smallest index leads, which PRESERVES orientation). Content-equal
+    meshes then have bit-identical arrays — determinism independent of the
+    kernel's thread scheduling."""
+    order = np.lexsort((V[:, 2], V[:, 1], V[:, 0]))
+    inv = np.empty(len(V), dtype=np.int64)
+    inv[order] = np.arange(len(V))
+    V, F = V[order], inv[F]
+    roll = np.argmin(F, axis=1)
+    F = np.take_along_axis(F, (roll[:, None] + np.arange(3)) % 3, axis=1)
+    F = F[np.lexsort((F[:, 2], F[:, 1], F[:, 0]))]
+    return np.ascontiguousarray(V), np.ascontiguousarray(F)
+
+
+def tomyum_pot_mesh(handles: int = 2, vents: int = 6, segments: int = 192,
+                    normalize: bool = True):
+    """Watertight Thai hot-pot (หม้อไฟ) surface as a (V, F) mesh.
+    Topology BY CONSTRUCTION: genus = 1 + handles + vents, i.e. exact mesh
+    homology b = (1, 2*(1+handles+vents), 1); default (2, 6) -> (1, 18, 1).
+    The manifold3d kernel guarantees each boolean stays manifold and its
+    genus() is asserted after every step, so a construction that silently
+    changed topology (e.g. a handle poking through a wall) cannot get out.
+    `normalize=True` applies the pipeline convention of
+    src/make_synthetic_scene.normalize_mesh: bbox-centered, max |v| = 1."""
+    from manifold3d import CrossSection, Manifold   # lazy: only this shape
+    if not 0 <= handles <= 2:
+        raise ValueError("handles must be 0..2 (azimuths +y/-y)")
+    if not 0 <= vents <= 10:
+        raise ValueError("vents must be 0..10 (spacing on the skirt)")
+
+    pot = Manifold.revolve(CrossSection([_tomyum_profile()]),
+                           circular_segments=int(segments))
+    expect = 1
+    assert pot.genus() == expect, f"body genus {pot.genus()} != {expect}"
+
+    if handles:
+        # Full torus (ring R=20, tube r=9) standing in a vertical radial plane,
+        # its inner arc buried 3 mm into the 10 mm wall at the bulge
+        # (r=119, z=88): ONE contact blob -> boundary connected sum, +1 genus.
+        ang = np.linspace(0.0, 2.0 * np.pi, 36, endpoint=False)
+        circ = np.stack([20.0 + 9.0 * np.cos(ang), 9.0 * np.sin(ang)], axis=1)
+        ring = Manifold.revolve(CrossSection([circ]), circular_segments=72)
+        ear = ring.rotate([90.0, 0.0, 0.0]).translate([145.0, 0.0, 88.0])
+        for az in (90.0, 270.0)[:handles]:
+            pot = pot + ear.rotate([0.0, 0.0, az])
+            expect += 1
+            assert pot.genus() == expect, \
+                f"after handle @{az}: genus {pot.genus()} != {expect}"
+
+    if vents:
+        # Radial Ø24 holes through the skirt (wall spans r~82-98 over the hole
+        # band z in [10,34]; the cylinder x-span [72,122] pierces it fully and
+        # clears the flue (r<=60), floor slab (z>=38) and ground (z=0)).
+        vent = (Manifold.cylinder(50.0, 12.0, circular_segments=48, center=True)
+                .rotate([0.0, 90.0, 0.0]).translate([97.0, 0.0, 22.0]))
+        for k in range(vents):
+            pot = pot - vent.rotate([0.0, 0.0, k * 360.0 / vents])
+        expect += vents
+        assert pot.genus() == expect, \
+            f"after {vents} vents: genus {pot.genus()} != {expect}"
+
+    assert not pot.is_empty() and len(pot.decompose()) == 1
+    mg = pot.to_mesh()
+    V = np.asarray(mg.vert_properties, dtype=np.float64)[:, :3].copy()
+    F = np.asarray(mg.tri_verts, dtype=np.int64).copy()
+    if normalize:
+        V -= 0.5 * (V.min(axis=0) + V.max(axis=0))
+        V /= np.linalg.norm(V, axis=1).max()
+    return _canonicalize_mesh(V, F)
+
+
+def tomyum_pot_cloud(n: int, rng=None, **mesh_kw) -> np.ndarray:
+    """Area-uniform surface sample of the Thai hot pot.  The alpha complex on
+    this cloud reads the METAL SOLID (walls merge below sample spacing): a
+    genus-9 handlebody, b1 -> 9, b2 = 0.  The reading is intentionally
+    M-dependent — the Ø104 chimney bore is significant from M=2048 while the
+    Ø22-24 handle/vent cycles sit below the 6*r_med floor until high M."""
+    rng = _rng(rng)
+    V, F = tomyum_pot_mesh(**mesh_kw)
+    return sample_surface(V, F, n, rng)
+
+
 def scaled(P: np.ndarray, factor: float, center=None) -> np.ndarray:
     """Uniformly scale a cloud about `center` (default: its own centroid).
     Used to build the topology-CORRECT-but-geometrically-perturbed comparands:

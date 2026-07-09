@@ -105,6 +105,35 @@ def test_thick_shell_betti():
     assert _betti(P) == (1, 0, 1), _betti(P)
 
 
+def test_tomyum_pot_mesh_topology():
+    """Thai signature mesh (the tom-yum hot pot): genus 9 BY CONSTRUCTION —
+    revolved moat+chimney body (1) + 2 side handles + 6 pedestal vents.
+    Gate = the numpy edge certificate (closed, consistently oriented,
+    edge-manifold, chi = 2-2g) plus EXACT simplicial homology of the mesh.
+    Topology is resolution-independent, so low `segments` keeps this fast."""
+    import gudhi
+    V, F = meshes.tomyum_pot_mesh(segments=64)
+    d = F[:, [0, 1, 1, 2, 2, 0]].reshape(-1, 2)
+    assert len(np.unique(d, axis=0)) == len(d)       # no repeated directed edge
+    s, cnt = np.unique(np.sort(d, axis=1), axis=0, return_counts=True)
+    assert (cnt == 2).all()                          # closed 2-manifold edges
+    assert len(V) - len(s) + len(F) == 2 - 2 * 9     # chi = -16  ->  genus 9
+    st = gudhi.SimplexTree()
+    st.insert_batch(np.ascontiguousarray(F.T), np.zeros(len(F)))
+    st.compute_persistence(homology_coeff_field=2, persistence_dim_max=True)
+    assert tuple(st.betti_numbers()) == (1, 18, 1)
+
+
+def test_tomyum_pot_cloud_solid_reading():
+    """The pot's POINT CLOUD reads the metal solid (walls merge below sample
+    spacing): at M=2048 exactly the chimney cycle is significant — (1,1,0),
+    a solid torus — measured seed-robust (margin >= 1.17x over seeds 0-4)."""
+    for seed in (0, 1, 2):
+        P = meshes.tomyum_pot_cloud(2048, rng=np.random.default_rng(seed),
+                                    segments=64)
+        assert _betti(P) == (1, 1, 0), (seed, _betti(P))
+
+
 def _main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     failed = 0

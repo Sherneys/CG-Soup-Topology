@@ -126,7 +126,16 @@ experiments/
   topo_loss_report.py        Phase-3 report: series/tail/nsig plots, verdicts
   density_bound.py           the measurement floor 6*r_med(M) vs actual bar
                              lifetimes (source of the paper's density bounds)
-tests/test_betti.py    9/9: Betti recovery on 6 deterministic shapes + determinism checks
+tests/test_betti.py    11/11: Betti recovery on the deterministic shapes + determinism
+                       checks + the tomyum mesh/cloud gates
+scripts/make_tomyum_asset.py  builds the Thai signature mesh — a tom-yum hot pot
+                       (topology/meshes.tomyum_pot_mesh, manifold3d CSG): genus 9
+                       BY CONSTRUCTION (chimney + 2 handles + 6 pedestal vents),
+                       triple-certified (kernel genus / edge certificate / exact
+                       GUDHI homology b=(1,18,1)); exports the pipeline source
+                       mesh (_meshes/tomyum_src.ply) + density preflight: the
+                       cloud reads the metal SOLID — (1,1,0) at M=2048, full
+                       handlebody rank (1,9,0) at M~50k — figures/tomyum_pot.png
 tests/test_topo_loss.py  10/10: Phase-3 stage-3a gate (gradchecks, alpha-complex
                        assumption gates, defect-repair toys -> figures/phase3_toy/)
 scripts/               builders for the Thai .docx reports (Phases 1, 2 & 3)
