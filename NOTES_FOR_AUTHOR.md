@@ -38,12 +38,15 @@ github.com/kenji-tojo/diffsoup ("(CVPR 2026)" in the title line) — if the entr
 10-author list match exactly, order included. Also added (verified): Leygonie et al.
 FoCM 22:1069–1131 (2022); Nigmetov & Morozov, DCG 2024, DOI 10.1007/s00454-023-00613-x.
 
-**Venue reality check (web, 2026-07-09):** SIGGRAPH Asia 2026 deadline has passed;
-EG 2027 CFP not yet published (conf. May 2027, Lucca); **3DV 2027: submissions due
-AUGUST 28, 2026** (conf. April 6–9, 2027, Thessaloniki) — the natural target: right
-scope (3D reconstruction), ~7 weeks out. 3DV is double-blind: strip the author block,
-anonymize the self-citation (marked spots in `main.tex` / `sections/intro.tex`), move
-Appendix A + the companion PDF to supplementary (marked in `appendix_companion.tex`).
+**Venue plan (official dates verified 2026-07-09):** primary **3DV 2027** — papers due
+**Aug 28, 2026**, supplementary Sep 2, preliminary notification **Oct 27**, final Dec 2,
+conference Apr 6–9 2027 (Thessaloniki). Risk chain: if the Oct 27 preliminary decision
+is negative, pivot to **CVPR 2027** (abstract deadline Nov 15, 2026 — three weeks later;
+conf. June 2027); **EG 2027** (CFP pending, historically ~early Oct; conf. May 2027,
+Lucca) is the graphics-community fallback if Aug 28 slips. SIGGRAPH Asia 2026 has
+passed; SGP 2027 (~Apr) is topically ideal but 9 months out. 3DV is double-blind:
+strip the author block, anonymize the "our allocation-channel study" self-references
+(marked spots), move Appendix A to supplementary (marked in `appendix_companion.tex`).
 
 **Still yours (the only blockers left):**
 1. **Voice pass** — abstract, intro, related, discussion (`TODO(human)` comments mark them).
