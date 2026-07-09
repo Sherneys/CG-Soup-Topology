@@ -42,7 +42,9 @@ where triangles respawn. Concretely:
   matching yields exactly zero gradient when a target feature has no live
   counterpart --- the most important failure mode. Recruitment attaches the
   nearest live bar instead, restoring a descent direction; a controlled toy
-  probes its known location-blindness (\S\ref{sec:results}).
+  probes its known location-blindness, and an in-loop ablation shows the
+  term is load-bearing --- removing it collapses the loop-class win to
+  baseline (\S\ref{sec:results}).
 \item \textbf{One calibrated knob}: $\lambda$ is set by a gradient-norm ratio
   $\rho$ against the photometric loss. The response is flat over a $10\times$
   range of $\rho$, and a curriculum schedule adds nothing once calibrated ---

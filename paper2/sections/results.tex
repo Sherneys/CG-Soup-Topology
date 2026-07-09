@@ -76,11 +76,13 @@ double\_torus (H1)& .0264$\pm$.0000 & .0264$\pm$.0000 (saturated)           & .0
 \includegraphics[width=0.495\linewidth]{torus_series.png}
 \caption{Topology error over training: bottleneck to target in the
 discriminating dimension (line = seed mean, band = seed min--max).
-\emph{Left}, sphere (H2): every loss arm --- C1, C3, C5, and both $\rho$
+\emph{Left}, sphere (H2): every loss arm --- C1, C3, C5, C6, and both $\rho$
 ablation variants --- converges to a fraction of baseline, while the
 norm-matched repulsion control C2 is \emph{destructive} and even its gentle
 variant C2g ends worse than baseline. \emph{Right}, torus (H1), the class no
-resampling prior won: same ordering, with C5 (loss $+$ spread prior) best.}
+resampling prior won: same ordering, with C5 (loss $+$ spread prior) best
+--- except the no-recruitment ablation C6, which rides the baseline (see
+\emph{Ablations}).}
 \label{fig:series}
 \end{figure}
 
@@ -165,6 +167,25 @@ channel's.
 decisive shapes. Overhead: ${\approx}45$--$55$\,s per 2{,}500-step run
 (refresh 174\,ms at $M{=}2048$, every 10 steps).
 % src: PHASE3_PLAN.md Appendices B-D
+
+\paragraph{Recruitment is load-bearing for loops (C6).} Removing the
+recruitment term (pure matching $+$ diagonal, all else identical) collapses
+the torus win entirely: $.0411\pm.0038$, statistically baseline
+($0.6\sigma$ from C0, $12.4\sigma$ worse than C1) at baseline Chamfer ---
+though the loops still \emph{exist} ($\#$sig H1 $= 2$ in every seed;
+Fig.~\ref{fig:series}, right: the C6 curve rides the baseline). The run
+logs locate the mechanism precisely: at the loss's own sampling density,
+one torus loop is significant at every refresh while the other sits
+chronically \emph{below} the significance threshold --- in all five seeds,
+at all 200 refreshes --- so matching and diagonal pressure act only on the
+loop the live diagram already measures, and recruitment is the sole
+gradient path to the other. It is not a cold-start device; on this class it
+\emph{is} the mechanism. On the sphere the void is always live and matched,
+recruitment never fires (0 of 200 refreshes, all seeds), and C6 is
+loss-identical to C1 by construction --- its tail ($.0166$ vs C1's $.0156$,
+$1.5\sigma$) doubles as a measurement of pure run-to-run (CUDA) noise.
+% src: topo3/report/results.json (C6 arms) + topo3/_train/*_C6_*/
+% topo_loss_log.json ("refreshes": per-refresh matched/target_unreached)
 
 \subsection{Generality: external genus-known meshes}
 \label{sec:generality}

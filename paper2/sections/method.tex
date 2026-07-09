@@ -79,7 +79,9 @@ short-range repulsion on the \emph{same} frozen samples, calibrated with the
 identical channel (C2g: a gentler radius). C3: C1 without the ramp.
 C5: C1 combined with the best allocation-channel prior of the companion study
 (the spread topological resampling field B4; defined in
-Appendix~\ref{app:companion}). The hook adds one loss line to
+Appendix~\ref{app:companion}). C6: C1 with the recruitment term removed
+(pure matching $+$ diagonal, all else identical) --- does recruitment matter
+in-loop, or only for cold-start repair? The hook adds one loss line to
 the training loop; with the flag off, no new code executes, and a $\rho{=}0$
 run is divergence-equivalent to baseline re-runs under CUDA
 nondeterminism.

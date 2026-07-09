@@ -21,7 +21,7 @@ Everything below is grounded in `PHASE3_PLAN.md` Appendices A–D and
 | 3a gate suite | `tests/test_topo_loss.py` | 10/10: gradchecks (incl. detach semantics), gates (mapping exact; Gabriel 22/22 across 6 shapes @M=2048), satisfiability, 4 defect-repair toys (hole 8.8×, spurious handle killed, components 1229×, recruitment probe RECOVERED 450×). Artifacts: `figures/phase3_toy/`. |
 | Training integration (3b) | `TopoLossState` (same module) | Frozen α×area barycentric sampling; auto re-pair on `F` tensor identity change + every K=10 steps; λ ramp with **ρ gradient-ratio calibration** (λ_peak = ρ·‖g_photo‖/‖g_topo‖); C2 `control_repulsion` mode (`rep_scale` knob); run log. |
 | Hook | `…/CG-Soup-for-Digital-Dentistry/src/diffsoup_train.py` | 8 `--topo_*` flags, lazy import from `TOPO_ROOT`, ONE loss line after `reg_normal`; `topo_loss_log.json` on exit. Flag-off executes zero Phase-3 code. **No renderer/core edits.** |
-| Runner (3c/3d) | `experiments/topo_loss_eval.py` | C0/C1/C2/C2g/C3/C5 × shapes × seeds; per-shape bundle preflight; `--loss_dims` restriction; resumable; quicklook. |
+| Runner (3c/3d) | `experiments/topo_loss_eval.py` | C0/C1/C2/C2g/C3/C5/C6 × shapes × seeds; per-shape bundle preflight; `--loss_dims` restriction; resumable; quicklook. |
 | Report | `experiments/topo_loss_report.py` | Auto-discovers runs; cached stability series; per-shape series/tail/nsig plots; Welch σ; verdicts → `report/{results.json,summary.md,*.png}`. |
 
 ## Verification gates (full detail: PHASE3_PLAN.md Appendices A–B)
@@ -69,7 +69,7 @@ loops at any feasible budget, replicating Phase 2b), not the guidance
 channel. The loss neither helps nor harms there (#sig H1 = 2 everywhere;
 Chamfer 0.96 vs C0's 0.98).
 
-### The four findings
+### The five findings
 
 1. **The loss channel succeeds where the prior channel failed: H1.** Phase 2's
    concentrated prior manufactured phantom handles; its spread prior never
@@ -90,6 +90,19 @@ Chamfer 0.96 vs C0's 0.98).
    decisive shapes, even marginally tighter). What makes the strength knob
    safe is the gradient-ratio calibration, not scheduling — an evidence-based
    answer to the advisor's blow-up concern (แนวทาง item 2).
+5. **Recruitment is load-bearing for loops (C6 ablation, 2026-07-09).**
+   Removing the recruitment term (pure matching+diagonal, all else identical)
+   collapses the torus win entirely: C6 .0411±.0038 — statistically baseline
+   (0.6σ from C0; 12.4σ worse than C1) at baseline Chamfer, loops still
+   present (#sig 2 every seed). The new per-refresh logs
+   (`topo_loss_log.json → "refreshes"`) show why: at M=2048 one torus loop is
+   significant at EVERY refresh, the other chronically sub-threshold — all 5
+   seeds, all 200 refreshes, profile (live_sig=1, matched=1, unreached=1) —
+   so recruitment is the ONLY gradient path to the second loop, at every
+   refresh. Not a cold-start device; on the loop class it IS the mechanism.
+   On the sphere recruitment never fires (0/200, void always matched) ⇒
+   sphere-C6 is loss-identical to C1; its tail (.0166 vs .0156, 1.5σ)
+   measures pure run-to-run CUDA noise — a free replication control.
 
 ## 3e generality wave (2026-07-09): external genus-known meshes — 3/3 PASS
 
@@ -163,6 +176,12 @@ python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 3 4 `
 python experiments\topo_loss_eval.py --shapes torus --seeds 0 1 2 3 4 `
     --conditions C0 C1 C2 C3 C5 --rhos 0.1 --steps 2500 --max_faces 700 --loss_dims 1
 # … cube/two_spheres/double_torus per PHASE3_PLAN.md Appendix C/D …
+
+# C6 recruitment ablation (decisive shapes only):
+python experiments\topo_loss_eval.py --shapes torus --seeds 0 1 2 3 4 `
+    --conditions C6 --rhos 0.1 --steps 2500 --max_faces 700 --loss_dims 1
+python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 3 4 `
+    --conditions C6 --rhos 0.1 --steps 2500 --max_faces 1200
 
 # 3e generality (scenes prebuilt under output/synth/{spot,bob,fandisk};
 # sources in output/synth/_meshes/; bundles in topo3/fields/; resumable):

@@ -59,8 +59,11 @@ directory.)
    proved unnecessary once λ is calibrated. The verdicts replicate, with no
    per-shape tuning, on three external genus-known meshes (spot genus 0 /
    bob genus 1 / fandisk CAD: 2.1–10.4× at equal-or-better Chamfer; zero
-   phantom handles on the genus-1 case). See `PHASE3_STATUS.md` and the
-   paper-2 draft in `paper2/`.
+   phantom handles on the genus-1 case). An ablation (C6) shows the
+   **recruitment term carries the loop win**: one torus loop is chronically
+   sub-threshold at the loss's density, recruitment is its only gradient
+   path, and removing it collapses H1 to baseline (.0411 ≈ C0's .0424).
+   See `PHASE3_STATUS.md` and the paper-2 draft in `paper2/`.
 
 ## Experimental conditions (the vocabulary used everywhere)
 
@@ -84,6 +87,7 @@ Phase 3 — the **loss** channel (C-arms; same control discipline):
 | C2 / C2g | + norm-matched repulsion on the same samples (2× / 1× spacing) | "is it just extra vertex regularization?" — at two control strengths |
 | C3 | C1 with constant λ (no ramp) | is the curriculum needed? |
 | C5 | C1 + the B4 spread prior | do the two channels stack? |
+| C6 | C1 without the recruitment term | is recruitment load-bearing in-loop? |
 
 ## Layout
 

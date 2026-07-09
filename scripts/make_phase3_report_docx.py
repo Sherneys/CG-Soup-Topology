@@ -41,6 +41,7 @@ SHAPE_TH = {"sphere": "ทรงกลม (sphere)", "torus": "ทอรัส (
 COND_TH = {"C0": "C0 เบสไลน์", "C1": "C1 topological loss",
            "C2": "C2 ตัวควบคุม (repulsion)", "C2g": "C2g ตัวควบคุมแบบอ่อน",
            "C3": "C3 ไม่มี curriculum", "C5": "C5 loss + B4 prior",
+           "C6": "C6 ตัดเทอม recruitment (ablation)",
            "C1_r0.03": "C1 (ρ=0.03)", "C1_r0.3": "C1 (ρ=0.3)"}
 
 
@@ -257,7 +258,7 @@ for shape in order:
         add_figure(doc, os.path.join(REPORT, fig), f"{SHAPE_TH.get(shape, shape)} — {cap}", width=5.8)
 
 # 5. findings
-H(doc, "5. ข้อค้นพบหลักห้าข้อ")
+H(doc, "5. ข้อค้นพบหลักหกข้อ")
 bullet(doc, "① loss channel สำเร็จในจุดที่ prior channel ล้มเหลว — ห่วง H1: ลด error 2.3 เท่า "
             "โดย #sig H1 = 2 ตลอดทั้ง 5 seeds (ไม่มี phantom handle) ขณะที่ตัวควบคุมทำห่วงหายหนึ่งวง "
             "— แรงดึงเชิงเมตริกแบบเจาะจงเหมาะกับ feature 1 มิติมากกว่าการเทงบสามเหลี่ยม")
@@ -273,6 +274,13 @@ bullet(doc, "⑤ ความทั่วไป (คลื่น 3e): ทุก 
             "spot 2.2 เท่า (6.1σ), bob 2.1 เท่า (26.1σ; phantom handle = ศูนย์ทุก seed — ผล H1 "
             "อยู่รอดนอกตระกูล analytic), fandisk 10.4 เท่า (35.7σ — ผลใหญ่ที่สุดในการศึกษา) "
             "— ข้อสรุปไม่ใช่ artifact ของตระกูลรูปทรงสังเคราะห์")
+bullet(doc, "⑥ เทอม recruitment คือกลไกหลักของชัยชนะบนห่วง (C6 ablation): ตัด recruitment ออก "
+            "(เหลือ matching+diagonal ล้วน) แล้วผลบนทอรัสหายทั้งหมด — .0411±.0038 ≈ เบสไลน์ "
+            "(ห่าง C0 แค่ 0.6σ; แย่กว่า C1 ถึง 12.4σ) เพราะที่ความหนาแน่นจุดสุ่มของ loss "
+            "ห่วงวงหนึ่งอยู่ใต้เกณฑ์นัยยะตลอดการเทรน (ทุก seed ทุก refresh) — recruitment "
+            "จึงเป็นเส้นทาง gradient เดียวไปถึงห่วงวงนั้น ไม่ใช่แค่ตัวช่วยตอนเริ่มต้น; "
+            "ส่วนบนทรงกลม recruitment ไม่เคยทำงานเลย (โพรงถูก match ตลอด) ทำให้ C6 ≡ C1 "
+            "โดยโครงสร้าง และผลต่าง .0166 กับ .0156 (1.5σ) วัด noise ของ CUDA ล้วน ๆ")
 
 # 6. caveats
 H(doc, "6. ข้อจำกัดและ caveat ที่รายงานตรงไปตรงมา")
