@@ -1,5 +1,10 @@
 # Phase 1 — Topology-blindness of Chamfer / Hausdorff
 
+> **Frozen data artifact (do not edit values).** This table is cited as the
+> `% src:` ground truth by both papers (paper 1 §5.1; paper 2 Appendix A /
+> Table `tab:blindness`). Regenerate only via
+> `experiments/topology_blindness.py`, never by hand.
+
 **Measurement-only harness.** No resampling method and no differentiable persistent homology — topology is computed (alpha complex, GUDHI) purely to MEASURE what geometric metrics miss.
 
 - Samples per shape: **40,000** (seeded, reproducible)

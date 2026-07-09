@@ -1,8 +1,12 @@
 # Phase 2 — Topology-aware Adaptive Resampling: Exploration Report & Plan
 
-**Status: exploration only. Nothing implemented. Awaiting go-ahead.**
-Scope guard honored: no differentiable PH, no renderer edits, no reimplementation of
-`topology/` or the persistence/metric. Topology enters as a *precomputed sampling bias* only.
+**Status (updated 2026-07-09): historical — the go-ahead was given, the design
+below was implemented as specified, swept, and published-in-draft.** See
+`PHASE2_STATUS.md` (implementation + sweep), `PHASE2B_CROSSOVER.md` (the
+spread-vs-concentrate revision), and paper 1 (`paper/`). Kept unchanged as the
+exploration record. Original scope guard (honored throughout Phase 2): no
+differentiable PH, no renderer edits; topology as a *precomputed sampling bias*
+only. (Differentiable PH later became Phase 3 — a separate plan.)
 
 ---
 

@@ -1,7 +1,15 @@
 # Phase 2 — Implementation status & how to run the full sweep
 
-**Status: implemented and smoke-validated end-to-end. The full scientific sweep
-(more steps / seeds / shapes / budgets) is the remaining compute — see below.**
+**Status (updated 2026-07-09): COMPLETE — and twice superseded.** The full
+sweep ran (results below); Phase 2b then showed the "concentrate wins voids"
+reading was width-confounded (**spread + the width-matched control B5 revise
+it: the value-add is width** — `PHASE2B_CROSSOVER.md`, paper 1); Phase 3 then
+showed the loss channel beats the prior channel outright (`PHASE3_STATUS.md`).
+One factual correction to the smoke notes below: the "`F`/resampling decisions
+ARE deterministic" caveat in the verification section was **torus-smoke-specific
+and is WRONG in general** — on the sphere scene same-seed baselines diverge in
+`F` at the first resample (corrected in `PHASE3_PLAN.md` Appendix B; hook
+cleanliness is judged by divergence-equivalence, not bit-identity).
 
 ## What was built (all deliverables)
 

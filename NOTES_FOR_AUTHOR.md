@@ -1,3 +1,16 @@
+# PAPER 2 — CURRENT STATE (2026-07-09, end of day)
+
+**Experimental record FROZEN at git tag `paper2-results-freeze`** — everything
+from here is prose/format only. Both advisor revision rounds answered (tables
+below). A Thai reply message to อาจารย์ is drafted (in the session log /
+ask Claude to reproduce it) — it requests the two pending sign-offs:
+**(1) paper 2 before paper 1, (2) 3DV 2027 (deadline Aug 28)** — and flags the
+recruitment-story correction for his explicit agreement. Your remaining work:
+send that message, then the voice pass. After venue confirmation: template +
+double-blind + 19 pp → 8 pp compression (delegable).
+
+---
+
 # PAPER 2 — ADVISOR REVISION ROUND 2 (REVISION_GUIDE / red-marks docx / actionable table, answered 2026-07-09)
 
 **⚠ READ THIS FIRST — the advisor's red-mark draft contains INVENTED numbers that contradict

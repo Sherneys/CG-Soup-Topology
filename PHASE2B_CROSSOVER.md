@@ -1,5 +1,12 @@
 # Phase 2b — Dimensional crossover: does the right resampling prior depend on feature dimension?
 
+**Status (updated 2026-07-09): COMPLETE — crossover thesis REFUTED** (spread
+dominates at every dimension), then sharpened by the width-matched control B5
+(`h2_unified`): the void gain is width-primary with only a small topological
+residual. These results are the thesis of paper 1 (`paper/`) and the premise
+of Phase 3 / paper 2 (the loss channel wins the loop class every prior failed;
+`PHASE3_STATUS.md`).
+
 ## Question
 Phase 2 found topology-aware resampling — a **concentrating** prior (condition **B2**) — gives a
 topology-specific win for enclosed **voids (H2)** but is null for components (H0) and *backfires* on

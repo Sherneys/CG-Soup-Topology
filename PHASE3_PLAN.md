@@ -5,9 +5,13 @@ triangle budget goes* (resampling prior); Phase 3 adds a differentiable
 persistence term to the loss so gradients *move vertices directly* toward the
 target's topology: `L = photometric + λ(t) · L_topo(V)`.
 
-Status: **PLAN — not implemented.** Design grounded in the current code
-(file:line refs verified 2026-07-06). Follows the advisor's แนวทาง (2026-07-06);
-§0 maps each of its five points to what this plan adopts, adapts, or defers.
+Status (updated 2026-07-09): **FULLY EXECUTED** — stages 3a–3d, the 3e
+generality stretch (Crane meshes substituted for ShapeNet, for cause), and
+post-plan ablations (C6 recruitment, C7 sensor noise, ramp-window pilot,
+density-floor quantification). Results: `PHASE3_STATUS.md`; experimental
+record frozen at git tag `paper2-results-freeze`. The sections below are the
+original plan + execution appendices, kept as the historical record (design
+rationale, file:line refs as of 2026-07-06, appendices A–D gate/matrix logs).
 
 ---
 

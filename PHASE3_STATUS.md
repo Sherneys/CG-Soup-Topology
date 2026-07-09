@@ -1,13 +1,18 @@
 # Phase 3 — Topological Loss: implementation status & results
 
-**Status: implemented end-to-end and validated through the full C-matrix
-(stages 3a→3d complete), PLUS the 3e generality wave (2026-07-09): all
-verdicts replicate on three external genus-known meshes with zero per-shape
-tuning. Headline: the differentiable topological loss gives topology-specific
-wins on voids (H2) AND loops (H1) — the class the Phase-2 resampling channel
-failed — the two channels stack, and the result is not an artifact of the
-analytic scene family.** Remaining: C4 (curvature-weighted mask) and the
-dental showcase (deferred by design; see PHASE3_PLAN.md §9).
+**Status: COMPLETE AND FROZEN (git tag `paper2-results-freeze`, 2026-07-09).**
+Stages 3a→3d, the 3e generality wave (all verdicts replicate on three external
+genus-known meshes, zero per-shape tuning), the C6 recruitment ablation
+(load-bearing), the C7 sensor-noise stress (graceful, zero Gabriel failures),
+the ramp-window pilot + external C3 (knob-insensitive everywhere), and the
+quantified measurement/representation floors. **Headline: the differentiable
+topological loss gives topology-specific wins on voids (H2) AND loops (H1) —
+the class the Phase-2 resampling channel failed — the two channels stack, the
+result survives the family change and sensor noise, and its one essential
+ingredient is recruitment.** Everything is written into paper 2 (`paper2/`,
+19 pp, both advisor revision rounds answered — see `NOTES_FOR_AUTHOR.md`).
+Remaining (deferred by design, out of the paper): C4 curvature-weighted mask
+and the dental showcase (Phase-4 items; see PHASE3_PLAN.md §9).
 
 Everything below is grounded in `PHASE3_PLAN.md` Appendices A–D and
 `output/synth/topo3/report/results.json` (regenerate:
@@ -21,7 +26,8 @@ Everything below is grounded in `PHASE3_PLAN.md` Appendices A–D and
 | 3a gate suite | `tests/test_topo_loss.py` | 10/10: gradchecks (incl. detach semantics), gates (mapping exact; Gabriel 22/22 across 6 shapes @M=2048), satisfiability, 4 defect-repair toys (hole 8.8×, spurious handle killed, components 1229×, recruitment probe RECOVERED 450×). Artifacts: `figures/phase3_toy/`. |
 | Training integration (3b) | `TopoLossState` (same module) | Frozen α×area barycentric sampling; auto re-pair on `F` tensor identity change + every K=10 steps; λ ramp with **ρ gradient-ratio calibration** (λ_peak = ρ·‖g_photo‖/‖g_topo‖); C2 `control_repulsion` mode (`rep_scale` knob); run log. |
 | Hook | `…/CG-Soup-for-Digital-Dentistry/src/diffsoup_train.py` | 8 `--topo_*` flags, lazy import from `TOPO_ROOT`, ONE loss line after `reg_normal`; `topo_loss_log.json` on exit. Flag-off executes zero Phase-3 code. **No renderer/core edits.** |
-| Runner (3c/3d) | `experiments/topo_loss_eval.py` | C0/C1/C2/C2g/C3/C5/C6 × shapes × seeds; per-shape bundle preflight; `--loss_dims` restriction; resumable; quicklook. |
+| Runner (3c/3d) | `experiments/topo_loss_eval.py` | C0/C1/C2/C2g/C3/C5/C6/C7/C7h × shapes × seeds; per-shape bundle preflight; `--loss_dims` restriction; resumable; quicklook. |
+| Density bounds | `experiments/density_bound.py` | the measurement floor 6·r_med(M) vs actual bar lifetimes (paper-2 §6 numbers + Appendix B M-sweep). |
 | Report | `experiments/topo_loss_report.py` | Auto-discovers runs; cached stability series; per-shape series/tail/nsig plots; Welch σ; verdicts → `report/{results.json,summary.md,*.png}`. |
 
 ## Verification gates (full detail: PHASE3_PLAN.md Appendices A–B)
@@ -115,6 +121,33 @@ Chamfer 0.96 vs C0's 0.98).
    spreads ≈3× across seeds under noise, tails stay tight (flat-ρ
    robustness extends to noisy calibration).
 
+### Round-2 additions (advisor review, 2026-07-09): knob insensitivity + quantified floors
+
+- **Ramp window is immaterial** (real pilot, sphere ×3 seeds): windows
+  10–40% → .0154±.0017 and 30–60% → .0179±.0019 vs the default 20–50%'s
+  .0156±.0013 — within seed noise (`ramp_1040/`, `ramp_3060/` +
+  quicklook.json). Combined with C3 ≈ C1, the schedule carries nothing once
+  ρ is calibrated.
+- **Curriculum-free generalizes off the analytic family**: bob C3 =
+  .0171±.0026 vs C1's .0208±.0008 (3 seeds, in topo3/report).
+- **The measurement floor is a law, not a folk rule**: significant ⟺
+  lifetime > 6·r_med(M), with r_med ∝ M^(−1/2) (measured ratio 3.16 vs
+  theoretical 3.13). M-sweep (512/1024/2048/4096): torus's 2nd loop appears
+  at 2048, its void at 4096; the double torus's 4 loops all clear the floor
+  at 4096 — confirming the M≈3×10³ bound. The binding double-torus
+  constraint is representation (budget N), not measurement.
+  (`experiments/density_bound.py`; paper-2 Appendix B table.)
+- **The control's failure mechanism, visualized**: persistence-diagram
+  trajectories (paper-2 Appendix B figure) show C0's void drifting off
+  target, C1's returning once the ramp activates (final gap ≈ its tail),
+  and C2's void *pinned and dragged* over an accumulating carpet of phantom
+  bars — the repulsion-equilibrium signature.
+- **Honest cost numbers** (replacing optimistic estimates): the loss adds a
+  fixed ≈46 s per 2,500-step run vs 33–41 s photometric baselines (more
+  than 2× on these tiny scenes; scales with M, not scene complexity).
+  Nondeterminism: tail CVs 7–10% for baseline and loss arms alike; the
+  loss-identical sphere C6/C1 pair lands 6% apart (pure run-to-run noise).
+
 ## 3e generality wave (2026-07-09): external genus-known meshes — 3/3 PASS
 
 The plan's stretch item said "ShapeNet subset (genus-known meshes)".
@@ -187,6 +220,15 @@ python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 3 4 `
 python experiments\topo_loss_eval.py --shapes torus --seeds 0 1 2 3 4 `
     --conditions C0 C1 C2 C3 C5 --rhos 0.1 --steps 2500 --max_faces 700 --loss_dims 1
 # … cube/two_spheres/double_torus per PHASE3_PLAN.md Appendix C/D …
+
+# ramp-window pilot (round 2; separate exp roots so tags don't collide):
+python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 --conditions C1 `
+    --rhos 0.1 --ramp 0.1:0.4 --steps 2500 --max_faces 1200 --exp_name ramp_1040
+python experiments\topo_loss_eval.py --shapes sphere --seeds 0 1 2 --conditions C1 `
+    --rhos 0.1 --ramp 0.3:0.6 --steps 2500 --max_faces 1200 --exp_name ramp_3060
+
+# density / measurement-floor numbers (CPU only):
+python experiments\density_bound.py
 
 # C7/C7h sensor-noise stress (decisive shapes only):
 python experiments\topo_loss_eval.py --shapes torus --seeds 0 1 2 `
