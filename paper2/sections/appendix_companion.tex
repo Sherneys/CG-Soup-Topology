@@ -47,15 +47,36 @@ punctured enclosed void (H2)      & 0.977 & .0040 & .1385 & $35\times$ \\
 \end{table}
 
 \paragraph{(2) The prior arms, and why voids are ``width-primary''.} The
-study biases DiffSoup's own resampler with a precomputed importance
-field: persistence-localized Gaussian splats at each target feature's
-death-simplex location ($\sigma_f=\sqrt{\mathrm{death}_f}$), applied at
-budget parity as prune protection plus respawn bias. Arms: B0 baseline; B2
-the concentrated field; B4 the same mass \emph{spread} over the feature's
-support ($\sigma{\to}s\sigma$, $w{\to}\mathrm{life}/s^2$, mass-preserving,
-$s{=}3$); B1 = B2 applied at initialization only; B3/B5 random-center
-non-topological controls width-matched to B2/B4 respectively. C5 in this
-paper reuses exactly the B4 field. On the void class
+study biases DiffSoup's own resampler with a precomputed importance field
+built from the target's significant features. Each significant feature $f$
+(lifetime $p_f$ above the significance threshold) contributes Gaussian
+kernels at the coordinates $C_f$ of its birth/death-simplex vertices ---
+the loop-filling triangle, void-filling tetrahedron, or component-merging
+edge --- sized by the feature's own death scale:
+\begin{equation}
+\phi_d(q)=\!\!\sum_{f:\,\dim f=d}\,\sum_{c\in C_f}\! w_f\,
+  e^{-\lVert q-c\rVert^2/(2\sigma_f^2)},
+\quad
+\sigma_f = s\,\mathrm{clip}\!\big(\sqrt{\smash[b]{\mathrm{death}_f}},\,
+  3r_{\mathrm{med}},\,\tfrac{1}{2}\mathrm{diag}\big),
+\quad
+w_f = p_f/s^2,
+\end{equation}
+evaluated on a dense target-surface sample, normalized per dimension to
+$[0,1]$ (99.5th percentile), combined by max; a query takes its nearest
+surface sample's value. The spread knob $s$ widens each kernel while
+preserving its injected surface mass ($\sigma\,{\to}\,s\sigma$,
+$w\,{\to}\,w/s^2$, so $w\sigma^2$ is $s$-invariant): $s{=}1$ is the
+concentrated prior (B2), $s{=}3$ the spread prior (B4) --- the field C5
+reuses. The field enters resampling at strict budget parity through two
+levers: prune protection --- faces drop in order of $\mathrm{vis} +
+\lambda\,Q_{0.9}(\mathrm{vis})\cdot\mathrm{imp}$, removing exactly the
+required count --- and respawn bias --- top-importance visible faces
+subdivide first, then the protective order re-prunes to the cap. Remaining
+arms: B0 baseline; B1 = B2 applied at initialization only; B3/B5
+random-center non-topological controls width-matched to B2/B4 respectively.
+% src: methods/topo_importance.py (build_importance_field, _localize_features)
+% + methods/topo_resampling.py (keep_map, densify_and_rebalance) On the void class
 (Table~\ref{tab:companion}; $N{=}1200$, five paired seeds) B4 cuts the
 bottleneck $33$--$53\%$ below baseline --- but the width-matched random
 control B5 recovers most of that gain, leaving only a small, shape-dependent

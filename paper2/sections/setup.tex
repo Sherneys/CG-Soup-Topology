@@ -29,7 +29,15 @@ $N{=}700$ loops), and a seed-0 C0 pilot confirming baseline imperfection
 $\rho{=}0.1$, ramp $0.2{:}0.5$, refresh $K{=}10$, $M{=}2048$; decisive shapes
 (sphere, torus) run 5 seeds with the full condition set (C0/C1/C2/C3/C5,
 plus the recruitment ablation C6), replication shapes (cube, two spheres) 3
-seeds (C0/C1/C2), double torus 2 seeds. The torus restricts the loss to H1: its own void bar is sub-threshold
+seeds (C0/C1/C2), double torus 2 seeds. A sensor-noise stress test
+(C7/C7h $=$ C1 $+$ noise; decisive shapes, 3 seeds) perturbs the cloud the
+loss \emph{plan} sees with i.i.d.\ Gaussian noise at every refresh,
+$\sigma = 0.5\%$ and $1\%$ of the target diagonal (${\approx}0.5$ and
+$1.0\times$ the median sample spacing at $M{=}2048$); the pairing, Gabriel
+gates, and recruitment decide on the noisy observation while the pulls
+apply to the true live positions.
+% src: methods/topological_loss.py TopoLossState(noise=...); r_med at 2048:
+% experiments/density_bound.py (torus .0104, i.e. 1% of diag ~= 1 spacing) The torus restricts the loss to H1: its own void bar is sub-threshold
 at $M{=}2048$, and a loss must not act on features it cannot reliably measure
 at its sampling density. For the same reason the double torus targets its two
 measurable loops (of four) --- matching what the reconstruction itself can

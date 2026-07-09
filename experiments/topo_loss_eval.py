@@ -9,6 +9,8 @@
 #   C3  C1 WITHOUT curriculum (constant lambda from step 1: ramp "0:0")
 #   C5  C1 + the B4 spread resampling prior (Phase-2 best; channel stacking)
 #   C6  C1 WITHOUT recruitment (pure matching+diagonal; --topo_recruit 0)
+#   C7  C1 + sensor noise on the plan's cloud, sigma=0.5% of the diagonal
+#   C7h C1 + sensor noise, sigma=1% (~= one median sample spacing at M=2048)
 #   (C4 curvature-weighted spatial mask: DEFERRED — needs a weight-mask input
 #    on TopoLossState; wire it before the decisive-shape extension runs.)
 #
@@ -93,6 +95,10 @@ def condition_flags(cond: str, shape: str, bundle: str, rho: float, ramp: str,
                      "--topo_dim", str(SHAPE_DIM[shape])]
     if cond == "C6":                                     # no recruitment (ablation)
         return c1 + ["--topo_recruit", "0"]
+    if cond == "C7":                                     # sensor-noise stress, mild
+        return c1 + ["--topo_noise", "0.005"]
+    if cond == "C7h":                                    # sensor-noise stress, strong
+        return c1 + ["--topo_noise", "0.01"]
     raise ValueError(cond)
 
 
@@ -167,7 +173,7 @@ def main() -> int:
     ap.add_argument("--shapes", nargs="+", default=["sphere"])
     ap.add_argument("--seeds", nargs="+", type=int, default=[0])
     ap.add_argument("--conditions", nargs="+", default=["C0", "C1", "C2"],
-                    choices=["C0", "C1", "C2", "C2g", "C3", "C5", "C6"])
+                    choices=["C0", "C1", "C2", "C2g", "C3", "C5", "C6", "C7", "C7h"])
     ap.add_argument("--rhos", nargs="+", type=float, default=[0.1])
     ap.add_argument("--ramp", default="0.2:0.5")
     ap.add_argument("--steps", type=int, default=2500)

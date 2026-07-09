@@ -30,9 +30,14 @@ coordinates are closed-form functions of a few sample positions ---
 half edge length (H0 deaths), triangle circumradius (H1 deaths, H2 births),
 tetrahedron circumradius (H2 deaths) --- all exactly differentiable. We
 verify, per pairing, that the re-expressed value matches the filtration value
-(relative $10^{-6}$); non-Gabriel simplices would contribute value without
-gradient, but on all six benchmark shapes 100\% of significant pairs are
-Gabriel-exact.
+(relative $10^{-6}$). A pair failing this Gabriel test is \emph{detached}:
+its term keeps contributing its (correct) value to the loss but propagates
+no gradient through that simplex --- an exactness failure can therefore
+never inject a wrong gradient or destabilize training; the worst case is a
+missing tug for one refresh interval, re-tested at the next re-pairing. On
+all six benchmark shapes 100\% of significant pairs are Gabriel-exact on
+clean clouds; the sensor-noise stress test (\S\ref{sec:setup}) probes the
+detachment path under perturbation.
 % src: PHASE3_PLAN.md Appendix A (mapping + Gabriel gates, 22/22)
 The pairing is treated as locally constant --- the standard pair-frozen
 device~\citep{gabrielsson2020topologylayer,carriere2021optimizing} --- and
@@ -54,11 +59,28 @@ The first term pulls matched features to their target coordinates; the second
 pushes spurious features to the diagonal. The third exists because optimal
 matching has a blind spot: when a target feature is entirely missing, the
 cheapest transport diagonalizes both sides and the gradient is exactly zero
---- precisely in the most important failure case. Recruitment attaches each
-unmatched target bar to the nearest not-yet-matched live bar (sub-threshold
-bars allowed) and pulls it toward the target. This deliberately departs from
-a metric-faithful $W_2$; \S\ref{sec:results} probes its known pathology
-(location-blindness) directly.
+--- precisely in the most important failure case. Recruitment restores a
+descent direction. Let $\mathcal{T}_{\mathrm{miss}}$ be the unmatched target
+bars, processed in decreasing persistence order, and let the candidate pool
+$\mathcal{A}$ hold every live bar not claimed by the matching --- unmatched
+significant bars and, crucially, \emph{sub-threshold} bars, which matching
+never sees. Each missing target greedily claims its nearest pool bar,
+without replacement, under the same squared birth--death metric as the
+matched term:
+\begin{equation}
+L_{\mathrm{recruit}} = \!\!\sum_{j\in\mathcal{T}_{\mathrm{miss}}}\!\!
+  \big[(b_{k(j)}-b^*_j)^2+(d_{k(j)}-d^*_j)^2\big],
+\quad
+k(j) = \operatorname*{arg\,min}_{k\,\in\,\mathcal{A}_j}
+  \big[(b_k-b^*_j)^2+(d_k-d^*_j)^2\big],
+\end{equation}
+where $\mathcal{A}_j$ is the pool remaining after earlier recruitments;
+recruited bars are excluded from the diagonal term. Both coordinates of the
+recruited bar back-propagate through the same circumradius machinery as
+matched bars. This deliberately departs from a metric-faithful $W_2$;
+\S\ref{sec:results} probes its known pathology (location-blindness)
+directly, and the C6 ablation shows the term is load-bearing in training.
+% src: methods/topological_loss.py plan_topo_loss (greedy recruit loop)
 
 \subsection{Calibration instead of curriculum}
 $\lambda(t)$ ramps linearly from 20\% to 50\% of training, with peak set once
