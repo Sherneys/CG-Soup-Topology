@@ -81,7 +81,17 @@ directory.)
    rather than trusted from a download — lands **2.3× (5.8σ) at Chamfer
    parity with the control 1.4× worse than baseline** under bob's config
    carried over blind, correct #sig H1 in every seed; held out of paper 2
-   pending the advisor's call.
+   pending the advisor's call. Later that day the showcase source swapped to
+   `kinkin` — the user's own Blender-modeled pot, pushed through a new
+   **ingest→certify** path (non-manifold artist soup → solidified thin shell,
+   certified by measurement: one body, genus 3, exact b=(1,6,1)). Its
+   observable flips class: every loop sits under the density floor, but the
+   narrow chimney mouth caps early so the flue reads as a **hidden-chamber H2
+   void** — and the C-matrix (3e config, bundle at M=8192 by the floor rule)
+   lands **3.9× below baseline at Chamfer parity, with the control DESTROYING
+   the void (b₂ 1→0 in 3/3 seeds, 1.36× worse Chamfer)**. First
+   artist-authored, non-manifold asset through the full pipeline — the dress
+   rehearsal for real dental scans.
    See `PHASE3_STATUS.md` and the paper-2 draft in `paper2/`.
 
 ## Experimental conditions (the vocabulary used everywhere)
@@ -142,6 +152,15 @@ scripts/make_tomyum_asset.py  builds the Thai signature mesh — a tom-yum hot p
                        mesh (_meshes/tomyum_src.ply) + density preflight: the
                        cloud reads the metal SOLID — (1,1,0) at M=2048, full
                        handlebody rank (1,9,0) at M~50k — figures/tomyum_pot.png
+scripts/make_kinkin_asset.py  ingest→certify for the artist-authored pot
+                       (assets/kinkin.ply, Blender, replaces the CSG pot as the
+                       tomyum showcase source): manual PLY parse, weld,
+                       offset-solidify (exact distance field + marching cubes),
+                       drop 804 enclosed pocket shells, certify BY MEASUREMENT
+                       (edge certificate / exact GUDHI b=(1,6,1), genus 3 /
+                       trimesh) → _meshes/kinkin_src.ply + cert json; density
+                       staircase: the chimney-well VOID becomes significant at
+                       M=8192 — figures/kinkin_pot.png
 tests/test_topo_loss.py  10/10: Phase-3 stage-3a gate (gradchecks, alpha-complex
                        assumption gates, defect-repair toys -> figures/phase3_toy/)
 scripts/               builders for the Thai .docx reports (Phases 1, 2 & 3)

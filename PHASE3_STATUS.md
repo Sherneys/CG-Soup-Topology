@@ -17,6 +17,12 @@ and the dental showcase (Phase-4 items; see PHASE3_PLAN.md §9).
 frozen was touched): the constructed genus-9 `tomyum` mesh replicates the
 C-matrix as a 4th external shape (2.3×, 5.8σ, control 1.4× worse); see the
 "Post-3e" section — held out of paper 2 pending the advisor's call.**
+**Post-freeze 2 (2026-07-10, later, additive again): the tomyum showcase
+SOURCE swapped to the user's artist-authored `kinkin` mesh via a new
+ingest→certify path (non-manifold Blender soup → certified genus-3 thin
+shell, exact b=(1,6,1)); its observable flips class to an H2 "hidden
+chamber" void — C1 3.9× below baseline at Chamfer parity, control DESTROYS
+the void (b₂ 1→0, 3/3 seeds). See "Post-3e … kinkin".**
 
 Everything below is grounded in `PHASE3_PLAN.md` Appendices A–D and
 `output/synth/topo3/report/results.json` (regenerate:
@@ -252,6 +258,71 @@ reviewers ask — the advisor brief with the inclusion question is
 `docs/CG-Soup_Tomyum_Brief_TH.docx` (commit `e8ed503`). All runs are additive
 new tags under `topo3/` — no published number changed.
 
+## Post-3e (2026-07-10, later): kinkin — the artist-authored pot replaces the CSG pot as the tomyum showcase
+
+User-requested swap: the tomyum showcase now runs on the user's own Blender
+model (`kinkin.ply`, vendored at `assets/kinkin.ply`). The CSG pot — its
+generator, tests and the C-matrix above — stands unchanged; this is a second,
+additive showcase asset (tags `kinkin_*` in `topo3/`).
+
+The raw file is a textbook artist mesh and is unusable as ground truth
+directly (the ShapeNet exclusion reason): 6,318 verts / 6,308 faces (6,304
+quads + 4 twelve-gons), 9 overlapping open shells, 50 boundary edges after
+weld, 232 non-manifold junction edges. `scripts/make_kinkin_asset.py` ingests
+it: manual binary-PLY parse (mixed-size face lists break trimesh's fast
+path), exact-dup weld (6,318→6,238), offset-solidify into a thin metal shell
+— exact unsigned distance field (open3d RaycastingScene) + marching_cubes at
+iso ε (pitch 0.02, ε 0.045 → 2ε walls), drop 804 enclosed pocket shells —
+then CERTIFY BY MEASUREMENT: numpy edge certificate (closed, edge-manifold,
+consistently oriented), exact GUDHI simplicial homology, trimesh
+watertight/volume cross-check, bit-identical rebuilds. Result: **one body,
+genus 3, b = (1, 6, 1) exact** (190,990 verts / 381,988 faces;
+`_meshes/kinkin_src.ply` + `kinkin_src_cert.json`). Construction proof is
+unavailable for artist meshes; exact certificates on the ingested shell
+replace it. This ingest→certify path is the dress rehearsal for real dental
+scans.
+
+The observable CLASS flips vs the CSG pot: every H1 loop (ear bores, narrow
+flue) sits below the 6·r_med floor at every working M, but the narrow chimney
+mouth caps at small alpha, so the flue interior reads as a hidden chamber —
+an **H2 void, localized on the pot axis** (death-simplex centroid x=−0.03,
+y=0.05). Staircase (seed 0): (1,0,0) @2048/4096 → (1,0,1) @8192/20000 →
+(1,1,2) @50k; the void clears the floor from **M=8192** with margin
+1.20–1.23× over seeds 0–4 — the same gate the CSG pot's chimney passed at
+2048 with 1.17–1.25×. The bundle is therefore built at M=8192 by the
+pre-registered floor rule (`density_bound.py`) — the only protocol deviation
+— and the runner now passes `--topo_loss_pts <bundle_n>` for every non-C0
+condition (density-matched contract, no-op at the 2048 default). Bundle
+content at 8192: H0 0 / H1 0 / **H2 exactly 1 bar**, re-sample stability
+~1e-5.
+
+Protocol otherwise 3e verbatim: H2 class ⇒ N=1200 (as spot/fandisk/sphere),
+C0/C1/C2 × seeds {0,1,2}, ρ=0.1, ramp 0.2:0.5, 2,500 steps, full bundle.
+9 runs, zero failures.
+
+| shape (dim, N) | C0 | C1 topo loss | C2 control | verdict |
+|---|---|---|---|---|
+| kinkin (H2, 1200) | .0221±.0003 | **.0057±.0002 (3.9×)** | .0223±.0000, **void DESTROYED (b₂ 1→0, 3/3 seeds)**, Chamfer 1.36× worse | PASS (80.1σ) |
+
+Chamfer parity clean (C1/C0 = 0.99); #sig H2 = 1 correct in every C0/C1
+seed. C2's failure mode here is DESTROY (as bob/spot in 3e, unlike the CSG
+pot's degrade): repulsion erases the void reading in 3/3 seeds and pays 1.36×
+worse geometry; its bottleneck pins at the unmatched-target bound (the target
+bar's half-life, .0223), so the value-σ (0.8σ) is meaningless — the count is
+the verdict.
+
+Caveats, honestly: (1) C0 already gets the count right — like bob/tomyum this
+is a value-accuracy win, not count repair. (2) The 80.1σ headline reflects an
+unusually tight seed spread at n=3 (C1 sd .0002); the honest summary is
+"3.9× with non-overlapping seed ranges", and 3.9× (from unrounded means,
+3.88) sits inside the study's 2.1–10.4× span. (3) Certified-by-measurement,
+not by-construction. (4) NOT in paper 2 (3e table frozen); the open advisor
+question now has two candidate rows: the CSG pot (H1, by-construction) or
+kinkin (H2, artist ingest). Advisor brief:
+`docs/CG-Soup_Kinkin_Brief_TH.docx` (regen: `scripts/make_kinkin_brief_docx.py`
+— reads quicklook.json + the cert json live and recomputes the staircase, so
+it cannot drift).
+
 ## How to reproduce
 
 ```powershell
@@ -303,6 +374,17 @@ python experiments\topo_loss_eval.py --shapes tomyum --seeds 0 1 2 `
 python experiments\topo_loss_eval.py --quicklook --shapes tomyum `
     --conditions C0 C1 C2 --seeds 0 1 2 --rhos 0.1
 python scripts\make_tomyum_brief_docx.py                         # Thai advisor brief
+
+# kinkin (post-3e, 2nd showcase): artist-mesh ingest + its C-matrix
+python scripts\make_kinkin_asset.py    # parse+weld+solidify+certify+export+preflight
+#   scene (dentistry repo): src\make_synthetic_scene.py --shape kinkin `
+#       --mesh output\synth\_meshes\kinkin_src.ply --out output\synth\kinkin `
+#       --views 48 --res 200
+python experiments\topo_loss_eval.py --shapes kinkin --seeds 0 1 2 `
+    --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 1200 --bundle_n 8192
+python experiments\topo_loss_eval.py --quicklook --shapes tomyum kinkin `
+    --conditions C0 C1 C2 --seeds 0 1 2 --rhos 0.1   # one file, both shapes
+python scripts\make_kinkin_brief_docx.py                         # Thai advisor brief
 
 # report:
 python experiments\topo_loss_report.py

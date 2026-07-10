@@ -162,7 +162,7 @@ def quicklook(args, root: str) -> int:
     path = os.path.join(root, "quicklook.json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out_rows, fh, indent=2)
-    print(f"\n[quicklook] {len(out_rows)} rows → {path}")
+    print(f"\n[quicklook] {len(out_rows)} rows -> {path}")   # ASCII: survives cp1252
     return 0
 
 
