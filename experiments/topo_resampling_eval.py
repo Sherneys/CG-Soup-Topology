@@ -56,7 +56,16 @@ SHAPE_DIM = {"torus": 1, "two_spheres": 0, "sphere": 2, "cube": 2, "cylinder": 2
              # hot pot, genus 9 BY CONSTRUCTION (chimney + 2 handles + 6
              # vents); its cloud reads the metal SOLID, and at M=2048 exactly
              # the chimney H1 cycle is significant (seed-robust preflight).
-             "tomyum": 1}
+             "tomyum": 1,
+             # kinkin: the artist-authored (Blender) tom-yum pot, solidified to
+             # a certified thin shell (scripts/make_kinkin_asset.py; 1 body,
+             # genus 3, exact b=(1,6,1)). All its loops are sub-floor at every
+             # working M; the discriminating feature is the CHIMNEY-WELL VOID
+             # (the narrow mouth caps early, so the flue interior reads as a
+             # hidden chamber): sig (1,0,1) from M=8192, margin 1.20-1.23x over
+             # seeds 0-4, localized on the pot axis. H2 class => N=1200,
+             # bundle_n 8192 (floor rule).
+             "kinkin": 2}
 
 ENV = dict(os.environ, PYTHONUTF8="1", DIFFSOUP_ROOT=DIFFSOUP_ROOT, TOPO_ROOT=_TOPO_ROOT)
 

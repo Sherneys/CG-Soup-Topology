@@ -225,6 +225,10 @@ def main() -> int:
                     cmd += condition_flags(cond, shape, bundle, rho, args.ramp,
                                            args.spread, args.lambda_prior,
                                            loss_dims=args.loss_dims)
+                    if cond != "C0":     # density-matched contract: the live
+                        cmd += ["--topo_loss_pts", str(args.bundle_n)]  # cloud
+                        # must be sampled at the bundle's M (no-op at the 2048
+                        # default; kinkin's void needs M=8192 per the floor rule)
                     print(f"[run ] {tag}")
                     if not _run(cmd):
                         print(f"[FAIL] {tag} — stopping")
