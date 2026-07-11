@@ -32,6 +32,29 @@ p12, prose p13). Build: tectonic clean, no undefined refs, no rendered
 TODOs, 20 pp; remaining overfulls are pre-existing (intro bullet, protocol
 C0/…/C5 chain, tab:main width).
 
+**Full recheck (2026-07-11, later): every number re-verified, five rendering
+bugs fixed.** `scripts/audit_paper2.py` (vendored — **re-run before any
+submission**) recomputes every quantitative claim from the source files:
+tab:main, tab:gen, every Welch σ, all chamfer claims, C6/C7/C2g/ρ/ramp,
+the appendix-A tables, the blindness cases, and the pot row — all pass.
+Fixed in the same pass: (1) five **comment-swallowed sentence-starts**
+(prose accidentally sitting on `% src:` lines, so the PDF rendered broken
+fragments): method "We verify…", setup "The torus restricts…" and "CUDA
+training is not bit-reproducible…", results "Overhead, honestly…",
+appendix A "On the void class"; (2) C5-vs-prior-alone corrected
+**4.6×→4.4×** (h2_unified B4 sphere is .0357, not ~.038); (3) the ρ triple
+(.0181/.0172/.0177) is now labeled "matched seed-0 sweep" (PHASE3_PLAN App
+C) so it cannot be misread against the five-seed C1 (.0156); (4) the stale
+external-pilot src comment fixed (that quicklook.json was later overwritten
+by the tomyum/kinkin quicklook; pilot tails now cited from results.json
+seed-0 entries .0429/.0429/.0540); (5) GUDHI + alpha-complex citations
+added in method (both entries already verified in refs.bib); (6) method's
+"M=2048" now reads "unless the floor rule dictates a denser bundle".
+Remaining known cosmetics: 3 pre-existing overfull hboxes (intro bullet,
+protocol C0/…/C5 chain, tab:main width — venue compression will resolve);
+2 uncited bib entries (edelsbrunner2010book, palfinger2022remeshing) and
+18 unused report PNGs in figures/ (harmless).
+
 **Venue: DECISION DEFERRED (user, 2026-07-11) until kinkin was in — now it
 is, so the advisor message below can go.** The 3DV-only proposal is
 superseded by the ACM-DL question; web-checked 2026-07-11 options:

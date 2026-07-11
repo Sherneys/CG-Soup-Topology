@@ -158,8 +158,8 @@ geometry and topology decouple: loops and voids.
 
 \paragraph{Composition (C5).} Loss $+$ spread prior is best everywhere
 tested --- sphere $.0082$ ($7.6\times$ vs C0, ${\approx}2\times$ vs C1 alone,
-${\approx}4.6\times$ below the prior alone
-% src: h2_unified/report/results.json (B4 sphere ~.038)
+${\approx}4.4\times$ below the prior alone
+% src: h2_unified/report/results.json (B4 sphere .0357; .0357/.0082 = 4.37)
 ), torus $.0133$ --- with the best sphere Chamfer as well; on the torus its
 Chamfer ($.502$) trails only the no-ramp arm ($.495$). Allocation and
 value-tuning are complementary mechanisms, not substitutes.
@@ -179,11 +179,15 @@ in \S\ref{sec:discussion}.
 % src: topo3/report/{results.json,cache/double_torus_*} (W2 check 2026-07-07)
 
 \paragraph{Ablations.} $\rho$-response flat over $\{0.03,0.1,0.3\}$
-(.0181/.0172/.0177 on sphere); C3 (no curriculum) $\approx$ C1 on both
+($.0181/.0172/.0177$ in the matched seed-0 sweep on the sphere; the
+five-seed $\rho{=}0.1$ arm is Table~\ref{tab:main}'s C1); C3 (no
+curriculum) $\approx$ C1 on both
 decisive shapes \emph{and} off the analytic family --- on the genus-1
 external mesh C3 lands at $.0171{\pm}.0026$ vs C1's $.0208{\pm}.0008$,
 so the curriculum-free finding generalizes.
-% src: topo3/report/results.json (bob C3, 3 seeds, 2026-07-09) Overhead, honestly: the loss adds a \emph{fixed}
+% src: PHASE3_PLAN.md Appendix C (rho mini-sweep, sphere seed 0, tail =
+% last 3 dumps); topo3/report/results.json (bob C3, 3 seeds, 2026-07-09)
+Overhead, honestly: the loss adds a \emph{fixed}
 ${\approx}46$\,s per 2{,}500-step run (refresh $174$\,ms at $M{=}2048$
 every 10 steps) --- on these deliberately tiny scenes that exceeds the
 $33$--$41$\,s photometric baseline itself, but the cost scales with $M$

@@ -23,8 +23,11 @@ rendered with the same pipeline (48 views, 200\,px), class budgets carried
 over unchanged ($N{=}1200$ voids, $N{=}700$ loops), and a seed-0 C0 pilot
 confirming baseline imperfection (tail bottleneck $.043$--$.054$, i.e.\
 inside the analytic shapes' band).
-% src: output/synth/{spot,bob,fandisk} scene builds + topo3/quicklook.json
-% (pilot 2026-07-09); bundles topo3/fields/{spot,bob,fandisk}_diag.npz
+% src: output/synth/{spot,bob,fandisk} scene builds; pilot tails = the
+% seed-0 entries of the topo3/report/results.json C0 aggregates
+% (.0429/.0429/.0540 — the pilot's 2026-07-09 quicklook.json was later
+% overwritten by the tomyum/kinkin quicklook, so cite results.json);
+% bundles topo3/fields/{spot,bob,fandisk}_diag.npz
 The fourth, the \emph{tom-yum pot} (Fig.~\ref{fig:tomyum}), probes the step
 every real deployment needs: starting from a raw artist-authored mesh
 rather than a clean benchmark. As exported from Blender it is textbook triangle soup
@@ -76,7 +79,8 @@ $1.0\times$ the median sample spacing at $M{=}2048$); the pairing, Gabriel
 gates, and recruitment decide on the noisy observation while the pulls
 apply to the true live positions.
 % src: methods/topological_loss.py TopoLossState(noise=...); r_med at 2048:
-% experiments/density_bound.py (torus .0104, i.e. 1% of diag ~= 1 spacing) The torus restricts the loss to H1: its own void bar is sub-threshold
+% experiments/density_bound.py (torus .0104, i.e. 1% of diag ~= 1 spacing)
+The torus restricts the loss to H1: its own void bar is sub-threshold
 at $M{=}2048$, and a loss must not act on features it cannot reliably measure
 at its sampling density. For the same reason the double torus targets its two
 measurable loops (of four) --- matching what the reconstruction itself can
@@ -100,6 +104,7 @@ headroom absorbs seed variance and CUDA nondeterminism, and in practice it
 never did any work --- every passing arm's Chamfer was at or below the
 baseline's.
 % src: experiments/topo_loss_report.py PARITY_MULT = 1.15; per-arm
-% chamfer_mean in topo3/report/results.json (all passing arms <= C0) CUDA training is not bit-reproducible (baseline re-runs
+% chamfer_mean in topo3/report/results.json (all passing arms <= C0)
+CUDA training is not bit-reproducible (baseline re-runs
 diverge at the first resample), so no bit-level claims are made anywhere.
 % src: experiments/topo_loss_report.py verdict rule; PHASE3_PLAN.md App. B
