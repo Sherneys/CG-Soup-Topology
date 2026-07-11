@@ -21,7 +21,7 @@ abandoned), while cutting the 1-D bridge raises the recruited bar's death
 monotonically toward target --- the runaway concentrates on the only
 profitable direction.
 
-\begin{figure}[t]
+\begin{figure}[tp]
 \centering
 % src: figures/phase3_toy/t{1,2,4}.png (tests/test_topo_loss.py artifacts;
 % title bands cropped for print, panel data untouched; factors in t*.json)
@@ -68,7 +68,7 @@ double\_torus (H1)& .0264$\pm$.0000 & .0264$\pm$.0000 (saturated)           & .0
 \end{tabular}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure}[tp]
 \centering
 % src: topo3/report/{sphere,torus}_series.png (topo_loss_report.py; line =
 % seed mean, band = seed min-max; underlying numbers in results.json)
@@ -100,9 +100,9 @@ tested repulsion strength reproduces any of the gain
 (Fig.~\ref{fig:tails}); Appendix~\ref{app:diagnostics} visualizes the
 mechanism as diagram trajectories --- the control \emph{pins and drags}
 the void's death while phantom bars accumulate.
-% src: topo3/report/results.json (sphere: C2g 0.0972±0.0169)
+% src: topo3/report/results.json (sphere: C2g 0.0972+-0.0169)
 
-\begin{figure}[t]
+\begin{figure}[tp]
 \centering
 % src: topo3/report/sphere_tail.png (per-seed tail means; results.json)
 \includegraphics[width=0.62\linewidth]{sphere_tail.png}
@@ -130,7 +130,7 @@ merges, or tightens the loop directly. Voids, whose support is the whole
 shell, respond to both channels --- which is why the composition (C5) wins
 everywhere.
 
-\begin{figure}[t]
+\begin{figure}[tp]
 \centering
 % src: topo3/report/torus_nsig.png (seed-mean significant-H1 count; axis
 % clipped near target, off-scale init transient annotated on-plot)
@@ -235,18 +235,22 @@ tails stay tight --- consistent with the flat $\rho$ response.
 \subsection{Generality: external genus-known meshes}
 \label{sec:generality}
 Everything above is on one analytic scene family. We therefore repeat the
-verdict protocol --- C0/C1/C2, three seeds, class budgets, $\rho$, ramp and
-sampling unchanged --- on three external watertight meshes of known genus
-(\S\ref{sec:setup}): \emph{spot} (genus 0, organic), \emph{bob} (genus 1,
-organic), and the \emph{fandisk} CAD benchmark (genus 0). No per-shape
-tuning of any kind: the headroom budgets transfer from the feature class,
-and bob runs the full unrestricted bundle.
-% src: topo3/report/results.json (spot/bob/fandisk aggregates + verdicts)
-All three \textbf{pass} the verdict rule at equal-or-\emph{better} Chamfer
+verdict protocol --- C0/C1/C2, three seeds, class budgets, $\rho$ and ramp
+unchanged, sampling density fixed by the pre-registered floor rule (the
+$2048$ default everywhere except kinkin's $8192$, \S\ref{sec:setup}) --- on
+four external meshes of known genus (\S\ref{sec:setup}): \emph{spot}
+(genus 0, organic), \emph{bob} (genus 1, organic), the \emph{fandisk} CAD
+benchmark (genus 0), and \emph{kinkin} (genus 3, artist-authored, certified
+by ingest). No per-shape tuning of any kind: the headroom budgets transfer
+from the feature class, bob runs the full unrestricted bundle, and kinkin's
+density is dictated by the rule, not chosen.
+% src: topo3/report/results.json (spot/bob/fandisk aggregates + verdicts);
+% kinkin: topo3/quicklook.json (per-seed tails/chamfer/nsig, 2026-07-10)
+All four \textbf{pass} the verdict rule at equal-or-\emph{better} Chamfer
 (Table~\ref{tab:gen}, Fig.~\ref{fig:gen}), and the control's failure modes
-replicate exactly: repulsion erases the void on both H2 shapes
-($\beta_2\,1{\to}0$, all seeds) and collapses a loop on the genus-1 shape
-($\beta_1\,2{\to}1$, all seeds).
+replicate exactly: repulsion erases the void on all three H2 shapes
+($\beta_2\,1{\to}0$, all seeds; on kinkin at $1.36\times$ worse Chamfer)
+and collapses a loop on the genus-1 shape ($\beta_1\,2{\to}1$, all seeds).
 
 \begin{table}[t]
 \centering\small
@@ -258,15 +262,17 @@ Table~\ref{tab:main}.}
 \toprule
 shape (dim) & C0 & C1 loss & C2 control & verdict \\
 \midrule
-% src: topo3/report/results.json
+% src: topo3/report/results.json; kinkin row: topo3/quicklook.json
+% (kinkin_C{0,1,2}_* seeds 0-2, 2026-07-10; sigma per PHASE3_STATUS Post-3e)
 spot (H2)    & .0521$\pm$.0081 & \textbf{.0237$\pm$.0000} (2.2$\times$) & .0652 ($\beta_2\,1{\to}0$) & PASS (6.1$\sigma$) \\
 bob (H1)     & .0426$\pm$.0012 & \textbf{.0208$\pm$.0008} (2.1$\times$) & .0437 ($\beta_1\,2{\to}1$) & PASS (26.1$\sigma$) \\
 fandisk (H2) & .0538$\pm$.0022 & \textbf{.0052$\pm$.0008} (10.4$\times$) & .0571 ($\beta_2\,1{\to}0$) & PASS (35.7$\sigma$) \\
+kinkin (H2)  & .0221$\pm$.0003 & \textbf{.0057$\pm$.0002} (3.9$\times$) & .0223 ($\beta_2\,1{\to}0$) & PASS (80.1$\sigma$) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure}[tp]
 \centering
 % src: topo3/report/{bob,fandisk}_series.png (topo_loss_report.py)
 \includegraphics[width=0.495\linewidth]{bob_series.png}\hfill
@@ -279,7 +285,26 @@ control rides the baseline after collapsing a loop. \emph{Right}: fandisk
 \label{fig:gen}
 \end{figure}
 
-Three observations. \emph{The H1 claim survives the family change}: bob
+\begin{figure}[tp]
+\centering
+% src: figures/kinkin_alu{,_cut}.png (scripts/make_kinkin_figure.py ---
+% CPU ray-traced render of the certified shell _meshes/kinkin_src.ply;
+% aluminium material per advisor request 2026-07-11)
+\includegraphics[width=0.495\linewidth]{kinkin_alu.png}\hfill
+\includegraphics[width=0.495\linewidth]{kinkin_alu_cut.png}
+\caption{The \emph{kinkin} asset: an artist-authored pot (raw Blender
+export: 9 open shells, 232 non-manifold junction edges) ingested and
+certified to a single genus-3 shell, $\beta{=}(1,6,1)$ exact
+(\S\ref{sec:setup}), rendered with an aluminium material. \emph{Right}:
+cutaway. The narrow flue mouth caps at small $\alpha$, so the flue interior
+reads as an enclosed chamber --- the on-axis H2 void that the floor rule
+selects as the discriminating observable at $M{=}8192$; every H1 loop
+(handle bores, flue) sits below the measurement floor at all working
+densities.}
+\label{fig:kinkin}
+\end{figure}
+
+Four observations. \emph{The H1 claim survives the family change}: bob
 halves loop error with zero phantom handles in every seed ($26.1\sigma$),
 replicating torus. \emph{Sharp-featured CAD benefits most}: fandisk's
 $10.4\times$ exceeds every analytic-family effect. \emph{Complex organic
@@ -290,4 +315,27 @@ clears it in two seeds but retains one spurious bar in the third ($1,2,1$)
 (legs, horns at $N{=}1200$) is an improvement, not a guarantee. Spot's C1
 tail is also pinned across seeds (sd $0$ at $.0237$), suggesting a geometric
 floor of the same kind as the double torus, far milder in degree.
+\emph{And the pipeline reaches raw artist content}: kinkin passes the same
+rule with its observable and sampling density chosen by the pre-registered
+floor rule rather than by hand --- the dress rehearsal for scan data, whose
+ground truth must likewise be certified, not assumed (\S\ref{sec:setup}).
 % src: topo3/report/results.json (nsig_final; tails)
+
+\paragraph{From artist soup to verdict (kinkin).} The certified artist mesh
+(Fig.~\ref{fig:kinkin}) extends the wave in two directions at once: the
+input class (a raw Blender export, certified rather than constructed,
+\S\ref{sec:setup}) and the observable (an H2 void that only clears the
+measurement floor at $M{=}8192$). The loss cuts the void's value error
+$3.9\times$ at Chamfer parity ($0.99\times$ baseline); the $80.1\sigma$
+Welch statistic reflects an unusually tight seed spread at $n{=}3$ (C1 sd
+$.0002$), so the honest summary is \emph{non-overlapping seed ranges}, with
+the effect size inside the study's $2.1$--$10.4\times$ span. The control
+\emph{destroys} the void ($\beta_2\,1{\to}0$ in all three seeds) at
+$1.36\times$ worse Chamfer; its bottleneck pins at the unmatched-target
+bound (the target bar's half-life, $.0223$), so the count --- not the
+meaningless value gap ($0.8\sigma$) --- is the verdict. Two caveats
+transfer verbatim from the rest of the study: the baseline already reads
+the correct count (a value-accuracy win, like bob), and ground truth here
+is certified, not constructed.
+% src: topo3/quicklook.json (kinkin C0/C1/C2 x seeds 0-2: tails, chamfer,
+% nsig; 2026-07-10); pin bound + staircase: PHASE3_STATUS.md Post-3e

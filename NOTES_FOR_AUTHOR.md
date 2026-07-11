@@ -1,13 +1,78 @@
-# PAPER 2 — CURRENT STATE (2026-07-09, end of day)
+# PAPER 2 — CURRENT STATE (2026-07-11)
 
-**Experimental record FROZEN at git tag `paper2-results-freeze`** — everything
-from here is prose/format only. Both advisor revision rounds answered (tables
-below). A Thai reply message to อาจารย์ is drafted (in the session log /
-ask Claude to reproduce it) — it requests the two pending sign-offs:
-**(1) paper 2 before paper 1, (2) 3DV 2027 (deadline Aug 28)** — and flags the
-recruitment-story correction for his explicit agreement. Your remaining work:
-send that message, then the voice pass. After venue confirmation: template +
-double-blind + 19 pp → 8 pp compression (delegable).
+**kinkin is now IN the paper** (user instruction 2026-07-11: "put the kinkin
+results in paper 2 before choosing the venue"). It enters as the **fourth
+external mesh**: setup describes the ingest→certify pipeline + the
+floor-rule bundle density (M=8192, the study's only protocol deviation,
+density-matched contract); the generality table gains the kinkin row
+(C0 .0221±.0003 / C1 .0057±.0002 = 3.9× / C2 .0223 with β₂ 1→0 all seeds,
+Chamfer 1.36× worse; PASS 80.1σ with the honest "non-overlapping seed
+ranges" phrasing in prose); discussion gets the prospective-floor-rule
+sentence; abstract/limitations/conclusion counts updated to four. Every
+number carries a `% src:` comment (quicklook.json / kinkin_src_cert.json /
+PHASE3_STATUS Post-3e). The frozen record itself is untouched — kinkin was
+always additive tags in topo3.
+
+**Aluminium figure (advisor's request) is in**: `fig:kinkin`, two panels
+(exterior 3/4 view + dollhouse cutaway exposing the flue chamber = the H2
+void), rendered by `scripts/make_kinkin_figure.py` — CPU ray-traced
+(open3d RaycastingScene + metal shader; Filament offscreen needs EGL and
+does not work on Windows), 1400², regenerate with the dentistry venv.
+Float placement was fixed paper-wide while placing it: all results figures
+were `[t]`-only and the tall toys figure jammed the whole float queue to
+pp. 16–19; now `[tp]`, every figure lands beside its section (kinkin fig
+p12, prose p13). Build: tectonic clean, no undefined refs, no rendered
+TODOs, 20 pp; remaining overfulls are pre-existing (intro bullet, protocol
+C0/…/C5 chain, tab:main width).
+
+**Venue: DECISION DEFERRED (user, 2026-07-11) until kinkin was in — now it
+is, so the advisor message below can go.** The 3DV-only proposal is
+superseded by the ACM-DL question; web-checked 2026-07-11 options:
+
+| requirement | venue | deadline |
+|---|---|---|
+| Scopus proceedings OK (fastest) | **3DV 2027** (IEEE, Thessaloniki Apr 2027) | **2026-08-28** |
+| same deadline, faster publication | WACV 2027 R2 (IEEE, conf Jan 4–8) | 2026-08-28 (reg Aug 21; decisions Oct 9) |
+| literally ACM DL | SIGGRAPH 2027 conference track (7 pp excl. refs) | ~late Jan 2027 (2026 was Jan 22) |
+| Scopus **journal** required | **SGP 2027** → CGF (Wiley, Q1) — best community fit of all | ~Feb + Apr 2027 (2026 double deadline Feb 4/Apr 15) |
+| any ACM DL item in 2026 | SA 2026 Technical Communications (4 pp incl. refs) | 2026-07-27 (notify Sep 8) |
+
+(3DV is IEEE — NOT in the ACM DL; SGP/EGSR/PG/EG publish in CGF/Wiley;
+SoCG is LIPIcs. ACM DL ⇒ SIGGRAPH/TOG family only. ACM is fully OA since
+2026-01-01 — if an ACM venue is chosen, ask the Chula library about ACM
+Open membership, else an APC applies.)
+
+**Draft message to อาจารย์ (updated 2026-07-11 — replaces the 3DV-only
+draft):**
+
+> เรียนอาจารย์ครับ
+>
+> อัปเดต paper 2 ครับ:
+> 1. ผมใส่ผลของโมเดลหม้อ (kinkin) ลงใน paper 2 เรียบร้อยแล้ว — เป็น
+>    external mesh ตัวที่ 4 ในตาราง generality (C1 ลด error ของ void
+>    3.9 เท่าที่ Chamfer เท่ากัน, ทุก seed แยกขาดจาก baseline; ส่วน
+>    control ทำลาย void ทั้ง 3 seeds และ Chamfer แย่ลง 1.36 เท่า)
+>    พร้อมอธิบาย pipeline ingest→certify (weld → solidify → certify
+>    genus 3 ด้วยการวัดจริง) ไว้ใน setup ครับ
+> 2. เรื่อง texture aluminium ตามที่อาจารย์ขอ — ทำแล้วครับ รูปใน paper
+>    เรนเดอร์หม้อเป็นวัสดุอะลูมิเนียม 2 มุม: ภายนอก และภาพผ่าครึ่ง
+>    ที่เห็นช่องปล่องด้านใน (คือ H2 void ที่ loss แก้) ครับ
+> 3. เรื่อง venue ผมขอเรียนถามข้อกำหนดก่อนตัดสินใจครับ:
+>    - ถ้า proceedings ที่อยู่ใน Scopus เพียงพอ → เสนอ **3DV 2027**
+>      (IEEE, deadline 28 ส.ค. 2026) เร็วที่สุดและ scope ตรงครับ
+>    - ถ้าจำเป็นต้องเป็น **วารสาร** ใน Scopus → เสนอ **SGP 2027**
+>      (ตีพิมพ์เป็น Computer Graphics Forum = วารสาร Wiley Q1,
+>      deadline ~ก.พ./เม.ย. 2027) — community ตรงกับงานเราที่สุดครับ
+>    - ถ้าต้องอยู่ใน **ACM Digital Library** จริง ๆ → 3DV ใช้ไม่ได้
+>      (เป็นของ IEEE) ต้องเป็น SIGGRAPH 2027 conference track
+>      (deadline ~ปลาย ม.ค. 2027) ครับ
+>    ขออาจารย์ช่วยยืนยันว่าเกณฑ์ของหลักสูตรต้องการแบบไหนครับ
+> 4. และขอยืนยันอีกครั้งเรื่องส่ง paper 2 ก่อน paper 1 ครับ
+>
+> ขอบพระคุณครับ
+
+**Your remaining work:** send that message; voice pass. After venue
+confirmation: template + double-blind + compression (delegable).
 
 ---
 

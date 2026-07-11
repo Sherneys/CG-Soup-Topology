@@ -15,15 +15,51 @@ are the allocation study's headroom points (Appendix~\ref{app:companion}) ---
 tight enough that the baseline's topology is imperfect, so there is something
 to win.
 % src: PHASE2B_CROSSOVER.md (headroom pilot); PHASE3_PLAN.md §6
-Three external, genus-known, watertight meshes probe generality beyond the
-analytic family (\S\ref{sec:generality}): \emph{spot} (genus 0) and
-\emph{bob} (genus 1) from the Crane model repository (CC0), and the
-\emph{fandisk} CAD benchmark (genus 0) --- rendered with the same pipeline
-(48 views, 200\,px), class budgets carried over unchanged ($N{=}1200$ voids,
-$N{=}700$ loops), and a seed-0 C0 pilot confirming baseline imperfection
-(tail bottleneck $.043$--$.054$, i.e.\ inside the analytic shapes' band).
+Four external, genus-known meshes probe generality beyond the analytic
+family (\S\ref{sec:generality}). Three are watertight benchmarks:
+\emph{spot} (genus 0) and \emph{bob} (genus 1) from the Crane model
+repository (CC0), and the \emph{fandisk} CAD benchmark (genus 0) ---
+rendered with the same pipeline (48 views, 200\,px), class budgets carried
+over unchanged ($N{=}1200$ voids, $N{=}700$ loops), and a seed-0 C0 pilot
+confirming baseline imperfection (tail bottleneck $.043$--$.054$, i.e.\
+inside the analytic shapes' band).
 % src: output/synth/{spot,bob,fandisk} scene builds + topo3/quicklook.json
 % (pilot 2026-07-09); bundles topo3/fields/{spot,bob,fandisk}_diag.npz
+The fourth, \emph{kinkin} (Fig.~\ref{fig:kinkin}), probes the step every
+real deployment needs: starting from a raw artist-authored mesh rather than
+a clean benchmark. As exported from Blender it is textbook triangle soup
+--- $6{,}318$ vertices in 9 overlapping open shells, mixed quad/12-gon
+faces, 50 boundary edges after exact welding, 232 non-manifold junction
+edges --- with no trustworthy ground-truth topology (the same defect that
+excluded ShapeNet). An ingest-and-certify pass makes it usable:
+exact-duplicate weld, offset-solidification into a thin closed shell
+(exact unsigned distance field $+$ marching cubes at iso $\varepsilon$),
+dropping 804 enclosed pocket shells, then \emph{certification by
+measurement} --- a closed, edge-manifold, consistently-oriented edge
+certificate, exact simplicial homology, a watertightness cross-check, and
+bit-identical rebuilds ---
+yielding one body of genus 3, $\beta{=}(1,6,1)$ exact ($190{,}990$
+vertices), rendered and budgeted as a void-class shape ($N{=}1200$, 48
+views, 200\,px). Where the benchmark trio's topology is known by
+construction, kinkin's is known by certificate --- the pipeline real scans
+will need.
+% src: output/synth/_meshes/kinkin_src_cert.json (components/genus/betti/
+% verts + raw-soup counts) + scripts/make_kinkin_asset.py (ingest+certify,
+% bit-identical rebuild check); scene: output/synth/kinkin
+Kinkin also exercises the measurement floor of \S\ref{sec:discussion}
+prospectively: every H1 loop of the certified shell (handle bores, flue)
+sits below the $6\,r_{\mathrm{med}}$ floor at every working $M$, while the
+narrow flue mouth caps at small $\alpha$, so the flue interior reads as an
+enclosed chamber --- an H2 void localized on the pot axis. The void first
+clears the floor at $M{=}8192$ (margin $1.20$--$1.23\times$ across five
+sampling seeds), so its target bundle is built there by the pre-registered
+floor rule --- the study's only protocol deviation --- and the loss samples
+the live surface at the same density (the density-matched contract; a
+no-op at the default $M{=}2048$ everywhere else). The bundle carries
+exactly one significant bar (H2), stable to re-sampling (${\sim}10^{-5}$).
+% src: PHASE3_STATUS.md Post-3e (make_kinkin_asset.py preflight staircase:
+% (1,0,0)@2048/4096 -> (1,0,1)@8192/20000; margins recomputed live by
+% scripts/make_kinkin_brief_docx.py); floor rule: experiments/density_bound.py
 
 \paragraph{Protocol.} 2{,}500 steps; resampling every 100 steps (untouched);
 $\rho{=}0.1$, ramp $0.2{:}0.5$, refresh $K{=}10$, $M{=}2048$; decisive shapes
@@ -41,10 +77,10 @@ apply to the true live positions.
 at $M{=}2048$, and a loss must not act on features it cannot reliably measure
 at its sampling density. For the same reason the double torus targets its two
 measurable loops (of four) --- matching what the reconstruction itself can
-express at any feasible budget. The generality trio runs C0/C1/C2 with three
+express at any feasible budget. The generality wave runs C0/C1/C2 with three
 seeds; bob, unlike the thin torus, has both its loop pair \emph{and} its void
 significant at $M{=}2048$ (fat tube), so it runs the full unrestricted
-bundle.
+bundle; kinkin runs at the floor-rule density above.
 % src: PHASE3_PLAN.md Appendix C (bundle preflights) + PHASE2B (2/4 loops);
 % spot/bob/fandisk bundle preflights 2026-07-09 (H bars printed at build)
 

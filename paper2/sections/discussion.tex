@@ -59,10 +59,18 @@ only $1.33\times$, a margin the live cloud's noise consumes --- which is
 exactly why that loop is chronically sub-threshold during training and
 recruitment becomes its only gradient path (the C6 ablation).
 Appendix~\ref{app:diagnostics} tabulates the counts across $M$; at
-$M{=}4096$ all four double-torus loops clear the floor. Adaptive or
+$M{=}4096$ all four double-torus loops clear the floor. Kinkin ran the rule
+\emph{prospectively}: on the certified shell no H1 loop clears the floor at
+any working $M$, while the flue void first clears it at $M{=}8192$
+($1.20$--$1.23\times$ across sampling seeds) --- so the rule, not judgment,
+picked both the observable class and the bundle density before any training
+run (\S\ref{sec:setup}), and the in-loop result (Table~\ref{tab:gen})
+validated the choice. Adaptive or
 multi-scale density --- raising $M$ where features sit near the floor, or
 hierarchical floors --- is the natural extension; the trade is explicit,
 since persistence cost grows $O(M\log M)$.
+% src: kinkin staircase/margins: PHASE3_STATUS.md Post-3e (preflight of
+% scripts/make_kinkin_asset.py; live recompute in make_kinkin_brief_docx.py)
 % src: experiments/density_bound.py — persistence_from_target on the GT
 % meshes at M in {2048, 20000}, seed 0 (2026-07-09); M-sweep in App. B
 
