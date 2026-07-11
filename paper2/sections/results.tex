@@ -237,19 +237,22 @@ tails stay tight --- consistent with the flat $\rho$ response.
 Everything above is on one analytic scene family. We therefore repeat the
 verdict protocol --- C0/C1/C2, three seeds, class budgets, $\rho$ and ramp
 unchanged, sampling density fixed by the pre-registered floor rule (the
-$2048$ default everywhere except kinkin's $8192$, \S\ref{sec:setup}) --- on
+$2048$ default everywhere except the tom-yum pot's $8192$,
+\S\ref{sec:setup}) --- on
 four external meshes of known genus (\S\ref{sec:setup}): \emph{spot}
 (genus 0, organic), \emph{bob} (genus 1, organic), the \emph{fandisk} CAD
-benchmark (genus 0), and \emph{kinkin} (genus 3, artist-authored, certified
-by ingest). No per-shape tuning of any kind: the headroom budgets transfer
-from the feature class, bob runs the full unrestricted bundle, and kinkin's
-density is dictated by the rule, not chosen.
+benchmark (genus 0), and the \emph{tom-yum pot} (genus 3, artist-authored,
+certified by ingest). No per-shape tuning of any kind: the headroom budgets
+transfer from the feature class, bob runs the full unrestricted bundle, and
+the pot's density is dictated by the rule, not chosen.
 % src: topo3/report/results.json (spot/bob/fandisk aggregates + verdicts);
-% kinkin: topo3/quicklook.json (per-seed tails/chamfer/nsig, 2026-07-10)
+% tom-yum pot = internal shape key kinkin: topo3/quicklook.json (per-seed
+% tails/chamfer/nsig, 2026-07-10)
 All four \textbf{pass} the verdict rule at equal-or-\emph{better} Chamfer
 (Table~\ref{tab:gen}, Fig.~\ref{fig:gen}), and the control's failure modes
 replicate exactly: repulsion erases the void on all three H2 shapes
-($\beta_2\,1{\to}0$, all seeds; on kinkin at $1.36\times$ worse Chamfer)
+($\beta_2\,1{\to}0$, all seeds; on the tom-yum pot at $1.36\times$ worse
+Chamfer)
 and collapses a loop on the genus-1 shape ($\beta_1\,2{\to}1$, all seeds).
 
 \begin{table}[t]
@@ -262,12 +265,13 @@ Table~\ref{tab:main}.}
 \toprule
 shape (dim) & C0 & C1 loss & C2 control & verdict \\
 \midrule
-% src: topo3/report/results.json; kinkin row: topo3/quicklook.json
-% (kinkin_C{0,1,2}_* seeds 0-2, 2026-07-10; sigma per PHASE3_STATUS Post-3e)
+% src: topo3/report/results.json; tom-yum pot row (internal key kinkin):
+% topo3/quicklook.json (kinkin_C{0,1,2}_* seeds 0-2, 2026-07-10; sigma per
+% PHASE3_STATUS Post-3e)
 spot (H2)    & .0521$\pm$.0081 & \textbf{.0237$\pm$.0000} (2.2$\times$) & .0652 ($\beta_2\,1{\to}0$) & PASS (6.1$\sigma$) \\
 bob (H1)     & .0426$\pm$.0012 & \textbf{.0208$\pm$.0008} (2.1$\times$) & .0437 ($\beta_1\,2{\to}1$) & PASS (26.1$\sigma$) \\
 fandisk (H2) & .0538$\pm$.0022 & \textbf{.0052$\pm$.0008} (10.4$\times$) & .0571 ($\beta_2\,1{\to}0$) & PASS (35.7$\sigma$) \\
-kinkin (H2)  & .0221$\pm$.0003 & \textbf{.0057$\pm$.0002} (3.9$\times$) & .0223 ($\beta_2\,1{\to}0$) & PASS (80.1$\sigma$) \\
+tom-yum pot (H2) & .0221$\pm$.0003 & \textbf{.0057$\pm$.0002} (3.9$\times$) & .0223 ($\beta_2\,1{\to}0$) & PASS (80.1$\sigma$) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -287,12 +291,13 @@ control rides the baseline after collapsing a loop. \emph{Right}: fandisk
 
 \begin{figure}[tp]
 \centering
-% src: figures/kinkin_alu{,_cut}.png (scripts/make_kinkin_figure.py ---
+% src: figures/tomyum_pot_alu{,_cut}.png (scripts/make_kinkin_figure.py ---
 % CPU ray-traced render of the certified shell _meshes/kinkin_src.ply;
-% aluminium material per advisor request 2026-07-11)
-\includegraphics[width=0.495\linewidth]{kinkin_alu.png}\hfill
-\includegraphics[width=0.495\linewidth]{kinkin_alu_cut.png}
-\caption{The \emph{kinkin} asset: an artist-authored pot (raw Blender
+% aluminium material per advisor request 2026-07-11; rendered name
+% tom-yum pot = internal asset name kinkin)
+\includegraphics[width=0.495\linewidth]{tomyum_pot_alu.png}\hfill
+\includegraphics[width=0.495\linewidth]{tomyum_pot_alu_cut.png}
+\caption{The \emph{tom-yum pot}: an artist-authored Blender model (raw
 export: 9 open shells, 232 non-manifold junction edges) ingested and
 certified to a single genus-3 shell, $\beta{=}(1,6,1)$ exact
 (\S\ref{sec:setup}), rendered with an aluminium material. \emph{Right}:
@@ -301,7 +306,7 @@ reads as an enclosed chamber --- the on-axis H2 void that the floor rule
 selects as the discriminating observable at $M{=}8192$; every H1 loop
 (handle bores, flue) sits below the measurement floor at all working
 densities.}
-\label{fig:kinkin}
+\label{fig:tomyum}
 \end{figure}
 
 Four observations. \emph{The H1 claim survives the family change}: bob
@@ -315,14 +320,16 @@ clears it in two seeds but retains one spurious bar in the third ($1,2,1$)
 (legs, horns at $N{=}1200$) is an improvement, not a guarantee. Spot's C1
 tail is also pinned across seeds (sd $0$ at $.0237$), suggesting a geometric
 floor of the same kind as the double torus, far milder in degree.
-\emph{And the pipeline reaches raw artist content}: kinkin passes the same
+\emph{And the pipeline reaches raw artist content}: the tom-yum pot passes
+the same
 rule with its observable and sampling density chosen by the pre-registered
 floor rule rather than by hand --- the dress rehearsal for scan data, whose
 ground truth must likewise be certified, not assumed (\S\ref{sec:setup}).
 % src: topo3/report/results.json (nsig_final; tails)
 
-\paragraph{From artist soup to verdict (kinkin).} The certified artist mesh
-(Fig.~\ref{fig:kinkin}) extends the wave in two directions at once: the
+\paragraph{From artist soup to verdict (the tom-yum pot).} The certified
+artist mesh
+(Fig.~\ref{fig:tomyum}) extends the wave in two directions at once: the
 input class (a raw Blender export, certified rather than constructed,
 \S\ref{sec:setup}) and the observable (an H2 void that only clears the
 measurement floor at $M{=}8192$). The loss cuts the void's value error
@@ -337,5 +344,6 @@ meaningless value gap ($0.8\sigma$) --- is the verdict. Two caveats
 transfer verbatim from the rest of the study: the baseline already reads
 the correct count (a value-accuracy win, like bob), and ground truth here
 is certified, not constructed.
-% src: topo3/quicklook.json (kinkin C0/C1/C2 x seeds 0-2: tails, chamfer,
-% nsig; 2026-07-10); pin bound + staircase: PHASE3_STATUS.md Post-3e
+% src: topo3/quicklook.json (internal key kinkin, C0/C1/C2 x seeds 0-2:
+% tails, chamfer, nsig; 2026-07-10); pin bound + staircase:
+% PHASE3_STATUS.md Post-3e

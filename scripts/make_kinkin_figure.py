@@ -1,9 +1,11 @@
 # scripts/make_kinkin_figure.py
 # Paper-2 figure: the certified kinkin shell rendered as aluminium
-# (advisor request, 2026-07-11). Two panels:
-#   paper2/figures/kinkin_alu.png      - exterior, 3/4 view
-#   paper2/figures/kinkin_alu_cut.png  - cutaway (y<=0 half): the flue
-#                                        interior = the on-axis H2 void
+# (advisor request, 2026-07-11). Rendered name in the paper is
+# "tom-yum pot" (user instruction 2026-07-11: no kinkin in print);
+# internal asset/tags/files keep the kinkin name. Two panels:
+#   paper2/figures/tomyum_pot_alu.png     - exterior, 3/4 view
+#   paper2/figures/tomyum_pot_alu_cut.png - dollhouse cutaway: the flue
+#                                           interior = the on-axis H2 void
 # Open3D's Filament OffscreenRenderer needs EGL-headless (unsupported on
 # Windows), so this renders with the CPU RaycastingScene (the same machinery
 # make_kinkin_asset.py used for its distance field) + a small metal shader:
@@ -175,10 +177,10 @@ def main():
     ext = V.max(0) - V.min(0)
     print(f"shell: {len(V)} verts / {len(F)} tris, extent {np.round(ext, 3)}")
 
-    render(V, F, N, os.path.join(OUT_DIR, "kinkin_alu.png"),
+    render(V, F, N, os.path.join(OUT_DIR, "tomyum_pot_alu.png"),
            eye_dir=(1.0, -1.35, 0.72))
     # same pose, near half removed -> section view at identical scale
-    render(*half(V, F, N), os.path.join(OUT_DIR, "kinkin_alu_cut.png"),
+    render(*half(V, F, N), os.path.join(OUT_DIR, "tomyum_pot_alu_cut.png"),
            eye_dir=(1.0, -1.35, 0.72), frame_pts=V)
 
 

@@ -1,7 +1,13 @@
 # PAPER 2 — CURRENT STATE (2026-07-11)
 
-**kinkin is now IN the paper** (user instruction 2026-07-11: "put the kinkin
-results in paper 2 before choosing the venue"). It enters as the **fourth
+**kinkin is now IN the paper, rendered as "the tom-yum pot"** (user
+instructions 2026-07-11: "put the kinkin results in paper 2 before choosing
+the venue", then "do not use kinkin as a name, use tomyum pot instead").
+The rendered prose/table/caption say **tom-yum pot** everywhere; the
+internal tags (`kinkin_*`), cert file and quicklook keys keep the kinkin
+name so the grounding trail stays intact — mapping comments sit next to
+every `% src:`. Do NOT confuse with the constructed CSG pot (`tomyum` in
+the repo), which is not in the paper. It enters as the **fourth
 external mesh**: setup describes the ingest→certify pipeline + the
 floor-rule bundle density (M=8192, the study's only protocol deviation,
 density-matched contract); the generality table gains the kinkin row
@@ -13,14 +19,15 @@ number carries a `% src:` comment (quicklook.json / kinkin_src_cert.json /
 PHASE3_STATUS Post-3e). The frozen record itself is untouched — kinkin was
 always additive tags in topo3.
 
-**Aluminium figure (advisor's request) is in**: `fig:kinkin`, two panels
+**Aluminium figure (advisor's request) is in**: `fig:tomyum` (files
+`figures/tomyum_pot_alu{,_cut}.png`), two panels
 (exterior 3/4 view + dollhouse cutaway exposing the flue chamber = the H2
 void), rendered by `scripts/make_kinkin_figure.py` — CPU ray-traced
 (open3d RaycastingScene + metal shader; Filament offscreen needs EGL and
 does not work on Windows), 1400², regenerate with the dentistry venv.
 Float placement was fixed paper-wide while placing it: all results figures
 were `[t]`-only and the tall toys figure jammed the whole float queue to
-pp. 16–19; now `[tp]`, every figure lands beside its section (kinkin fig
+pp. 16–19; now `[tp]`, every figure lands beside its section (pot fig
 p12, prose p13). Build: tectonic clean, no undefined refs, no rendered
 TODOs, 20 pp; remaining overfulls are pre-existing (intro bullet, protocol
 C0/…/C5 chain, tab:main width).
@@ -48,7 +55,8 @@ draft):**
 > เรียนอาจารย์ครับ
 >
 > อัปเดต paper 2 ครับ:
-> 1. ผมใส่ผลของโมเดลหม้อ (kinkin) ลงใน paper 2 เรียบร้อยแล้ว — เป็น
+> 1. ผมใส่ผลของโมเดลหม้อต้มยำลงใน paper 2 เรียบร้อยแล้ว
+>    (ในเปเปอร์ใช้ชื่อ tom-yum pot) — เป็น
 >    external mesh ตัวที่ 4 ในตาราง generality (C1 ลด error ของ void
 >    3.9 เท่าที่ Chamfer เท่ากัน, ทุก seed แยกขาดจาก baseline; ส่วน
 >    control ทำลาย void ทั้ง 3 seeds และ Chamfer แย่ลง 1.36 เท่า)

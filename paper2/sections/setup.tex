@@ -25,9 +25,9 @@ confirming baseline imperfection (tail bottleneck $.043$--$.054$, i.e.\
 inside the analytic shapes' band).
 % src: output/synth/{spot,bob,fandisk} scene builds + topo3/quicklook.json
 % (pilot 2026-07-09); bundles topo3/fields/{spot,bob,fandisk}_diag.npz
-The fourth, \emph{kinkin} (Fig.~\ref{fig:kinkin}), probes the step every
-real deployment needs: starting from a raw artist-authored mesh rather than
-a clean benchmark. As exported from Blender it is textbook triangle soup
+The fourth, the \emph{tom-yum pot} (Fig.~\ref{fig:tomyum}), probes the step
+every real deployment needs: starting from a raw artist-authored mesh
+rather than a clean benchmark. As exported from Blender it is textbook triangle soup
 --- $6{,}318$ vertices in 9 overlapping open shells, mixed quad/12-gon
 faces, 50 boundary edges after exact welding, 232 non-manifold junction
 edges --- with no trustworthy ground-truth topology (the same defect that
@@ -41,12 +41,15 @@ bit-identical rebuilds ---
 yielding one body of genus 3, $\beta{=}(1,6,1)$ exact ($190{,}990$
 vertices), rendered and budgeted as a void-class shape ($N{=}1200$, 48
 views, 200\,px). Where the benchmark trio's topology is known by
-construction, kinkin's is known by certificate --- the pipeline real scans
+construction, the pot's is known by certificate --- the pipeline real scans
 will need.
+% naming: rendered as tom-yum pot; the asset, tags and files are named
+% kinkin internally (do not confuse with the constructed CSG pot, which is
+% NOT in this paper).
 % src: output/synth/_meshes/kinkin_src_cert.json (components/genus/betti/
 % verts + raw-soup counts) + scripts/make_kinkin_asset.py (ingest+certify,
 % bit-identical rebuild check); scene: output/synth/kinkin
-Kinkin also exercises the measurement floor of \S\ref{sec:discussion}
+The pot also exercises the measurement floor of \S\ref{sec:discussion}
 prospectively: every H1 loop of the certified shell (handle bores, flue)
 sits below the $6\,r_{\mathrm{med}}$ floor at every working $M$, while the
 narrow flue mouth caps at small $\alpha$, so the flue interior reads as an
@@ -80,7 +83,7 @@ measurable loops (of four) --- matching what the reconstruction itself can
 express at any feasible budget. The generality wave runs C0/C1/C2 with three
 seeds; bob, unlike the thin torus, has both its loop pair \emph{and} its void
 significant at $M{=}2048$ (fat tube), so it runs the full unrestricted
-bundle; kinkin runs at the floor-rule density above.
+bundle; the tom-yum pot runs at the floor-rule density above.
 % src: PHASE3_PLAN.md Appendix C (bundle preflights) + PHASE2B (2/4 loops);
 % spot/bob/fandisk bundle preflights 2026-07-09 (H bars printed at build)
 
