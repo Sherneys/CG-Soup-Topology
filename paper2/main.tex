@@ -99,13 +99,16 @@ combine.
 \input{sections/limitations}
 \input{sections/conclusion}
 
+% References BEFORE the appendices (venue-standard order; also keeps the
+% appendix figure from floating into the reference pages). Safe: neither
+% appendix contains a \cite, so unsrtnat numbering is unaffected.
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
+
 % The allocation-channel study (our own prior experiments), reported
 % first-hand with numbers. Moves to supplementary at venues with strict
 % page limits.
 \input{sections/appendix_companion}
 \input{sections/appendix_diagnostics}
-
-\bibliographystyle{unsrtnat}
-\bibliography{refs}
 
 \end{document}
