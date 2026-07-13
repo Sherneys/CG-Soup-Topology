@@ -87,11 +87,13 @@ commit).** What changed:
 - **Page budget: body ends exactly at page 8**; references fill pp. 9–10
   (allowed). **Zero overfull hboxes** — the 3 pre-existing ones died with
   the reformat, as predicted.
-- **supplementary.tex** (NEW, 4 pp, builds separately, same anonymous
+- **supplementary.tex** (NEW, 3 pp, builds separately, same anonymous
   style; due Sep 2): §A allocation study (Tables S1/S2), §B diagnostics
   (Table S3, Fig. S1 pd-trajectories), §C additional figures + the repair
-  gate (Fig. S2 generality trajectories, S3 sphere per-seed tails, S4
-  gate toys, S5 torus phantom check). Main text cites them as
+  gate (Fig. S2 generality trajectories, S3 sphere per-seed tails, **S4
+  torus phantom check, S5 gate toys** — reordered 2026-07-13 so the tall
+  gate figure stops stranding the phantom check alone on a 4th page;
+  same-class floats place in source order). Main text cites them as
   "suppl. Fig. S1…S5 / Table S1…S3" in plain text (no \ref across docs).
 - **Moved to supplementary** (numbers stay in the main text; figures and
   mechanism prose moved): the two appendices (as planned since 07-09),

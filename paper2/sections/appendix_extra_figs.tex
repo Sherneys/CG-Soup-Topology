@@ -2,14 +2,20 @@
 \label{app:extrafigs}
 
 % Moved from the main paper's §5 for the 3DV page limit (2026-07-13):
-% fig:gen (S2), fig:tails (S3), and the stage-3a gate figure fig:toys (S4)
-% with its mechanism prose. Captions and % src comments carried over
-% verbatim; the verdicts these figures illustrate are stated with their
-% numbers in main-paper §5.
+% fig:gen (S2), fig:tails (S3), fig:nsig (S4), and the stage-3a gate
+% figure fig:toys (S5) with its mechanism prose. Captions and % src
+% comments carried over verbatim; the verdicts these figures illustrate
+% are stated with their numbers in main-paper §5.
+% Order note (2026-07-13 later): nsig moved BEFORE toys — same-class
+% floats place in source order, and the tall toys figure was stranding
+% nsig alone on a fourth page. S4/S5 swapped accordingly (main-text
+% plain-text refs updated in results.tex).
 
 Fig.~\ref{fig:gen} shows the generality-wave training trajectories
 (main paper \S5.2, Table~2); Fig.~\ref{fig:tails} the per-seed tail
-spread behind the sphere row of main-paper Table~1.
+spread behind the sphere row of main-paper Table~1;
+Fig.~\ref{fig:nsig} the torus significant-count check behind
+\S5.1's zero-phantom-handles claim.
 
 \begin{figure*}[t]
 \centering
@@ -33,6 +39,19 @@ Every loss arm sits far below baseline with tight seed spread; the two
 control strengths bracket baseline from \emph{above}; the $\rho$ ablation
 arms are indistinguishable from $\rho{=}0.1$.}
 \label{fig:tails}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+% src: topo3/report/torus_nsig.png (seed-mean significant-H1 count; axis
+% clipped near target, off-scale init transient annotated on-plot)
+\includegraphics[width=0.85\linewidth]{torus_nsig.png}
+\caption{Torus phantom check (main paper \S5.1): significant-H1 count over
+training (seed means; dashed line: true $\beta_1{=}2$). After the brief
+resampling transient near step 100, every loss arm sits exactly on two
+significant loops --- zero phantom handles --- while the repulsion control
+(C2) collapses a loop by step ${\sim}800$ and never recovers it.}
+\label{fig:nsig}
 \end{figure}
 
 \paragraph{The stage-3a gate (main paper \S5).} Fig.~\ref{fig:toys} shows
@@ -63,17 +82,4 @@ H1 bar. \emph{Bottom} (T4): bridged merge with no significant live H0 bar
 case where plain optimal matching provably has zero gradient. (T3,
 mis-spaced components, $1229\times$: omitted for space.)}
 \label{fig:toys}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-% src: topo3/report/torus_nsig.png (seed-mean significant-H1 count; axis
-% clipped near target, off-scale init transient annotated on-plot)
-\includegraphics[width=0.85\linewidth]{torus_nsig.png}
-\caption{Torus phantom check (main paper \S5.1): significant-H1 count over
-training (seed means; dashed line: true $\beta_1{=}2$). After the brief
-resampling transient near step 100, every loss arm sits exactly on two
-significant loops --- zero phantom handles --- while the repulsion control
-(C2) collapses a loop by step ${\sim}800$ and never recovers it.}
-\label{fig:nsig}
 \end{figure}
