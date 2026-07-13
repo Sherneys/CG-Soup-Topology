@@ -1,51 +1,50 @@
 \section{Experimental setup}
 \label{sec:setup}
 
-% Budgets/headroom carried over from the allocation study (Appendix A).
+% Budgets/headroom carried over from the allocation study (suppl. §A).
 % TODO(human): venue-dependent compression.
+% 3DV pass 2026-07-13: appendix ref -> supplementary; ingest prose
+% tightened. Every number kept verbatim with its % src.
 
 \paragraph{Scenes and budgets.} Synthetic COLMAP scenes with analytically
 known topology, rendered from 24--72 Fibonacci-sphere viewpoints at
-200--256\,px (the loader's standard every-8th test holdout leaves 21--63
-training views): sphere and cube
+200--256\,px (every-8th test holdout $\Rightarrow$ 21--63 training
+views): sphere and cube
 (void class H2, $\beta{=}(1,0,1)$, budget $N{=}1200$), torus (loop class H1,
 $(1,2,1)$, $N{=}700$), two spheres (component class H0, $(2,0,2)$, $N{=}700$),
 and genus-2 double torus as a stretch case ($(1,4,1)$, $N{=}2000$). Budgets
-are the allocation study's headroom points (Appendix~\ref{app:companion}) ---
-tight enough that the baseline's topology is imperfect, so there is something
-to win.
+are the allocation study's headroom points (suppl.\ \S A): tight enough
+that baseline topology is imperfect, so there is something to win.
 % src: PHASE2B_CROSSOVER.md (headroom pilot); PHASE3_PLAN.md §6
 Four external, genus-known meshes probe generality beyond the analytic
 family (\S\ref{sec:generality}). Three are watertight benchmarks:
 \emph{spot} (genus 0) and \emph{bob} (genus 1) from the Crane model
 repository (CC0), and the \emph{fandisk} CAD benchmark (genus 0) ---
-rendered with the same pipeline (48 views, 200\,px), class budgets carried
-over unchanged ($N{=}1200$ voids, $N{=}700$ loops), and a seed-0 C0 pilot
-confirming baseline imperfection (tail bottleneck $.043$--$.054$, i.e.\
-inside the analytic shapes' band).
+rendered with the same pipeline (48 views, 200\,px) at unchanged class
+budgets; a seed-0 C0 pilot confirms baseline imperfection (tail bottleneck
+$.043$--$.054$, inside the analytic band).
 % src: output/synth/{spot,bob,fandisk} scene builds; pilot tails = the
 % seed-0 entries of the topo3/report/results.json C0 aggregates
 % (.0429/.0429/.0540 — the pilot's 2026-07-09 quicklook.json was later
 % overwritten by the tomyum/kinkin quicklook, so cite results.json);
 % bundles topo3/fields/{spot,bob,fandisk}_diag.npz
 The fourth, the \emph{tom-yum pot} (Fig.~\ref{fig:tomyum}), probes the step
-every real deployment needs: starting from a raw artist-authored mesh
-rather than a clean benchmark. As exported from Blender it is textbook triangle soup
---- $6{,}318$ vertices in 9 overlapping open shells, mixed quad/12-gon
-faces, 50 boundary edges after exact welding, 232 non-manifold junction
-edges --- with no trustworthy ground-truth topology (the same defect that
-excluded ShapeNet). An ingest-and-certify pass makes it usable:
+every real deployment needs: a raw artist-authored mesh
+rather than a clean benchmark. As exported from Blender it is textbook
+triangle soup --- $6{,}318$ vertices in 9 overlapping open shells, mixed
+quad/12-gon faces, 50 boundary edges after exact welding, 232 non-manifold
+junction edges --- with no trustworthy ground-truth topology (the same
+defect that excluded ShapeNet). An ingest-and-certify pass makes it usable:
 exact-duplicate weld, offset-solidification into a thin closed shell
 (exact unsigned distance field $+$ marching cubes at iso $\varepsilon$),
 dropping 804 enclosed pocket shells, then \emph{certification by
-measurement} --- a closed, edge-manifold, consistently-oriented edge
+measurement} --- closed, edge-manifold, consistently-oriented edge
 certificate, exact simplicial homology, a watertightness cross-check, and
-bit-identical rebuilds ---
-yielding one body of genus 3, $\beta{=}(1,6,1)$ exact ($190{,}990$
-vertices), rendered and budgeted as a void-class shape ($N{=}1200$, 48
-views, 200\,px). Where the benchmark trio's topology is known by
-construction, the pot's is known by certificate --- the pipeline real scans
-will need.
+bit-identical rebuilds --- yielding one body of genus 3, $\beta{=}(1,6,1)$
+exact ($190{,}990$ vertices), rendered and budgeted as a void-class shape
+($N{=}1200$, 48 views, 200\,px). Where the benchmark trio's topology is
+known by construction, the pot's is known by \emph{certificate} --- the
+pipeline real scans will need.
 % naming: rendered as tom-yum pot; the asset, tags and files are named
 % kinkin internally (do not confuse with the constructed CSG pot, which is
 % NOT in this paper).
@@ -53,15 +52,15 @@ will need.
 % verts + raw-soup counts) + scripts/make_kinkin_asset.py (ingest+certify,
 % bit-identical rebuild check); scene: output/synth/kinkin
 The pot also exercises the measurement floor of \S\ref{sec:discussion}
-prospectively: every H1 loop of the certified shell (handle bores, flue)
-sits below the $6\,r_{\mathrm{med}}$ floor at every working $M$, while the
-narrow flue mouth caps at small $\alpha$, so the flue interior reads as an
-enclosed chamber --- an H2 void localized on the pot axis. The void first
+prospectively: no H1 loop of the certified shell (handle bores, flue)
+clears the $6\,r_{\mathrm{med}}$ floor at any working $M$, while the
+narrow flue mouth caps at small $\alpha$, making the flue interior an
+enclosed chamber --- an H2 void on the pot axis. The void first
 clears the floor at $M{=}8192$ (margin $1.20$--$1.23\times$ across five
-sampling seeds), so its target bundle is built there by the pre-registered
-floor rule --- the study's only protocol deviation --- and the loss samples
-the live surface at the same density (the density-matched contract; a
-no-op at the default $M{=}2048$ everywhere else). The bundle carries
+sampling seeds), so the pre-registered floor rule builds its target
+bundle there --- the study's only protocol deviation --- and the loss
+samples the live surface at the same density (the density-matched
+contract). The bundle carries
 exactly one significant bar (H2), stable to re-sampling (${\sim}10^{-5}$).
 % src: PHASE3_STATUS.md Post-3e (make_kinkin_asset.py preflight staircase:
 % (1,0,0)@2048/4096 -> (1,0,1)@8192/20000; margins recomputed live by
@@ -74,10 +73,10 @@ plus the recruitment ablation C6), replication shapes (cube, two spheres) 3
 seeds (C0/C1/C2), double torus 2 seeds. A sensor-noise stress test
 (C7/C7h $=$ C1 $+$ noise; decisive shapes, 3 seeds) perturbs the cloud the
 loss \emph{plan} sees with i.i.d.\ Gaussian noise at every refresh,
-$\sigma = 0.5\%$ and $1\%$ of the target diagonal (${\approx}0.5$ and
-$1.0\times$ the median sample spacing at $M{=}2048$); the pairing, Gabriel
-gates, and recruitment decide on the noisy observation while the pulls
-apply to the true live positions.
+$\sigma = 0.5\%/1\%$ of the target diagonal (${\approx}0.5/1.0\times$ the
+median sample spacing at $M{=}2048$): pairing, Gabriel gates, and
+recruitment decide on the noisy observation; the pulls apply to the true
+live positions.
 % src: methods/topological_loss.py TopoLossState(noise=...); r_med at 2048:
 % experiments/density_bound.py (torus .0104, i.e. 1% of diag ~= 1 spacing)
 The torus restricts the loss to H1: its own void bar is sub-threshold
@@ -100,9 +99,9 @@ at Chamfer parity --- a topological win a dumb regularizer can match is not a
 topological win. \emph{Chamfer parity}, formally: the passing arm's
 seed-mean Chamfer must satisfy
 $\mathrm{Ch}(\mathrm{C1})\le 1.15\,\mathrm{Ch}(\mathrm{C0})$; the $15\%$
-headroom absorbs seed variance and CUDA nondeterminism, and in practice it
-never did any work --- every passing arm's Chamfer was at or below the
-baseline's.
+headroom absorbs seed variance and CUDA nondeterminism and in practice
+never did any work --- every passing arm's Chamfer was at or below
+baseline.
 % src: experiments/topo_loss_report.py PARITY_MULT = 1.15; per-arm
 % chamfer_mean in topo3/report/results.json (all passing arms <= C0)
 CUDA training is not bit-reproducible (baseline re-runs

@@ -3,6 +3,9 @@
 
 % Grounded in methods/topological_loss.py + PHASE3_PLAN.md §3-4.
 % TODO(human): tighten notation to venue conventions.
+% 3DV pass 2026-07-13: display equations reflowed for the two-column
+% measure (gathered/split); C5's appendix ref -> supplementary; wording
+% tightened. All equations and numbers unchanged.
 
 \subsection{Objective}
 DiffSoup trains with a photometric objective $L_{\mathrm{photo}}$ (opacity
@@ -16,9 +19,9 @@ where $V$ are the soup's vertex positions and $L_{\mathrm{topo}}$ compares the
 persistence diagram of the live surface to a fixed \emph{target bundle}
 $\mathcal{T}$: the significant finite bars of the ground-truth shape's
 diagram, computed once at the same sampling density $M$ the loss will see
-(alpha birth/death values shift with point spacing, so density matching is a
-correctness requirement, not a convenience) and normalized by the target's
-bounding-box diagonal, which is locked for all live evaluations.
+(alpha values shift with point spacing: density matching is a correctness
+requirement) and normalized by the target's bounding-box diagonal, which
+is locked for all live evaluations.
 
 \subsection{Live diagram and pair-frozen backward}
 At each refresh we draw $M$ surface samples ($M{=}2048$ unless the
@@ -34,35 +37,34 @@ alpha filtration value is its squared circumradius, so each paired bar's
 coordinates are closed-form functions of a few sample positions, all
 exactly differentiable:
 \begin{equation}
+\begin{gathered}
 R_{\mathrm{edge}}=\tfrac12\lVert p_1{-}p_0\rVert,\qquad
 R_{\mathrm{tri}}=\frac{\lVert u\rVert\,\lVert v\rVert\,\lVert u{-}v\rVert}
-                      {2\,\lVert u\times v\rVert},\qquad
-R_{\mathrm{tet}}=\lVert y\rVert\ \text{with}\
+                      {2\,\lVert u\times v\rVert},\\[2pt]
+R_{\mathrm{tet}}=\lVert y\rVert\quad\text{with}\quad
 A\,y=\tfrac12\operatorname{diag}\!\big(AA^{\!\top}\big),
+\end{gathered}
 \end{equation}
 where $u=p_1{-}p_0$, $v=p_2{-}p_0$, and $A$ stacks the rows $p_i{-}p_0$
 (the circumcenter is $p_0{+}y$). Edges carry H0 deaths and H1 births,
 triangles H1 deaths and H2 births, tetrahedra H2 deaths.
 % src: methods/topological_loss.py circumradius_{edge,triangle,tetra}
 We verify, per pairing, that the re-expressed value matches the filtration
-value (relative $10^{-6}$). A pair failing this Gabriel test is \emph{detached}:
-its term keeps contributing its (correct) value to the loss but propagates
-no gradient through that simplex --- an exactness failure can therefore
-never inject a wrong gradient or destabilize training; the worst case is a
-missing tug for one refresh interval, re-tested at the next re-pairing. On
-all six benchmark shapes 100\% of significant pairs are Gabriel-exact on
-clean clouds, and the sensor-noise stress test (\S\ref{sec:setup}) never
-triggered the fallback --- zero failures across $2{,}400$ noisy refreshes
-(\S\ref{sec:results}). Alternatives compatible with the same gate ---
-dropping failing pairs outright, subgradient surrogates, or locally
-raising $M$ near degeneracies --- exist; detachment is the most
-conservative, and the per-refresh failure count is logged so practitioners
-can judge when a stronger fallback is warranted.
+value (relative $10^{-6}$); a pair failing this Gabriel test is
+\emph{detached} --- it keeps its (correct) value in the loss but propagates
+no gradient through that simplex, so an exactness failure can never inject
+a wrong gradient; the worst case is a missing tug for one refresh interval.
+In practice the gate never fires: 100\% of significant pairs are
+Gabriel-exact on clean clouds across all six benchmark shapes, with zero
+failures in the stress test's $2{,}400$ noisy refreshes
+(\S\ref{sec:results}). The per-refresh failure count is logged, and
+stronger fallbacks (dropping failing pairs, subgradient surrogates,
+locally raising $M$) remain compatible with the gate.
 % src: PHASE3_PLAN.md Appendix A (mapping + Gabriel gates, 22/22)
 The pairing is treated as locally constant --- the standard pair-frozen
-device~\citep{gabrielsson2020topologylayer,carriere2021optimizing} --- and
-refreshed every $K{=}10$ steps and, necessarily, immediately after every
-resampling event, which replaces the vertex and face tensors wholesale.
+device~\citep{gabrielsson2020topologylayer,carriere2021optimizing} ---
+refreshed every $K{=}10$ steps and, necessarily, after every resampling
+event, which replaces the vertex and face tensors wholesale.
 
 \subsection{Matching, diagonal pressure, and recruitment}
 Let $D$ be the live significant bars and $\mathcal{T}$ the target bars of one
@@ -70,16 +72,18 @@ dimension. An optimal partial matching (Hungarian on the standard augmented
 cost; equivalently $W_2$) splits bars into matched pairs, unmatched live, and
 unmatched target:
 \begin{equation}
+\begin{split}
 L_{\mathrm{topo}} = \!\!\sum_{(i,j)\,\mathrm{matched}}\!\!\!
-  \big[(b_i-b^*_j)^2+(d_i-d^*_j)^2\big]
+  \big[(b_i-b^*_j)^2+(d_i-d^*_j)^2\big]\\[-2pt]
  \;+\; \sum_{i\,\mathrm{unmatched}} \Big(\tfrac{d_i-b_i}{2}\Big)^{\!2}
  \;+\; L_{\mathrm{recruit}} .
+\end{split}
 \end{equation}
 The first term pulls matched features to their target coordinates; the second
 pushes spurious features to the diagonal. The third exists because optimal
 matching has a blind spot: when a target feature is entirely missing, the
-cheapest transport diagonalizes both sides and the gradient is exactly zero
---- precisely in the most important failure case. Recruitment restores a
+cheapest transport diagonalizes both sides and the gradient is exactly
+zero. Recruitment restores a
 descent direction. Let $\mathcal{T}_{\mathrm{miss}}$ be the unmatched target
 bars, processed in decreasing persistence order, and let the candidate pool
 $\mathcal{A}$ hold every live bar not claimed by the matching --- unmatched
@@ -88,11 +92,12 @@ never sees. Each missing target greedily claims its nearest pool bar,
 without replacement, under the same squared birth--death metric as the
 matched term:
 \begin{equation}
-L_{\mathrm{recruit}} = \!\!\sum_{j\in\mathcal{T}_{\mathrm{miss}}}\!\!
-  \big[(b_{k(j)}-b^*_j)^2+(d_{k(j)}-d^*_j)^2\big],
-\quad
-k(j) = \operatorname*{arg\,min}_{k\,\in\,\mathcal{A}_j}
+\begin{split}
+L_{\mathrm{recruit}} &= \!\!\sum_{j\in\mathcal{T}_{\mathrm{miss}}}\!\!
+  \big[(b_{k(j)}-b^*_j)^2+(d_{k(j)}-d^*_j)^2\big],\\
+k(j) &= \operatorname*{arg\,min}_{k\,\in\,\mathcal{A}_j}
   \big[(b_k-b^*_j)^2+(d_k-d^*_j)^2\big],
+\end{split}
 \end{equation}
 where $\mathcal{A}_j$ is the pool remaining after earlier recruitments;
 recruited bars are excluded from the diagonal term. Both coordinates of the
@@ -115,9 +120,8 @@ scheduling, is what makes the knob safe.
 The window itself carries no measurable sensitivity either: alternative
 ramps ($10$--$40\%$ and $30$--$60\%$ of training; sphere, three seeds) land
 at $.0154{\pm}.0017$ and $.0179{\pm}.0019$ against the default window's
-$.0156{\pm}.0013$ --- within seed noise. The $20{:}50$ default is a
-conservative choice (let photometric pressure establish coarse geometry
-before topology guidance activates), not a tuned hyperparameter.
+$.0156{\pm}.0013$ --- within seed noise; the $20{:}50$ default is a
+conservative choice, not a tuned hyperparameter.
 % src: ramp_1040/quicklook.json + ramp_3060/quicklook.json (2026-07-09)
 
 \subsection{Conditions}
@@ -126,12 +130,11 @@ C0: baseline (photometric only). C1: $+L_{\mathrm{topo}}$. C2: $+$ a
 short-range repulsion on the \emph{same} frozen samples, calibrated with the
 \emph{same} $\rho$ --- a norm-matched non-topological control through the
 identical channel (C2g: a gentler radius). C3: C1 without the ramp.
-C5: C1 combined with the best prior of our allocation-channel study
-(the spread topological resampling field B4; defined in
-Appendix~\ref{app:companion}). C6: C1 with the recruitment term removed
+C5: C1 $+$ the best prior of our allocation study (the spread topological
+field B4; suppl.\ \S A).
+C6: C1 with the recruitment term removed
 (pure matching $+$ diagonal, all else identical) --- does recruitment matter
-in-loop, or only for cold-start repair? The hook adds one loss line to
-the training loop; with the flag off, no new code executes, and a $\rho{=}0$
-run is divergence-equivalent to baseline re-runs under CUDA
-nondeterminism.
+in-loop, or only for cold-start repair? The hook adds one loss line to the
+training loop; flag off, no new code executes, and a $\rho{=}0$ run is
+divergence-equivalent to baseline under CUDA nondeterminism.
 % src: PHASE3_PLAN.md Appendix B (cleanliness, revised criterion)

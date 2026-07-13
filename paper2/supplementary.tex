@@ -1,0 +1,48 @@
+% ============================================================================
+%  SUPPLEMENTARY MATERIAL — 3DV 2027 submission (due 2026-09-02)
+%  Build:  cd paper2 && tectonic supplementary.tex
+%
+%  Contents: the two former in-paper appendices, moved here for the 3DV page
+%  limit (author decision anticipated in appendix_companion.tex since
+%  2026-07-09). Section files are shared with the old single-document build;
+%  their % src: grounding comments are unchanged. Counters are S-prefixed so
+%  the main paper can cite "suppl. Table S1 / Fig. S1" unambiguously.
+%  No \cite here, so no bibliography is emitted.
+% ============================================================================
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage[review]{cvpr}      % same anonymous review mode as the paper
+% \usepackage{cvpr}              % camera-ready
+
+\usepackage[dvipsnames]{xcolor}
+\definecolor{cvprblue}{rgb}{0.21,0.49,0.74}
+\usepackage[pagebackref,breaklinks,colorlinks,citecolor=cvprblue]{hyperref}
+
+%%%%%%%%% PAPER ID — keep in sync with main.tex
+\def\paperID{*****}
+\def\confName{3DV\xspace}
+\def\confYear{2027\xspace}
+
+\graphicspath{{figures/}}
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{[\,TODO: #1\,]}}}
+
+\title{Supplementary Material for\\
+       Topology-Correcting Differentiable Triangle-Soup Reconstruction\\
+       via Persistent Homology}
+
+% DOUBLE-BLIND: anonymous in review mode, same as main.tex.
+\author{}
+
+\begin{document}
+\maketitle
+
+% S-prefixed counters: the main paper refers to these as Table S1-S3, Fig. S1.
+\appendix
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\input{sections/appendix_companion}
+\input{sections/appendix_diagnostics}
+\input{sections/appendix_extra_figs}
+
+\end{document}

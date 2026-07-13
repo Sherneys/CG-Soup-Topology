@@ -1,4 +1,74 @@
-# PAPER 2 — CURRENT STATE (2026-07-11)
+# PAPER 2 — 3DV 2027 SUBMISSION FORMAT (2026-07-13)
+
+**VENUE DECIDED: อาจารย์ agreed with 3DV (you, 2026-07-13).** Timeline
+(re-verified on the official 3DV 2027 site today): **papers due
+2026-08-28**, supplementary 2026-09-02, preliminary notification
+2026-10-27, final 2026-12-02, conference Apr 6–9 2027 (Thessaloniki).
+Limit: **8 pages incl. figures/tables; reference-only pages free;
+double-blind via OpenReview.** Risk chain unchanged: prelim negative →
+CVPR 2027 (abstract ~Nov 15); SGP 2027 (~Feb/Apr, → CGF journal) stays
+the natural second target.
+
+**The promised template + anonymization + compression pass is DONE (this
+commit).** What changed:
+
+- **Style**: 3DV 2026 author kit (`cvpr.sty` + `ieeenat_fullname.bst`,
+  vendored into `paper2/`). The 2027 kit was NOT posted as of 2026-07-13 —
+  when it appears (expect `3dvconf.github.io/files/2027/author-kit-3DV2027.zip`),
+  diff against the 2026 sty and swap; `\confYear` is already 2027.
+- **Double-blind review mode**: `\usepackage[review]{cvpr}` renders
+  "Anonymous 3DV submission / Paper ID *****" + confidential header +
+  line numbers. The real author block is **commented out in main.tex** —
+  restore it for the camera-ready. **Fill `\paperID` in BOTH main.tex and
+  supplementary.tex after OpenReview registration.**
+- **Page budget: body ends exactly at page 8**; references fill pp. 9–10
+  (allowed). **Zero overfull hboxes** — the 3 pre-existing ones died with
+  the reformat, as predicted.
+- **supplementary.tex** (NEW, 4 pp, builds separately, same anonymous
+  style; due Sep 2): §A allocation study (Tables S1/S2), §B diagnostics
+  (Table S3, Fig. S1 pd-trajectories), §C additional figures + the repair
+  gate (Fig. S2 generality trajectories, S3 sphere per-seed tails, S4
+  gate toys, S5 torus phantom check). Main text cites them as
+  "suppl. Fig. S1…S5 / Table S1…S3" in plain text (no \ref across docs).
+- **Moved to supplementary** (numbers stay in the main text; figures and
+  mechanism prose moved): the two appendices (as planned since 07-09),
+  the §5.1 gate figure + its mechanism paragraph, fig:gen, fig:tails,
+  fig:nsig. Main keeps tab:main*, fig:series*, tab:gen*, and the tom-yum
+  pot figure (advisor's aluminium render).
+- **Compression ~25% of prose**: every number verbatim, every `% src:`
+  comment kept attached to its claim, all `TODO(human)` markers
+  preserved. True redundancies merged: the pot paragraph folded into the
+  observations paragraph; discussion's recruitment paragraph folded into
+  the measurability paragraph (content also in results C6 ¶ + suppl §C).
+  The advisor's §6–7 merge was NOT needed — both sections survive.
+- **`scripts/audit_paper2.py` re-run after conversion: ALL numeric checks
+  pass**; no rendered "kinkin", no rendered TODO, no missing
+  refs/cites/figure files.
+- **Build**: `tools\tectonic.exe` is a NEW stable copy (gitignored;
+  the old temp-scratchpad copy can vanish any day).
+  `cd paper2 && ..\tools\tectonic.exe main.tex` and
+  `..\tools\tectonic.exe supplementary.tex`.
+
+**Your remaining work:**
+1. **Voice pass** — the `TODO(human)` spots are unchanged (abstract,
+   intro, related, method notation, discussion). Prose got denser in the
+   compression; read it as yours before submitting.
+2. **OpenReview registration** when the portal opens → `\paperID` in both
+   tex files.
+3. **Swap the official 2027 kit** when posted (see above).
+4. **Reply to อาจารย์**: 3DV confirmed. One dangling thread from your
+   message: the **SA 2026 poster (deadline 2026-07-31)** proposal — he
+   answered the venue question but not the poster; ask if you still want
+   that parallel submission (it is novelty-safe and 18 days out).
+5. Camera-ready (after acceptance): uncomment the author block, switch
+   `[review]` → plain `cvpr`, consider regenerating the 130-dpi PNGs at
+   print resolution.
+
+The pre-conversion single-document 20 pp version is at commit `cadf36c`.
+
+---
+
+# PAPER 2 — CURRENT STATE (2026-07-11, superseded 2026-07-13: venue decided, 3DV format in)
 
 **kinkin is now IN the paper, rendered as "the tom-yum pot"** (user
 instructions 2026-07-11: "put the kinkin results in paper 2 before choosing
@@ -124,8 +194,10 @@ draft):**
 >
 > ขอบพระคุณครับ
 
-**Your remaining work:** send that message; voice pass. After venue
-confirmation: template + double-blind + compression (delegable).
+**Your remaining work:** ~~send that message~~ (sent; advisor answered
+**3DV** 2026-07-13); voice pass. ~~After venue confirmation: template +
+double-blind + compression (delegable)~~ — DONE 2026-07-13, see the top
+section.
 
 ---
 

@@ -1,4 +1,3 @@
-\appendix
 \section{The allocation-channel study, in brief}
 \label{app:companion}
 
@@ -9,8 +8,10 @@
 % src: figures/summary.md a.k.a. blindness_results.json (Phase 1);
 %      h2_unified/report/results.json (voids, 5 paired seeds);
 %      crossover/report/results.json (torus incl. B5).
-% NOTE(author): at venues with strict page limits this appendix moves to the
-% supplementary material unchanged.
+% MOVED to the supplementary (3DV page limit, 2026-07-13) exactly as the
+% NOTE(author) here anticipated; \appendix now lives in supplementary.tex.
+% Anonymity: "our" is double-blind-safe — the study is unpublished and
+% travels with this submission; it names no authors.
 
 This appendix reports, with their numbers, the three findings of our
 allocation-channel study --- controlled resampling-prior experiments on the
@@ -28,15 +29,16 @@ the topologically wrong candidate. Chamfer cannot tell a benign bump from a
 destroyed void; the persistence metric can.
 % src: figures/summary.md (Phase-1 result table, 3/3 gate)
 
-\begin{table}[h]
-\centering\small
+\begin{table*}[t]
+\centering
 \caption{Blindness probes: A topologically correct, B wrong, geometry
 bisection-matched so Chamfer is equal by construction. Bottleneck to ground
 truth in the discriminating dimension.}
 \label{tab:blindness}
+\small
 \begin{tabular}{lcccc}
 \toprule
-case (disc.\ dim) & Chamfer\% A $=$ B & bott.\ A & bott.\ B & ratio \\
+case (disc.\ dim) & Cham.\% A $=$ B & bott.\ A & bott.\ B & ratio \\
 \midrule
 % src: figures/summary.md (Phase-1 result table)
 thin handle, genus $0{\to}1$ (H1) & 0.916 & ${\approx}0$ & .0302 & --- \\
@@ -44,7 +46,7 @@ bridge merges two components (H0) & 0.628 & .0014 & .0574 & $40\times$ \\
 punctured enclosed void (H2)      & 0.977 & .0040 & .1385 & $35\times$ \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \paragraph{(2) The prior arms, and why voids are ``width-primary''.} The
 study biases DiffSoup's own resampler with a precomputed importance field
@@ -54,13 +56,12 @@ kernels at the coordinates $C_f$ of its birth/death-simplex vertices ---
 the loop-filling triangle, void-filling tetrahedron, or component-merging
 edge --- sized by the feature's own death scale:
 \begin{equation}
+\begin{gathered}
 \phi_d(q)=\!\!\sum_{f:\,\dim f=d}\,\sum_{c\in C_f}\! w_f\,
-  e^{-\lVert q-c\rVert^2/(2\sigma_f^2)},
-\quad
+  e^{-\lVert q-c\rVert^2/(2\sigma_f^2)},\qquad w_f = p_f/s^2,\\
 \sigma_f = s\,\mathrm{clip}\!\big(\sqrt{\smash[b]{\mathrm{death}_f}},\,
   3r_{\mathrm{med}},\,\tfrac{1}{2}\mathrm{diag}\big),
-\quad
-w_f = p_f/s^2,
+\end{gathered}
 \end{equation}
 evaluated on a dense target-surface sample, normalized per dimension to
 $[0,1]$ (99.5th percentile), combined by max; a query takes its nearest
@@ -83,20 +84,23 @@ bottleneck $33$--$53\%$ below baseline --- but the width-matched random
 control B5 recovers most of that gain, leaving only a small, shape-dependent
 topological residual (cylinder $4.6\sigma$, sphere $2.2\sigma$, cube tie);
 one-shot placement washes out entirely (B1 $\approx$ B0, $.0546$ vs $.0535$
-on the sphere). Hence the verdict quoted in
-\S\ref{sec:intro}: the prior's topological value is carried largely by its
-spatial \emph{width}.
+on the sphere). Hence the verdict quoted in the main paper's introduction:
+the prior's topological value is carried largely by its spatial
+\emph{width}.
 % src: h2_unified/report/results.json (all five arms, paired seeds)
 
-\begin{table}[h]
-\centering\small
+\begin{table}[t]
+\centering
 \caption{Allocation study, void class (H2), $N{=}1200$, five paired seeds:
 tail bottleneck to target (lower is better). Spread beats concentrated;
 the width-matched random control (B5) recovers most of the spread gain.}
 \label{tab:companion}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{lccccc}
 \toprule
-shape & B0 & B2 concentrated & B3 narrow rand. & B4 spread & B5 wide rand. \\
+ & & B2 & B3 & B4 & B5 \\
+shape & B0 & conc. & narrow rand. & spread & wide rand. \\
 \midrule
 % src: h2_unified/report/results.json (bott_tail_mean)
 sphere   & .0535 & .0438 & .0440 & \textbf{.0357} & .0374 \\
@@ -114,6 +118,6 @@ narrow random B3 ($.0397$); the concentrated topological field B2 is worst
 ($.0425$) \emph{and} manufactures phantom handles --- final significant-H1
 count $4.4$ against the true $2.0$, with the worst Chamfer ($1.32$ vs
 baseline $1.01$). Spreading merely stops the harm; it never beats the random
-control. That failure is the opening premise of this paper, and the class
-the loss channel wins (\S\ref{sec:cmatrix}, Table~\ref{tab:main}).
+control. That failure is the opening premise of the main paper, and the
+class the loss channel wins there (main paper \S5.1, Table~1).
 % src: crossover/report/results.json (torus B0/B2/B3/B4/B5 + final_nsig)

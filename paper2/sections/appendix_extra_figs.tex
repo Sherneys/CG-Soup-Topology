@@ -1,0 +1,79 @@
+\section{Additional result figures and the repair gate}
+\label{app:extrafigs}
+
+% Moved from the main paper's §5 for the 3DV page limit (2026-07-13):
+% fig:gen (S2), fig:tails (S3), and the stage-3a gate figure fig:toys (S4)
+% with its mechanism prose. Captions and % src comments carried over
+% verbatim; the verdicts these figures illustrate are stated with their
+% numbers in main-paper §5.
+
+Fig.~\ref{fig:gen} shows the generality-wave training trajectories
+(main paper \S5.2, Table~2); Fig.~\ref{fig:tails} the per-seed tail
+spread behind the sphere row of main-paper Table~1.
+
+\begin{figure*}[t]
+\centering
+% src: topo3/report/{bob,fandisk}_series.png (topo_loss_report.py)
+\includegraphics[width=0.495\linewidth]{bob_series.png}\hfill
+\includegraphics[width=0.495\linewidth]{fandisk_series.png}
+\caption{Generality trajectories (line = seed mean, band = seed min--max).
+\emph{Left}: bob (genus 1) --- the H1 result off the analytic family: the
+loss halves the loop error with $\#$sig H1 $= 2$ in every seed, while the
+control rides the baseline after collapsing a loop. \emph{Right}: fandisk
+(CAD) --- the largest effect measured in this study ($10.4\times$).}
+\label{fig:gen}
+\end{figure*}
+
+\begin{figure}[t]
+\centering
+% src: topo3/report/sphere_tail.png (per-seed tail means; results.json)
+\includegraphics[width=0.9\linewidth]{sphere_tail.png}
+\caption{Sphere, per-seed tail bottlenecks (dots) with arm means (bars).
+Every loss arm sits far below baseline with tight seed spread; the two
+control strengths bracket baseline from \emph{above}; the $\rho$ ablation
+arms are indistinguishable from $\rho{=}0.1$.}
+\label{fig:tails}
+\end{figure}
+
+\paragraph{The stage-3a gate (main paper \S5).} Fig.~\ref{fig:toys} shows
+three of the four repair probes run before integration: the loss alone
+(no photometric term, Adam directly on point positions) must repair
+defective clouds. The predicted location-blind pathology of recruitment
+did not materialize, for a mechanism reason worth stating: tearing a
+2-manifold shell cannot grow a component bar past the local detour scale
+(the tug is abandoned), while cutting the 1-D bridge raises the recruited
+bar's death monotonically toward target --- the runaway concentrates on
+the only profitable direction.
+% src: figures/phase3_toy/t{1..4}.json (PHASE3_PLAN.md Appendix A)
+
+\begin{figure}[t]
+\centering
+% src: figures/phase3_toy/t{1,2,4}.png (tests/test_topo_loss.py artifacts;
+% title bands cropped for print, panel data untouched; factors in t*.json)
+\includegraphics[width=\linewidth]{toy_t1.png}\\[2pt]
+\includegraphics[width=\linewidth]{toy_t2.png}\\[2pt]
+\includegraphics[width=\linewidth]{toy_t4.png}
+\caption{The stage-3a gate: the loss alone (Adam on raw points, no
+photometric term) repairs defective clouds; each row shows initial cloud,
+final cloud, and bottleneck-to-target trajectory. \emph{Top} (T1):
+punctured sphere --- the matched birth term closes the void ($8.8\times$).
+\emph{Middle} (T2): spurious handle --- the diagonal term kills the extra
+H1 bar. \emph{Bottom} (T4): bridged merge with no significant live H0 bar
+--- recruitment severs the bridge ($450\times$, $\beta_0\,1{\to}2$), the
+case where plain optimal matching provably has zero gradient. (T3,
+mis-spaced components, $1229\times$: omitted for space.)}
+\label{fig:toys}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+% src: topo3/report/torus_nsig.png (seed-mean significant-H1 count; axis
+% clipped near target, off-scale init transient annotated on-plot)
+\includegraphics[width=0.85\linewidth]{torus_nsig.png}
+\caption{Torus phantom check (main paper \S5.1): significant-H1 count over
+training (seed means; dashed line: true $\beta_1{=}2$). After the brief
+resampling transient near step 100, every loss arm sits exactly on two
+significant loops --- zero phantom handles --- while the repulsion control
+(C2) collapses a loop by step ${\sim}800$ and never recovers it.}
+\label{fig:nsig}
+\end{figure}

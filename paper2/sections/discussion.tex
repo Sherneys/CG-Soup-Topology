@@ -1,93 +1,73 @@
 \section{Mechanism and discussion}
 \label{sec:discussion}
 
-% TODO(human): voice pass; consider merging with results at venue length.
+% TODO(human): voice pass.
+% 3DV pass 2026-07-13: appendix/fig refs -> supplementary; tightened.
+% All numbers verbatim.
 
 \paragraph{Sparse tugs vs.\ budget allocation.} Each significant pair
 back-propagates through the $3$--$7$ sample positions of its birth and
-death simplices, so the loss delivers \emph{precise but sparse} pulls,
-iterated by re-pairing --- the toy probes show surgery ``walking'' around a
-defect a few points at a time; the prior, by contrast, biases every
-respawn decision diffusely across a feature's whole support. The
-resampling prior is the opposite: broad, indirect, budget-limited. The
-results sort cleanly along this axis: 1-D loops, which the prior could only
-over- or under-tessellate, respond to precise value pressure (H1 win); wide
-2-D shells benefit from both (H2: prior helps, loss helps more, composition
-best); 0-D component structure needs neither --- any spreading pressure
-suffices (H0 null, three channels).
+death simplices: \emph{precise but sparse} pulls, iterated by re-pairing
+--- the toys show surgery ``walking'' around a defect a few points at a
+time; the resampling prior is the opposite --- broad, indirect,
+budget-limited. The results sort cleanly along this axis: 1-D loops, which
+allocation can only over- or under-tessellate, respond to value pressure
+(H1 win); wide 2-D shells benefit from both (prior helps, loss helps more,
+composition best); 0-D structure needs neither (H0 null, three channels).
 
 \paragraph{Why the control damages topology.} The norm-matched repulsion
-imposes a length-scale floor on the sampled surface; the void's death time
-pins at that equilibrium (identical across seeds) and thin structures
-collapse ($\beta_2$ loss on the cube, $\beta_1$ loss on the torus).
-Fig.~\ref{fig:pdtraj} makes this visible: once the repulsed cloud reaches
-its equilibrium spacing, no refinement can tighten the void closure --- the
-death coordinate is pinned, then dragged, while near-diagonal phantom bars
-accumulate. The loss has no such length-scale constraint: it pulls the
-death coordinate itself and the geometry follows, rather than the other
-way around. This sharpens the control argument: spending the same gradient
-budget through the same channel \emph{without} topological information is
-not neutral --- it is harmful --- so C1's wins cannot be an artifact of
-extra regularization.
+imposes a length-scale floor on the sampled surface: the void's death
+pins at that equilibrium (identical across seeds), then drags, while
+near-diagonal phantom bars accumulate (diagram trajectories: suppl.\
+Fig.~S1), and thin structures collapse ($\beta_2$ on the cube, $\beta_1$
+on the torus). The loss has no length-scale constraint --- it pulls the
+death coordinate itself and the geometry follows. This sharpens the
+control argument: spending the same gradient budget through the same
+channel \emph{without} topological information is not neutral but
+harmful, so C1's wins cannot be an artifact of extra regularization.
 
 \paragraph{Measurability at the loss's density.} A persistence loss can only
 enforce features that clear the significance floor at its sampling density
 $M$: the torus void and the double torus's two tube loops do not, at
-$M{=}2048$. We treat this as a principle rather than a nuisance: the target
+$M{=}2048$. We treat this as a principle, not a nuisance: the target
 bundle is built (and audited) at the same $M$, features below the floor are
-excluded from the objective, and the double-torus stretch case is evaluated
-against its two measurable loops --- which is also all the reconstruction
-itself can express at feasible budgets. Raising $M$ buys resolution at
-linear-ish persistence cost; the trade is explicit and logged at bundle-build
-time.
+excluded from the objective, and the double torus is evaluated
+against its two measurable loops --- also all the reconstruction
+itself can express at feasible budgets.
 
-The floor is quantifiable. A bar is significant iff its lifetime exceeds
+The floor is quantifiable: a bar is significant iff its lifetime exceeds
 $6\,r_{\mathrm{med}}(M)$ ($r_{\mathrm{med}}$ = median nearest-neighbour
 spacing, the implementation's self-calibrating threshold), and
 $r_{\mathrm{med}}$ follows the uniform-sampling law $\propto M^{-1/2}$
 (measured $.0090{\to}.0028$ over $M{=}2048{\to}20000$; ratio $3.16$ vs
-$\sqrt{9.77}{=}3.13$). This puts numbers on both stories in this paper. The
+$\sqrt{9.77}{=}3.13$). The
 double torus's tube loops live at lifetime $.045$--$.046$ on the clean
 surface: at $M{=}2048$ that is $0.83$--$0.85\times$ the floor --- invisible
 by a $15\%$ margin, clearing it only from $M\!\approx\!3{\times}10^{3}$ ---
 while at the evaluation density ($M{=}20000$, floor $.0171$) they clear it
 $3.1\times$; the binding constraint there is the \emph{representation}
-(the soup never expresses the tubes at any feasible $N$), so raising $M$
+(the soup never expresses the tubes), so raising $M$
 alone cannot close the gap. The torus quantifies the interaction with
-reconstruction noise: its second loop clears the clean-surface floor by
-only $1.33\times$, a margin the live cloud's noise consumes --- which is
-exactly why that loop is chronically sub-threshold during training and
-recruitment becomes its only gradient path (the C6 ablation).
-Appendix~\ref{app:diagnostics} tabulates the counts across $M$; at
-$M{=}4096$ all four double-torus loops clear the floor. The tom-yum pot ran
-the rule \emph{prospectively}: on the certified shell no H1 loop clears the floor at
-any working $M$, while the flue void first clears it at $M{=}8192$
-($1.20$--$1.23\times$ across sampling seeds) --- so the rule, not judgment,
-picked both the observable class and the bundle density before any training
-run (\S\ref{sec:setup}), and the in-loop result (Table~\ref{tab:gen})
-validated the choice. Adaptive or
-multi-scale density --- raising $M$ where features sit near the floor, or
-hierarchical floors --- is the natural extension; the trade is explicit,
-since persistence cost grows $O(M\log M)$.
+noise: its second loop clears the clean floor by only $1.33\times$, a
+margin the live cloud's noise consumes --- why it is chronically
+sub-threshold in training and recruitment is its only gradient path (C6).
+Recruitment is thus how the loss reaches below its own significance floor
+on the live side --- landscape-guided in practice (unproductive tears
+self-extinguish at the local detour scale; suppl.\ \S C), with the
+location-blindness caveat standing for target features larger than any
+achievable detour.
+Suppl.\ Table~S3 tabulates the counts across $M$ (at $4096$ all four
+double-torus loops clear). The tom-yum pot ran the rule
+\emph{prospectively} (\S\ref{sec:setup}): it picked observable class and
+bundle density before any training run; the in-loop result
+(Table~\ref{tab:gen}) validated it. Adaptive or multi-scale density is
+the natural extension; the trade is explicit, since persistence cost
+grows $O(M\log M)$.
 % src: kinkin staircase/margins: PHASE3_STATUS.md Post-3e (preflight of
 % scripts/make_kinkin_asset.py; live recompute in make_kinkin_brief_docx.py)
 % src: experiments/density_bound.py — persistence_from_target on the GT
-% meshes at M in {2048, 20000}, seed 0 (2026-07-09); M-sweep in App. B
-
-\paragraph{Recruitment is landscape-guided in practice --- and it is the
-mechanism for loops.} Its location blindness --- pull the nearest bar
-anywhere --- did not misfire on our geometry because unproductive tears
-self-extinguish (their bar's death saturates at the local detour scale)
-while productive cuts run away toward the target. The caveat stands for
-target features larger than any achievable detour; the probe and its
-mechanism are reported so the term is used with eyes open. The C6 ablation
-sharpens its role beyond cold-start repair: a loop that never clears the
-live significance floor at $M$ receives metric pressure \emph{only} through
-recruitment, at every refresh --- matching alone reduces the torus to
-baseline. Recruitment is how the loss reaches below its own significance
-floor on the live side.
+% meshes at M in {2048, 20000}, seed 0 (2026-07-09); M-sweep in suppl. §B
 
 \paragraph{Prescription.} Correct topology in the \emph{loss}; allocate
-budget with a \emph{wide} prior; combine for the best of both. Curriculum
-schedules are unnecessary once the loss scale is calibrated against the
-photometric gradient.
+with a \emph{wide} prior; combine. Curriculum schedules are unnecessary
+once the loss scale is calibrated against the photometric gradient.

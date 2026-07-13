@@ -14,3 +14,14 @@ paper/*.out
 paper/*.toc
 paper/*.fls
 paper/*.fdb_latexmk
+paper2/*.aux
+paper2/*.bbl
+paper2/*.blg
+paper2/*.brf
+paper2/*.log
+paper2/*.out
+paper2/*.toc
+paper2/*.xdv
+
+# Local tool binaries (tectonic.exe lives here; not for the repo)
+tools/

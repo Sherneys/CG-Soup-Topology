@@ -3,24 +3,22 @@
 
 % Added per advisor round 2 (the paper previously ended at Limitations).
 % TODO(human): voice pass.
+% 3DV pass 2026-07-13: tightened; content unchanged.
 
-This paper moved topology out of the resampler's allocation channel and
-into the training objective of a differentiable triangle-soup pipeline.
-Four things carry the contribution: a matched persistence loss whose
+We moved topology out of the resampler's allocation channel into the
+training objective. Four things carry it: a matched
+persistence loss whose
 pair-frozen backward is \emph{certified} per pairing by a Gabriel-exactness
-gate; a recruitment term that restores the gradient optimal matching
-provably lacks for missing features --- and which an ablation shows is the
-load-bearing mechanism for the loop class; a channel-controlled evaluation
-in which every gain must beat a norm-matched non-topological control at
-Chamfer parity; and a quantified account of the method's floors (the
-$6\,r_{\mathrm{med}}(M)$ measurement floor and the budget-$N$
-representation ceiling). The verdicts replicate on external genus-known
-meshes --- including a raw artist mesh ingested and certified by
-measurement --- without per-shape tuning, and degrade gracefully under
-sensor noise.
-The prescription stands: correct topology in the \emph{loss}, allocate
-budget with a \emph{wide} prior, and combine them --- the two channels are
-complementary, and the composition is best everywhere tested. Future work:
-open surfaces and real scans (boundary-aware persistence), adaptive or
-multi-scale sampling density, template-free targets (genus-level
-penalties), and curvature-weighted spatial masking of the loss.
+gate; a recruitment term restoring the gradient optimal matching
+provably lacks for missing features --- the load-bearing mechanism for
+loops; a channel-controlled evaluation where every gain must beat
+a norm-matched non-topological control at Chamfer parity; and a quantified
+account of the floors (measurement, $6\,r_{\mathrm{med}}(M)$;
+representation, budget $N$). The verdicts replicate
+on external genus-known meshes --- including a raw artist mesh certified
+by measurement --- without per-shape tuning, and degrade gracefully
+under noise.
+The prescription: correct topology in the \emph{loss}, allocate with a
+\emph{wide} prior, combine. Future work: open surfaces and real scans,
+adaptive sampling density, template-free targets, curvature-weighted
+masking.

@@ -2,57 +2,52 @@
 \label{sec:limitations}
 
 % TODO(human): trim to venue length; keep the honesty.
+% 3DV pass 2026-07-13: tightened ~25%; all five topics and every number
+% kept.
 
 \textbf{Synthetic, closed, single-machine.} All quantitative claims are on
-synthetic renders of closed surfaces with known topology, on one GPU. The
-scene family is analytic plus four external genus-known meshes
-(\S\ref{sec:generality}; one of them a raw artist mesh ingested and
-certified --- the intended path for scans) --- still short of a public
-shape-set benchmark ---
-and a real (open-surface, clinical) demonstration remains future work; open
-surfaces add a genuine research obstacle --- scan boundaries contaminate H1,
-and no clean ground-truth diagram exists. Concrete paths exist: a
-boundary-aware persistence definition (relative homology), filtering
-boundary-born bars before matching, or template-aligned initialization
-that suppresses boundary noise; we judge bar-filtering the pragmatic
-near-term step, with a synthetic open-surface stress test (a ray-cast
-solid plus point noise) as the natural first experiment.
+synthetic renders of closed surfaces with known topology, on one GPU: an
+analytic family plus four external genus-known meshes
+(\S\ref{sec:generality}; one a raw artist mesh ingested and certified ---
+the intended path for scans), still short of a public benchmark. A real
+(open-surface, clinical) demonstration remains future work: scan
+boundaries contaminate H1 and no clean ground-truth diagram exists; of
+the concrete paths (boundary-aware persistence, filtering boundary-born
+bars, template-aligned initialization) we judge bar-filtering the
+pragmatic near-term step, with a synthetic open-surface stress test
+first.
 
 \textbf{Density floor.} The loss cannot see features below the significance
 threshold at its sampling density (torus void; two of four double-torus
-loops at $M{=}2048$). The bundle audit makes this visible, not invisible ---
-but it is a real ceiling on what the objective can enforce.
+loops at $M{=}2048$); the bundle audit makes this visible, not invisible
+--- but it is a real ceiling on what the objective can enforce.
 
 \textbf{Fixed target diagram.} The target bundle presumes known ground-truth
-topology (true in reconstruction-from-scans settings where a prior scan or
-template exists; not in blind capture). Three template-free designs are
-natural but untested here: minimizing total persistence (risks collapsing
-legitimate structure), enforcing a target \emph{genus} via a penalty on
-the significant-H1 count (the most robust of the three, and the one we
-would try first for blind capture), or statistical priors over a shape
-class's diagrams.
+topology (true where a prior scan or template exists; not in blind
+capture). Template-free designs are natural but untested: minimizing total
+persistence (risks collapsing legitimate structure), a target-\emph{genus}
+penalty on the significant-H1 count (what we would try first), or
+statistical priors over a shape class's diagrams.
 
 \textbf{Control strength.} The repulsion control is aggressive (it destroys
 topology at the calibrated magnitude); a gentler variant at half the radius
 is still $1.6\times$ worse than baseline (sphere: $.0972$ vs $.0623$), so the
-verdicts do not hinge on control tuning --- but control \emph{design} for
-loss-channel studies deserves more variety than one family at two strengths.
+verdicts do not hinge on control tuning --- but control \emph{design}
+deserves more variety than one family at two strengths.
 % src: topo3/report/results.json
 
 \textbf{Nondeterminism.} DiffSoup's CUDA training is not bit-reproducible:
 divergence enters at resampling, where borderline prune/split decisions
-flip under floating-point drift, so even baseline re-runs differ in
-detail. Quantitatively, tail coefficients of variation run $7$--$10\%$ for
-baseline and loss arms alike, and a loss-identical re-run pair (the sphere
-C6 arm, which is C1 by construction there) landed $6\%$ apart --- the
-scale of pure run-to-run noise. All statements are therefore seed-averaged
-with Welch statistics.
+flip under floating-point drift. Tail coefficients of variation run
+$7$--$10\%$ for baseline and loss arms alike, and a loss-identical re-run
+pair (the sphere C6 arm, which is C1 by construction there) landed $6\%$
+apart --- the scale of pure run-to-run noise. All statements are
+seed-averaged with Welch statistics.
 % src: topo3/report/results.json (sd/mean per arm); C6-vs-C1 sphere
 % ("Deferred arms" removed 2026-07-09 per advisor revision item 5.)
 
 \textbf{Recruitment guarantees.} Recruitment's self-correction premise ---
 unproductive edits saturate at the local detour scale --- is validated
 empirically (toys, training, stress test), not proven; pathological
-geometries (very thin filaments, tightly constrained manifolds) could
-defeat it. A failure-case study and a hardness analysis of
-recruitment-based matching are future work.
+geometries (thin filaments, tightly constrained manifolds) could defeat
+it; a failure-case study and a hardness analysis are future work.

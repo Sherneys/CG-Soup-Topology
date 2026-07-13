@@ -1,7 +1,15 @@
 % ============================================================================
 %  Topology-Correcting Differentiable Triangle-Soup Reconstruction via
-%  Persistent Homology  —  PAPER 2 (DRAFT SKELETON, stage 3e)
-%  Build:  cd paper2 && latexmk -pdf main.tex
+%  Persistent Homology  —  PAPER 2, 3DV 2027 submission format
+%  Build:  cd paper2 && tectonic main.tex        (+ tectonic supplementary.tex)
+%
+%  VENUE (advisor confirmed 2026-07-13): 3DV 2027 — IEEE, Thessaloniki.
+%  Papers due 2026-08-28, supplementary 2026-09-02. Limit: 8 pages incl.
+%  figures/tables; reference pages free. Double-blind via OpenReview.
+%  Style: 3DV 2026 author kit (cvpr.sty + ieeenat_fullname.bst) — the 2027
+%  kit was not posted as of 2026-07-13; swap when it appears at
+%  3dvconf.github.io/files/2027/author-kit-3DV2027.zip (expect no layout
+%  change; check \confYear and the sty diff).
 %
 %  GROUNDING CONTRACT (same discipline as paper/):
 %   * every numeric result carries a "% src:" comment naming the results file
@@ -10,80 +18,89 @@
 %   * citations: paper-1 verified set + two web-verified additions
 %     (leygonie2022framework, nigmetov2024bigsteps — provenance comments in
 %     refs.bib). Never a guessed entry. The allocation study is UNCITED by
-%     design: it is reported first-hand in Appendix A (author decision
-%     2026-07-09).
+%     design: it is reported first-hand in the SUPPLEMENTARY MATERIAL
+%     (author decision 2026-07-09; moved out of the main pages for the 3DV
+%     page limit — sections/appendix_*.tex now build via supplementary.tex).
 %   * author-only spots are marked % TODO(human).
 % ============================================================================
-\documentclass[11pt]{article}
+\documentclass[10pt,twocolumn,letterpaper]{article}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[margin=1in]{geometry}
-\usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{multirow}
-\usepackage{amsmath,amssymb}
-\usepackage{xcolor}
-\usepackage[numbers,sort&compress]{natbib}
-\usepackage{hyperref}
-\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+%%%%%%%%% PAPER TYPE — [review] for the 3DV submission
+\usepackage[review]{cvpr}      % REVIEW version (anonymous, line numbers)
+% \usepackage{cvpr}              % camera-ready
+% \usepackage[pagenumbers]{cvpr} % arXiv preprint
+
+% cvpr.sty already loads: times, cite, xspace, graphicx, amsmath, amssymb,
+% booktabs, natbib[numbers,sort&compress], caption, subcaption. Do NOT
+% re-load those here (option clashes). multirow was unused and is dropped.
+\usepackage[dvipsnames]{xcolor}
+
+\definecolor{cvprblue}{rgb}{0.21,0.49,0.74}
+\usepackage[pagebackref,breaklinks,colorlinks,citecolor=cvprblue]{hyperref}
+
+%%%%%%%%% PAPER ID — fill in after OpenReview registration
+\def\paperID{*****}
+\def\confName{3DV\xspace}
+\def\confYear{2027\xspace}
+
 \graphicspath{{figures/}}
-
 \newcommand{\TODO}[1]{\textcolor{red}{\textbf{[\,TODO: #1\,]}}}
 
-% TODO(human): venue document class + author block reformat, as with paper 1.
 \title{Topology-Correcting Differentiable Triangle-Soup Reconstruction\\
        via Persistent Homology}
-% Advisor email verified 2026-07-09 from the official faculty page
-% (cp.eng.chula.ac.th/en/about/faculty/pizzanuk). First-author address:
-% viritphon.1234@gmail.com CONFIRMED by the author for print (2026-07-09).
-\author{Viritphon Chongpermwattanapol\thanks{Corresponding author:
-  \texttt{viritphon.1234@gmail.com}} \qquad Pizzanu Kanongchaiyos\\[4pt]
-  Department of Computer Engineering, Faculty of Engineering,\\
-  Chulalongkorn University, Bangkok, Thailand\\[2pt]
-  \texttt{viritphon.1234@gmail.com}\quad\texttt{pizzanu.k@chula.ac.th}}
-\date{\today}
+
+% ----------------------------------------------------------------------------
+% DOUBLE-BLIND: review mode renders "Anonymous 3DV submission / Paper ID"
+% and ignores \author. The real block is kept below IN A COMMENT — restore it
+% for the camera-ready. (Advisor email verified 2026-07-09 from the faculty
+% page cp.eng.chula.ac.th/en/about/faculty/pizzanuk; first-author address
+% viritphon.1234@gmail.com CONFIRMED for print 2026-07-09.)
+% \author{Viritphon Chongpermwattanapol\thanks{Corresponding author:
+%   \texttt{viritphon.1234@gmail.com}} \qquad Pizzanu Kanongchaiyos\\[4pt]
+%   Department of Computer Engineering, Faculty of Engineering,\\
+%   Chulalongkorn University, Bangkok, Thailand\\[2pt]
+%   \texttt{viritphon.1234@gmail.com}\quad\texttt{pizzanu.k@chula.ac.th}}
+% ----------------------------------------------------------------------------
+\author{}
 
 \begin{document}
 \maketitle
 
 % ----------------------------------------------------------------------------
-% ABSTRACT — draft; numbers grounded per the contract.
+% ABSTRACT — numbers grounded per the contract.
 % TODO(human): voice pass.
 % ----------------------------------------------------------------------------
 \begin{abstract}
 Resampling priors can steer \emph{where} a differentiable triangle-soup
 reconstruction spends its triangle budget, but our controlled study of that
-channel (reported in Appendix~\ref{app:companion}) found their topological
-value is carried largely by spatial \emph{width}, and that no prior shape
-repairs
+channel (supplementary material) found their topological value carried
+largely by spatial \emph{width}, and no prior shape repairs
 one-dimensional features: concentrated priors manufacture phantom handles,
 spread priors never beat a random control. We move topology
-from the allocation channel into the \emph{objective}: a differentiable
-persistence loss $L=\mathrm{photometric}+\lambda(t)\,L_{\mathrm{topo}}$, where
+from the allocation channel into the \emph{objective}:
+$L=\mathrm{photometric}+\lambda(t)\,L_{\mathrm{topo}}$, where
 $L_{\mathrm{topo}}$ is an optimally-matched distance between the live surface's
 persistence diagram and a fixed target diagram. Gradients flow through a
-pair-frozen backward pass: the matched birth/death simplices are re-expressed
-as closed-form circumradii of live sample positions --- exact for the
-Gabriel simplices that constitute all significant pairs in practice --- and a
-recruitment term restores the gradient that optimal matching provably lacks
-when a target feature is missing entirely. A single ratio knob $\rho$ sets the
+pair-frozen backward pass: matched birth/death simplices are re-expressed
+as closed-form circumradii of live sample positions --- exact for Gabriel
+simplices, which constitute all significant pairs in practice --- and a
+recruitment term restores the gradient optimal matching provably lacks
+when a target feature is missing. A single ratio knob $\rho$ sets the
 loss scale by gradient-norm calibration; a curriculum proved unnecessary.
 % src: PHASE3_PLAN.md Appendix D / topo3/report/results.json
 On budget-starved synthetic scenes the loss is topology-specific where a
 norm-matched non-topological control is not: enclosed voids improve
 $4.0$--$7.9\times$ and --- the channel's distinguishing result --- torus loops
 improve $2.3\times$ with zero phantom handles across seeds, while the control
-collapses a loop. The two channels compose: loss plus the best resampling
-prior reaches $7.6\times$ below baseline at the best Chamfer. Component
-counting (H0) is again matched by the generic control --- a third channel
-agreeing that this class needs no topological information. All verdicts
+collapses a loop. The channels compose: loss plus the best prior reaches
+$7.6\times$ below baseline at the best Chamfer. Component
+counting (H0) is again matched by the generic control --- this class needs
+no topological information. All verdicts
 replicate, with no per-shape tuning, on four external genus-known meshes
---- one of them a raw artist mesh ingested and \emph{certified} rather than
+--- one a raw artist mesh ingested and \emph{certified} rather than
 constructed --- at $2.1$--$10.4\times$ and equal-or-better Chamfer, and the
-loss degrades
-gracefully --- never below baseline --- under sensor noise up to one
-sample spacing.
+loss degrades gracefully (never below baseline) under sensor noise up to
+one sample spacing.
 % src: topo3/report/results.json (spot/bob/fandisk) +
 % topo3/quicklook.json (kinkin, 2026-07-10)
 Prescription: correct topology in the loss, allocate with a wide prior, and
@@ -99,16 +116,13 @@ combine.
 \input{sections/limitations}
 \input{sections/conclusion}
 
-% References BEFORE the appendices (venue-standard order; also keeps the
-% appendix figure from floating into the reference pages). Safe: neither
-% appendix contains a \cite, so unsrtnat numbering is unaffected.
-\bibliographystyle{unsrtnat}
-\bibliography{refs}
+{
+  \small
+  \bibliographystyle{ieeenat_fullname}
+  \bibliography{refs}
+}
 
-% The allocation-channel study (our own prior experiments), reported
-% first-hand with numbers. Moves to supplementary at venues with strict
-% page limits.
-\input{sections/appendix_companion}
-\input{sections/appendix_diagnostics}
+% Appendices A (allocation-channel study) and B (diagnostics) moved to the
+% supplementary material for the 3DV page limit — see supplementary.tex.
 
 \end{document}

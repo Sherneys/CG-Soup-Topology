@@ -1,39 +1,40 @@
 \section{Introduction}
 \label{sec:intro}
 
-% Framing: measurement -> prior (Appendix A) -> loss.
+% Framing: measurement -> prior (suppl. §A) -> loss.
 % TODO(human): voice pass.
+% 3DV pass 2026-07-13: appendix refs -> supplementary; light trim only (the
+% intro is the advisor-approved framing; numbers untouched).
 
 Differentiable rasterization reconstructs a triangle soup from images by
 following photometric gradients~\citep{tojo2026diffsoup}, periodically
 resampling triangles under a fixed budget. Photometric losses are
 topologically blind: reconstructions that differ in genus, connectivity, or
 enclosed-void structure can be indistinguishable to Chamfer and Hausdorff
-distances while the bottleneck distance between persistence diagrams separates
-them by an order of magnitude
-(Appendix~\ref{app:companion}). We first
-% src: figures/summary.md (Phase 1); h2_unified + crossover reports (App. A)
+distances while the bottleneck distance between persistence diagrams
+separates them by an order of magnitude (suppl.\ Table~S1). We first
+% src: figures/summary.md (Phase 1); h2_unified + crossover reports (suppl. §A)
 attacked this through the \emph{allocation} channel --- biasing where the
-resampler spends triangles --- in a controlled study reported with its key
-numbers in Appendix~\ref{app:companion}. The verdict was mixed: a topological
-prior helps enclosed voids, but most of the gain is reproduced by any
-equally-wide non-topological prior, and no prior shape repairs
+resampler spends triangles --- in a controlled study reported in the
+supplementary material (§A). The verdict was mixed: a
+topological prior helps enclosed voids, but most of the gain is reproduced
+by any equally-wide non-topological prior, and no prior shape repairs
 one-dimensional features: concentrating manufactures phantom handles, and
 spreading never beats a random control on loops.
 % src: PHASE2B_CROSSOVER.md; h2_unified/report/results.json
 
-This paper moves topology into the \emph{objective}. We add a differentiable
-persistence term to the training loss, so gradients act on the birth/death
-values of the reconstruction's topological features directly, rather than on
-where triangles respawn. Concretely:
+This paper moves topology into the \emph{objective}: a differentiable
+persistence term in the training loss, so gradients act on the birth/death
+values of the reconstruction's topological features directly, rather than
+on where triangles respawn. Concretely:
 
 \begin{itemize}
 \item \textbf{A matched persistence loss with a pair-frozen backward}
   (\S\ref{sec:method}): the forward pass is ordinary exact persistence
   (GUDHI alpha complex); the backward pass re-expresses each paired
-  birth/death simplex as the closed-form circumradius of live surface samples.
-  On our shapes, 100\% of significant pairs are Gabriel-exact, so the frozen
-  gradient is the true gradient almost everywhere.
+  birth/death simplex as the closed-form circumradius of live surface
+  samples; 100\% of significant pairs are Gabriel-exact on our shapes, so
+  the frozen gradient is the true gradient almost everywhere.
   % src: PHASE3_PLAN.md Appendix A (22/22 gate)
 \item \textbf{A recruitment term for missing features}: optimal partial
   matching yields exactly zero gradient when a target feature has no live
@@ -42,21 +43,21 @@ where triangles respawn. Concretely:
   probes its known location-blindness, and an in-loop ablation shows the
   term is load-bearing --- removing it collapses the loop-class win to
   baseline (\S\ref{sec:results}).
-\item \textbf{One calibrated knob}: $\lambda$ is set by a gradient-norm ratio
-  $\rho$ against the photometric loss. The response is flat over a $10\times$
-  range of $\rho$, and a curriculum schedule adds nothing once calibrated ---
-  an ablation, not an assumption.
+\item \textbf{One calibrated knob}: $\lambda$ is set by a gradient-norm
+  ratio $\rho$ against the photometric loss; the response is flat over a
+  $10\times$ range, and a curriculum adds nothing once calibrated --- an
+  ablation, not an assumption.
   % src: PHASE3_PLAN.md Appendix C (rho sweep), Appendix D (C3)
-\item \textbf{Channel-controlled evaluation}: every claim is tested against a
-  norm-matched \emph{non-topological} control acting through the identical
-  channel (a repulsion on the same surface samples), inheriting the control
-  discipline that made the allocation-channel study conclusive.
+\item \textbf{Channel-controlled evaluation}: every claim is tested against
+  a norm-matched \emph{non-topological} control acting through the identical
+  channel (a repulsion on the same surface samples), inheriting the
+  allocation study's control discipline.
 \end{itemize}
 
 The loss is topology-specific for enclosed voids ($4.0$--$7.9\times$ error
 reduction at Chamfer parity) and, unlike every prior shape we tested,
 for loops ($2.3\times$, zero phantom handles across seeds). The two channels
-compose (best-of-both $7.6\times$), and component structure (H0) is once
-again matched by the generic control --- three channels now agree that this
-class carries no exploitable topological signal.
+compose (best-of-both $7.6\times$); component structure (H0) is again
+matched by the generic control --- three channels agree it carries no
+exploitable topological signal.
 % src: PHASE3_PLAN.md Appendix D / topo3/report/results.json
