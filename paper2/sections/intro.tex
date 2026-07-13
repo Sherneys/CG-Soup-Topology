@@ -11,8 +11,8 @@ following photometric gradients~\citep{tojo2026diffsoup}, periodically
 resampling triangles under a fixed budget. Photometric losses are
 topologically blind: reconstructions that differ in genus, connectivity, or
 enclosed-void structure can be indistinguishable to Chamfer and Hausdorff
-distances while the bottleneck distance between persistence diagrams
-separates them by an order of magnitude (suppl.\ Table~S1). We first
+while the bottleneck distance between persistence diagrams separates them
+by an order of magnitude (suppl.\ Table~S1). We first
 % src: figures/summary.md (Phase 1); h2_unified + crossover reports (suppl. §A)
 attacked this through the \emph{allocation} channel --- biasing where the
 resampler spends triangles --- in a controlled study reported in the
@@ -54,10 +54,9 @@ on where triangles respawn. Concretely:
   allocation study's control discipline.
 \end{itemize}
 
-The loss is topology-specific for enclosed voids ($4.0$--$7.9\times$ error
-reduction at Chamfer parity) and, unlike every prior shape we tested,
-for loops ($2.3\times$, zero phantom handles across seeds). The two channels
-compose (best-of-both $7.6\times$); component structure (H0) is again
-matched by the generic control --- three channels agree it carries no
-exploitable topological signal.
+The loss is topology-specific for enclosed voids ($4.0$--$7.9\times$ at
+Chamfer parity) and, unlike every prior we tested, for loops
+($2.3\times$, zero phantom handles). The channels compose (best-of-both
+$7.6\times$); components (H0) are again matched by the generic control
+--- three channels agree the class carries no exploitable signal.
 % src: PHASE3_PLAN.md Appendix D / topo3/report/results.json

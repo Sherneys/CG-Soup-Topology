@@ -299,3 +299,167 @@
   year    = {2024},
   doi     = {10.1007/s00454-023-00613-x}
 }
+
+% ---- 10-year reconstruction-landscape sweep (advisor request 2026-07-13) --
+% Works that support or oppose reconstructing with a connectivity-free
+% triangle soup, for the four-position paragraph in related.tex. ALL
+% entries below web-verified 2026-07-13 against arXiv abstract pages /
+% CVF open-access listings / ACM DOIs — provenance comment on each entry.
+% Page numbers included only where read off a publisher listing.
+
+% -- position (i): implicit / neural fields (topology correct by construction)
+
+% [W 2026-07-13: arXiv 2003.08934 — title + 6 authors exact; "ECCV 2020 oral"]
+@inproceedings{mildenhall2020nerf,
+  author    = {Mildenhall, Ben and Srinivasan, Pratul P. and Tancik, Matthew and Barron, Jonathan T. and Ramamoorthi, Ravi and Ng, Ren},
+  title     = {{NeRF}: Representing Scenes as Neural Radiance Fields for View Synthesis},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2020}
+}
+
+% [W 2026-07-13: arXiv 2106.10689 — title + 6 authors exact; NeurIPS 2021
+%  cross-checked via public listings of the paper]
+@inproceedings{wang2021neus,
+  author    = {Wang, Peng and Liu, Lingjie and Liu, Yuan and Theobalt, Christian and Komura, Taku and Wang, Wenping},
+  title     = {{NeuS}: Learning Neural Implicit Surfaces by Volume Rendering for Multi-view Reconstruction},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2021}
+}
+
+% [W 2026-07-13: arXiv 1901.05103 — title + 5 authors exact; CVPR 2019
+%  pages 165-174 per the CVF open-access listing]
+@inproceedings{park2019deepsdf,
+  author    = {Park, Jeong Joon and Florence, Peter and Straub, Julian and Newcombe, Richard and Lovegrove, Steven},
+  title     = {{DeepSDF}: Learning Continuous Signed Distance Functions for Shape Representation},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {165--174},
+  year      = {2019}
+}
+
+% [W 2026-07-13: arXiv 1812.03828 — title + 5 authors exact; "CVPR 2019"]
+@inproceedings{mescheder2019occupancy,
+  author    = {Mescheder, Lars and Oechsle, Michael and Niemeyer, Michael and Nowozin, Sebastian and Geiger, Andreas},
+  title     = {Occupancy Networks: Learning {3D} Reconstruction in Function Space},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2019}
+}
+
+% [W 2026-07-13: arXiv 2306.03092 — title + 7 authors exact; "CVPR 2023"]
+@inproceedings{li2023neuralangelo,
+  author    = {Li, Zhaoshuo and M{\"u}ller, Thomas and Evans, Alex and Taylor, Russell H. and Unberath, Mathias and Liu, Ming-Yu and Lin, Chen-Hsuan},
+  title     = {Neuralangelo: High-Fidelity Neural Surface Reconstruction},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2023}
+}
+
+% -- position (ii): fixed-connectivity template deformation
+
+% [W 2026-07-13: arXiv 1804.01654 — title + 6 authors exact; "ECCV2018"]
+@inproceedings{wang2018pixel2mesh,
+  author    = {Wang, Nanyang and Zhang, Yinda and Li, Zhuwen and Fu, Yanwei and Liu, Wei and Jiang, Yu-Gang},
+  title     = {{Pixel2Mesh}: Generating {3D} Mesh Models from Single {RGB} Images},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2018}
+}
+
+% [W 2026-07-13: arXiv 2005.11084 — title + 4 authors exact; SIGGRAPH 2020,
+%  DOI 10.1145/3386569.3392415 = TOG 39(4); article no. omitted, not guessed]
+@article{hanocka2020point2mesh,
+  author  = {Hanocka, Rana and Metzer, Gal and Giryes, Raja and Cohen-Or, Daniel},
+  title   = {{Point2Mesh}: A Self-Prior for Deformable Meshes},
+  journal = {ACM Transactions on Graphics},
+  volume  = {39},
+  number  = {4},
+  year    = {2020}
+}
+
+% -- position (iii): differentiable iso-surfacing on a volumetric scaffold
+
+% [W 2026-07-13: arXiv 2111.04276 — title + 5 authors exact; NeurIPS 2021
+%  per proceedings.neurips.cc hash 30a237d18c50f563cba4531f1db44acf]
+@inproceedings{shen2021dmtet,
+  author    = {Shen, Tianchang and Gao, Jun and Yin, Kangxue and Liu, Ming-Yu and Fidler, Sanja},
+  title     = {Deep Marching Tetrahedra: a Hybrid Representation for High-Resolution {3D} Shape Synthesis},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2021}
+}
+
+% [W 2026-07-13: arXiv 2111.12503 — title + 8 authors exact; CVPR 2022 oral,
+%  pages 8280-8290 per the CVF open-access listing + NVlabs GitHub]
+@inproceedings{munkberg2022nvdiffrec,
+  author    = {Munkberg, Jacob and Hasselgren, Jon and Shen, Tianchang and Gao, Jun and Chen, Wenzheng and Evans, Alex and M{\"u}ller, Thomas and Fidler, Sanja},
+  title     = {Extracting Triangular {3D} Models, Materials, and Lighting From Images},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {8280--8290},
+  year      = {2022}
+}
+
+% [W 2026-07-13: arXiv 2308.05371 — title + 10 authors exact; TOG 42(4)
+%  Article 37, SIGGRAPH 2023]
+@article{shen2023flexicubes,
+  author  = {Shen, Tianchang and Munkberg, Jacob and Hasselgren, Jon and Yin, Kangxue and Wang, Zian and Chen, Wenzheng and Gojcic, Zan and Fidler, Sanja and Sharp, Nicholas and Gao, Jun},
+  title   = {Flexible Isosurface Extraction for Gradient-Based Mesh Optimization},
+  journal = {ACM Transactions on Graphics},
+  volume  = {42},
+  number  = {4},
+  year    = {2023}
+}
+
+% [W 2026-07-13: arXiv 2106.03452 — title + 6 authors exact; "NeurIPS 2021
+%  (Oral)"; author 2 listed with nickname quotes on arXiv — dropped for BibTeX]
+@inproceedings{peng2021sap,
+  author    = {Peng, Songyou and Jiang, Chiyu and Liao, Yiyi and Niemeyer, Michael and Pollefeys, Marc and Geiger, Andreas},
+  title     = {Shape As Points: A Differentiable {Poisson} Solver},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2021}
+}
+
+% -- position (iv): connectivity-free primitive soups (our family)
+
+% [W 2026-07-13: arXiv 1908.01210 — title + 7 authors exact; "Accepted to
+%  NeurIPS 2019"]
+@inproceedings{chen2019dibr,
+  author    = {Chen, Wenzheng and Gao, Jun and Ling, Huan and Smith, Edward J. and Lehtinen, Jaakko and Jacobson, Alec and Fidler, Sanja},
+  title     = {Learning to Predict {3D} Objects with an Interpolation-based Differentiable Renderer},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2019}
+}
+
+% [W 2026-07-13: arXiv 1906.04173 — title + 5 authors exact; SIGGRAPH Asia
+%  2019, DOI 10.1145/3355089.3356513 = TOG 38(6); article no. omitted]
+@article{yifan2019dss,
+  author  = {Yifan, Wang and Serena, Felice and Wu, Shihao and {\"O}ztireli, Cengiz and Sorkine-Hornung, Olga},
+  title   = {Differentiable Surface Splatting for Point-based Geometry Processing},
+  journal = {ACM Transactions on Graphics},
+  volume  = {38},
+  number  = {6},
+  year    = {2019}
+}
+
+% [W 2026-07-13: arXiv 1802.05384 — title + 5 authors exact; CVPR 2018 per
+%  the CVF open-access listing (content_cvpr_2018)]
+@inproceedings{groueix2018atlasnet,
+  author    = {Groueix, Thibault and Fisher, Matthew and Kim, Vladimir G. and Russell, Bryan C. and Aubry, Mathieu},
+  title     = {{AtlasNet}: A Papier-M{\^a}ch{\'e} Approach to Learning {3D} Surface Generation},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2018}
+}
+
+% [W 2026-07-13: arXiv 2403.17888 — title + 5 authors exact; DOI
+%  10.1145/3641519.3657428 = SIGGRAPH 2024 Conference Papers]
+@inproceedings{huang20242dgs,
+  author    = {Huang, Binbin and Yu, Zehao and Chen, Anpei and Geiger, Andreas and Gao, Shenghua},
+  title     = {{2D} {Gaussian} Splatting for Geometrically Accurate Radiance Fields},
+  booktitle = {ACM SIGGRAPH 2024 Conference Papers},
+  year      = {2024}
+}
+
+% [W 2026-07-13: arXiv 2311.12775 — title + 2 authors exact; CVPR 2024
+%  pages 5354-5363 per the CVF open-access listing]
+@inproceedings{guedon2024sugar,
+  author    = {Gu{\'e}don, Antoine and Lepetit, Vincent},
+  title     = {{SuGaR}: Surface-Aligned {Gaussian} Splatting for Efficient {3D} Mesh Reconstruction and High-Quality Mesh Rendering},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {5354--5363},
+  year      = {2024}
+}

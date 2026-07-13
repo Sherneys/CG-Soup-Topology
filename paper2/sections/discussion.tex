@@ -21,18 +21,18 @@ pins at that equilibrium (identical across seeds), then drags, while
 near-diagonal phantom bars accumulate (diagram trajectories: suppl.\
 Fig.~S1), and thin structures collapse ($\beta_2$ on the cube, $\beta_1$
 on the torus). The loss has no length-scale constraint --- it pulls the
-death coordinate itself and the geometry follows. This sharpens the
-control argument: spending the same gradient budget through the same
-channel \emph{without} topological information is not neutral but
-harmful, so C1's wins cannot be an artifact of extra regularization.
+death coordinate itself and the geometry follows. So the control argument
+sharpens: the same gradient budget through the same channel
+\emph{without} topological information is not neutral but harmful ---
+C1's wins cannot be an artifact of extra regularization.
 
 \paragraph{Measurability at the loss's density.} A persistence loss can only
 enforce features that clear the significance floor at its sampling density
 $M$: the torus void and the double torus's two tube loops do not, at
 $M{=}2048$. We treat this as a principle, not a nuisance: the target
-bundle is built (and audited) at the same $M$, features below the floor are
+bundle is built (and audited) at the same $M$, sub-floor features are
 excluded from the objective, and the double torus is evaluated
-against its two measurable loops --- also all the reconstruction
+against its two measurable loops --- all the reconstruction
 itself can express at feasible budgets.
 
 The floor is quantifiable: a bar is significant iff its lifetime exceeds
@@ -52,13 +52,13 @@ noise: its second loop clears the clean floor by only $1.33\times$, a
 margin the live cloud's noise consumes --- why it is chronically
 sub-threshold in training and recruitment is its only gradient path (C6).
 Recruitment is thus how the loss reaches below its own significance floor
-on the live side --- landscape-guided in practice (unproductive tears
+on the live side: landscape-guided in practice (unproductive tears
 self-extinguish at the local detour scale; suppl.\ \S C), with the
-location-blindness caveat standing for target features larger than any
-achievable detour.
+location-blindness caveat for target features beyond any achievable
+detour.
 Suppl.\ Table~S3 tabulates the counts across $M$ (at $4096$ all four
 double-torus loops clear). The tom-yum pot ran the rule
-\emph{prospectively} (\S\ref{sec:setup}): it picked observable class and
+\emph{prospectively} (\S\ref{sec:setup}), picking observable class and
 bundle density before any training run; the in-loop result
 (Table~\ref{tab:gen}) validated it. Adaptive or multi-scale density is
 the natural extension; the trade is explicit, since persistence cost

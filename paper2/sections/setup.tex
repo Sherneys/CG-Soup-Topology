@@ -38,9 +38,9 @@ defect that excluded ShapeNet). An ingest-and-certify pass makes it usable:
 exact-duplicate weld, offset-solidification into a thin closed shell
 (exact unsigned distance field $+$ marching cubes at iso $\varepsilon$),
 dropping 804 enclosed pocket shells, then \emph{certification by
-measurement} --- closed, edge-manifold, consistently-oriented edge
-certificate, exact simplicial homology, a watertightness cross-check, and
-bit-identical rebuilds --- yielding one body of genus 3, $\beta{=}(1,6,1)$
+measurement} (closed, edge-manifold, consistently oriented; exact
+simplicial homology; watertightness cross-check; bit-identical rebuilds),
+yielding one body of genus 3, $\beta{=}(1,6,1)$
 exact ($190{,}990$ vertices), rendered and budgeted as a void-class shape
 ($N{=}1200$, 48 views, 200\,px). Where the benchmark trio's topology is
 known by construction, the pot's is known by \emph{certificate} --- the
@@ -83,10 +83,10 @@ The torus restricts the loss to H1: its own void bar is sub-threshold
 at $M{=}2048$, and a loss must not act on features it cannot reliably measure
 at its sampling density. For the same reason the double torus targets its two
 measurable loops (of four) --- matching what the reconstruction itself can
-express at any feasible budget. The generality wave runs C0/C1/C2 with three
-seeds; bob, unlike the thin torus, has both its loop pair \emph{and} its void
-significant at $M{=}2048$ (fat tube), so it runs the full unrestricted
-bundle; the tom-yum pot runs at the floor-rule density above.
+express at any feasible budget. The generality wave runs C0/C1/C2, three
+seeds; bob (fat tube, unlike the thin torus) has both loops \emph{and}
+void significant at $M{=}2048$ and runs the full bundle; the tom-yum pot
+runs at the floor-rule density above.
 % src: PHASE3_PLAN.md Appendix C (bundle preflights) + PHASE2B (2/4 loops);
 % spot/bob/fandisk bundle preflights 2026-07-09 (H bars printed at build)
 
@@ -101,9 +101,8 @@ seed-mean Chamfer must satisfy
 $\mathrm{Ch}(\mathrm{C1})\le 1.15\,\mathrm{Ch}(\mathrm{C0})$; the $15\%$
 headroom absorbs seed variance and CUDA nondeterminism and in practice
 never did any work --- every passing arm's Chamfer was at or below
-baseline.
+baseline. (CUDA nondeterminism itself is quantified in
+\S\ref{sec:limitations}.)
 % src: experiments/topo_loss_report.py PARITY_MULT = 1.15; per-arm
 % chamfer_mean in topo3/report/results.json (all passing arms <= C0)
-CUDA training is not bit-reproducible (baseline re-runs
-diverge at the first resample), so no bit-level claims are made anywhere.
 % src: experiments/topo_loss_report.py verdict rule; PHASE3_PLAN.md App. B

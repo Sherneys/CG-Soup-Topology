@@ -9,7 +9,7 @@
 % the observations ¶ (they repeated each other); prose + captions
 % tightened. Every number and % src kept.
 
-Before integration we verified a gate: the loss alone (no photometric
+A gate first: the loss alone (no photometric
 term, Adam on point positions) repairs defective clouds on all
 four controlled probes --- a punctured sphere's void closes ($8.8\times$),
 a spurious handle dies at the diagonal, mis-spaced components reach
@@ -30,7 +30,7 @@ decisive shapes.
 \begin{table*}[t]
 \centering\small
 \caption{Tail bottleneck to target (lower is better); $\times$ = reduction vs
-C0. Verdict requires C1 $<$ C0 and C1 $<$ every control at Chamfer parity.}
+C0. Verdict: C1 $<$ C0 and C1 $<$ every control at Chamfer parity.}
 \label{tab:main}
 \begin{tabular}{llllll}
 \toprule
@@ -58,9 +58,8 @@ discriminating dimension (line = seed mean, band = seed min--max).
 variants, noise pair C7/C7h) converges to a fraction of baseline; the
 norm-matched repulsion control C2 is \emph{destructive}, and its gentle
 variant C2g still ends worse than baseline. \emph{Right}, torus (H1), the
-class no prior won: same ordering, C5 best; the noise arms descend
-shallower but never approach baseline --- except the no-recruitment
-ablation C6, which rides it.}
+class no prior won: same ordering, C5 best; noise arms descend shallower
+but never approach baseline; the no-recruitment ablation C6 rides it.}
 \label{fig:series}
 \end{figure*}
 
@@ -79,7 +78,7 @@ tested strength reproduces any of the gain
 % src: topo3/report/results.json (sphere: C2g 0.0972+-0.0169)
 
 \paragraph{Loops (H1): the channel's distinguishing result.} In the
-allocation-channel study (suppl.\ \S A) no prior shape won this class ---
+allocation study (suppl.\ \S A) no prior shape won this class:
 concentration manufactured phantom handles; spreading never beat a random
 control. The loss cuts torus
 H1 error $2.3\times$ with \emph{zero phantom handles in all five seeds}
@@ -96,8 +95,8 @@ respond to both channels --- why the composition (C5) wins everywhere.
 \paragraph{Components (H0): not topological --- third channel, same answer.}
 C1 reduces the (already small) baseline error $9.5\times$, but the generic
 control matches it on the diagram metric (.0008 vs .0007); the topological
-increment appears only in Chamfer ($0.54$ vs $1.94$). With the
-allocation-channel results, this is a statement about the feature class:
+increment appears only in Chamfer ($0.54$ vs $1.94$). Three channels now
+agree on the feature class:
 $\beta_0$ structure is carried by the count and spatial separation of
 shells --- properties \emph{any} spreading pressure improves and the
 photometric term already infers from images. Topological guidance earns
@@ -117,9 +116,9 @@ every arm --- baseline, loss, control --- returns a bottleneck of exactly
 $.0264$ (sd $0$ over seeds), and Wasserstein is equally pinned
 ($.0527$--$.0528$): the two tube loops are unexpressable at feasible budgets
 (replicating the allocation study's floor, suppl.\ \S A), and they dominate
-both diagram metrics regardless of guidance. The loss adds no phantoms there
-($\beta_1$-significant count $=2$ in every run) and its Chamfer is marginally
-best; the case measures the \emph{representation's} ceiling, not the
+both diagram metrics regardless of guidance. The loss adds no phantoms
+($\#$sig $\beta_1$ $=2$ every run) at marginally best Chamfer;
+the case measures the \emph{representation's} ceiling, not the
 channel's --- both floors are quantified in \S\ref{sec:discussion}.
 % src: topo3/report/{results.json,cache/double_torus_*} (W2 check 2026-07-07)
 
@@ -127,9 +126,9 @@ channel's --- both floors are quantified in \S\ref{sec:discussion}.
 ($.0181/.0172/.0177$ in the matched seed-0 sweep on the sphere; the
 five-seed $\rho{=}0.1$ arm is Table~\ref{tab:main}'s C1); C3 (no
 curriculum) $\approx$ C1 on both
-decisive shapes \emph{and} off the analytic family --- on the genus-1
-external mesh C3 lands at $.0171{\pm}.0026$ vs C1's $.0208{\pm}.0008$,
-so the curriculum-free finding generalizes.
+decisive shapes \emph{and} off the analytic family (bob: C3
+$.0171{\pm}.0026$ vs C1 $.0208{\pm}.0008$) --- the curriculum-free
+finding generalizes.
 % src: PHASE3_PLAN.md Appendix C (rho mini-sweep, sphere seed 0, tail =
 % last 3 dumps); topo3/report/results.json (bob C3, 3 seeds, 2026-07-09)
 Overhead, honestly: the loss adds a \emph{fixed}
@@ -147,11 +146,11 @@ the torus win entirely: $.0411\pm.0038$, statistically baseline
 ($0.6\sigma$ from C0, $12.4\sigma$ worse than C1) at baseline Chamfer ---
 though the loops still \emph{exist} ($\#$sig H1 $= 2$ in every seed;
 Fig.~\ref{fig:series}, right: the C6 curve rides the baseline). The run
-logs locate the mechanism: one torus loop is significant at every refresh
-while the other sits chronically \emph{below} the significance threshold
-(all five seeds, all 200 refreshes), so matching and diagonal pressure act
-only on the loop the live diagram already measures --- recruitment is the
-sole gradient path to the other; on this class it \emph{is} the mechanism,
+logs locate the mechanism: one torus loop is significant at every refresh,
+the other chronically \emph{below} threshold (all five seeds, all 200
+refreshes) --- matching and diagonal pressure act only on the measured
+loop, recruitment is the sole gradient path to the other; on this class it
+\emph{is} the mechanism,
 not a cold-start device. On the sphere the void is always live and matched,
 recruitment never fires (0 of 200 refreshes, all seeds), so C6 is
 loss-identical to C1 by construction; its tail ($.0166$ vs $.0156$,
@@ -167,10 +166,9 @@ gradually and never harms: torus $.0210{\pm}.0018$ / $.0259{\pm}.0022$
 $.0235{\pm}.0009$ / $.0328{\pm}.0013$ ($2.7\times$/$1.9\times$, vs
 $4.0\times$) --- at equal-or-better Chamfer, with the correct
 significant-feature count in every run (Fig.~\ref{fig:series}). Internals:
-across all $2{,}400$ noisy refreshes \emph{not one} significant pair
-failed the Gabriel gate, and recruitment absorbed the noise (at
-$\sigma{=}1\%$ the torus's second loop is sub-threshold at every refresh
-and recruitment reaches it every time, zero unreached targets).
+zero Gabriel-gate failures across all $2{,}400$ noisy refreshes, and
+recruitment absorbed the noise (at $\sigma{=}1\%$ the torus's second loop
+is sub-threshold at every refresh; zero unreached targets).
 Calibration is the noisiest part ($\lambda_{\mathrm{peak}}$ spreads
 ${\approx}3\times$ across seeds), yet tails stay tight --- consistent with
 the flat $\rho$ response.
@@ -224,8 +222,8 @@ tom-yum pot (H2) & .0221$\pm$.0003 & \textbf{.0057$\pm$.0002} (3.9$\times$) & .0
 % CPU ray-traced render of the certified shell _meshes/kinkin_src.ply;
 % aluminium material per advisor request 2026-07-11; rendered name
 % tom-yum pot = internal asset name kinkin)
-\includegraphics[width=0.43\linewidth]{tomyum_pot_alu.png}\hfill
-\includegraphics[width=0.43\linewidth]{tomyum_pot_alu_cut.png}
+\includegraphics[width=0.405\linewidth]{tomyum_pot_alu.png}\hfill
+\includegraphics[width=0.405\linewidth]{tomyum_pot_alu_cut.png}
 \caption{The \emph{tom-yum pot}: an artist-authored Blender model (raw
 export: 9 open shells, 232 non-manifold junction edges) ingested and
 certified to a single genus-3 shell, $\beta{=}(1,6,1)$ exact

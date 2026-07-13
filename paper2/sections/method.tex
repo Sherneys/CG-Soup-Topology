@@ -18,10 +18,10 @@ L \;=\; L_{\mathrm{photo}} \;+\; \lambda(t)\, L_{\mathrm{topo}}(V),
 where $V$ are the soup's vertex positions and $L_{\mathrm{topo}}$ compares the
 persistence diagram of the live surface to a fixed \emph{target bundle}
 $\mathcal{T}$: the significant finite bars of the ground-truth shape's
-diagram, computed once at the same sampling density $M$ the loss will see
+diagram, computed once at the sampling density $M$ the loss will see
 (alpha values shift with point spacing: density matching is a correctness
-requirement) and normalized by the target's bounding-box diagonal, which
-is locked for all live evaluations.
+requirement) and normalized by the target's bounding-box diagonal, locked
+for all live evaluations.
 
 \subsection{Live diagram and pair-frozen backward}
 At each refresh we draw $M$ surface samples ($M{=}2048$ unless the
@@ -55,7 +55,7 @@ value (relative $10^{-6}$); a pair failing this Gabriel test is
 no gradient through that simplex, so an exactness failure can never inject
 a wrong gradient; the worst case is a missing tug for one refresh interval.
 In practice the gate never fires: 100\% of significant pairs are
-Gabriel-exact on clean clouds across all six benchmark shapes, with zero
+Gabriel-exact on all six shapes' clean clouds, with zero
 failures in the stress test's $2{,}400$ noisy refreshes
 (\S\ref{sec:results}). The per-refresh failure count is logged, and
 stronger fallbacks (dropping failing pairs, subgradient surrogates,
@@ -100,9 +100,9 @@ k(j) &= \operatorname*{arg\,min}_{k\,\in\,\mathcal{A}_j}
 \end{split}
 \end{equation}
 where $\mathcal{A}_j$ is the pool remaining after earlier recruitments;
-recruited bars are excluded from the diagonal term. Both coordinates of the
-recruited bar back-propagate through the same circumradius machinery as
-matched bars. This deliberately departs from a metric-faithful $W_2$;
+recruited bars are excluded from the diagonal term. Both coordinates of a
+recruited bar back-propagate through the same circumradius machinery.
+This deliberately departs from a metric-faithful $W_2$;
 \S\ref{sec:results} probes its known pathology (location-blindness)
 directly, and the C6 ablation shows the term is load-bearing in training.
 % src: methods/topological_loss.py plan_topo_loss (greedy recruit loop)
@@ -117,11 +117,11 @@ $\rho\in\{0.03,0.1,0.3\}$, and an uncalibrated-schedule ablation (constant
 $\lambda$ from step one) matches the ramped version --- calibration, not
 scheduling, is what makes the knob safe.
 % src: PHASE3_PLAN.md Appendix C (rho sweep) + Appendix D (C3 vs C1)
-The window itself carries no measurable sensitivity either: alternative
-ramps ($10$--$40\%$ and $30$--$60\%$ of training; sphere, three seeds) land
-at $.0154{\pm}.0017$ and $.0179{\pm}.0019$ against the default window's
-$.0156{\pm}.0013$ --- within seed noise; the $20{:}50$ default is a
-conservative choice, not a tuned hyperparameter.
+The window carries no measurable sensitivity either: alternative ramps
+($10$--$40\%$, $30$--$60\%$; sphere, three seeds) land at
+$.0154{\pm}.0017$ / $.0179{\pm}.0019$ vs the default's $.0156{\pm}.0013$
+--- within seed noise; $20{:}50$ is a conservative choice, not a tuned
+hyperparameter.
 % src: ramp_1040/quicklook.json + ramp_3060/quicklook.json (2026-07-09)
 
 \subsection{Conditions}

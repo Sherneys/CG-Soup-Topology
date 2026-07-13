@@ -1,3 +1,66 @@
+# PAPER 2 — 10-YEAR RELATED-WORK SWEEP (advisor request, 2026-07-13 later)
+
+**Advisor asked: หา related works 10 ปี ที่สนับสนุนหรือเห็นต่างกับแนวคิด
+ใช้ DiffSoup มา reconstruct, ใส่เพิ่มก่อนส่ง — DONE (this commit).**
+
+`related.tex` ¶1 is rewritten as a **four-position map of gradient-based
+reconstruction (2018–2026)** — the "support or disagree" framing the
+advisor asked for, as positions rather than a cite-dump. **16 new
+references, EVERY entry web-verified 2026-07-13** against its arXiv
+abstract page / CVF open-access listing / ACM DOI (provenance comment on
+each entry in refs.bib; the grounding contract held — nothing cited from
+memory, page numbers only where read off a publisher listing):
+
+| # | position | stance on soup-based reconstruction | works added |
+|---|---|---|---|
+| (i) | Implicit / neural fields | **เห็นต่าง** — strongest counter-position: topology correct *by construction*; costs dense field evaluation + post-hoc mesh extraction | Occupancy Networks (CVPR'19), DeepSDF (CVPR'19), NeRF (ECCV'20), NeuS (NeurIPS'21), Neuralangelo (CVPR'23) |
+| (ii) | Fixed-connectivity templates | **เห็นต่าง** — manifold by construction but genus frozen at the template's | Pixel2Mesh (ECCV'18), Point2Mesh (SIGGRAPH'20) |
+| (iii) | Differentiable iso-surfacing | **เห็นต่าง** — the strongest modern alternative: topology via a volumetric scaffold, at grid cost | DMTet (NeurIPS'21), nvdiffrec (CVPR'22), FlexiCubes (SIGGRAPH'23), Shape-as-Points (NeurIPS'21, bridges soups→implicits) |
+| (iv) | Connectivity-free primitive soups | **สนับสนุน** — our lineage: fastest, easiest to budget; even surface-minded members regularize only *geometry*, never measured topology | DIB-R (NeurIPS'19, lineage), DSS points (SIGGRAPH Asia'19), AtlasNet patches (CVPR'18), 2DGS (SIGGRAPH'24), SuGaR (CVPR'24) + already-cited 3DGS / Triangle Splatting / DiffSoup |
+
+Punchline now in print: *(i) and (iii) solve topology representationally;
+(iv) had not addressed it — the gap this paper fills at the soup's budget
+and speed.*
+
+**Page budget held: body still ends exactly at page 8** (references pp.
+9–10, now 46 bib entries). The new paragraph was paid for with ~30 lines
+of wording trims across intro/method/setup/results/discussion/
+limitations/conclusion — **no number changed, every % src comment kept**;
+`audit_paper2.py` re-run: all numeric checks pass, zero overfulls.
+One content note for your voice pass: the conclusion's future-work list
+was compressed to "next: open surfaces and real scans" (the full list
+still lives item-by-item in §7), and setup's CUDA sentence now defers to
+§7's Nondeterminism block instead of repeating it.
+
+**Draft message to อาจารย์ (related-work sweep):**
+
+> เรียนอาจารย์ครับ
+>
+> ตามที่อาจารย์แนะนำ ผมเพิ่ม related works ช่วง 10 ปี (2018–2026) ที่
+> สนับสนุน/เห็นต่างกับแนวคิดใช้ triangle soup แบบ DiffSoup ในการ
+> reconstruct ลงใน related work ของ paper 2 แล้วครับ — เพิ่ม 16 อ้างอิง
+> (ตรวจ metadata กับ arXiv/CVF/ACM ครบทุกรายการ) จัดเป็น 4 กลุ่มครับ:
+>
+> 1. **Implicit fields** (เห็นต่างชัดที่สุด): Occupancy Networks, DeepSDF,
+>    NeRF, NeuS, Neuralangelo — ได้ topology ถูกต้องโดยโครงสร้าง แต่แลกกับ
+>    field หนาแน่นและต้อง extract mesh ภายหลัง
+> 2. **Template deformation** (เห็นต่าง): Pixel2Mesh, Point2Mesh —
+>    manifold เสมอ แต่ genus ถูกล็อกตาม template
+> 3. **Differentiable iso-surfacing** (เห็นต่าง — คู่แข่งหลักในปัจจุบัน):
+>    DMTet, nvdiffrec, FlexiCubes (+ Shape as Points) — ได้ topology ผ่าน
+>    volumetric grid โดยจ่ายราคาที่ grid
+> 4. **Primitive soups** (สนับสนุน — สายที่เราต่อยอด): DSS, AtlasNet,
+>    3D/2D Gaussian Splatting, SuGaR, Triangle Splatting, DiffSoup —
+>    เร็วที่สุดและคุม triangle budget ง่ายที่สุด แต่ยังไม่มีงานไหนวัด
+>    topology จริง ๆ
+>
+> ข้อสรุปที่เขียนในเปเปอร์: กลุ่ม 1 และ 3 แก้ topology ด้วยตัว
+> representation ส่วนกลุ่ม 4 ยังไม่เคยแก้ — ช่องว่างนี้คือสิ่งที่ paper 2
+> เติม โดยยังรักษาความเร็วและ budget ของ soup ไว้ครับ เปเปอร์ยังอยู่ใน
+> 8 หน้าตามเกณฑ์ 3DV ครับ
+
+---
+
 # PAPER 2 — 3DV 2027 SUBMISSION FORMAT (2026-07-13)
 
 **VENUE DECIDED: อาจารย์ agreed with 3DV (you, 2026-07-13).** Timeline
