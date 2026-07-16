@@ -1,3 +1,165 @@
+# PAPER 2 — ADVISOR ROUND 3 (AI revision package) — EXECUTED 2026-07-16
+
+**What arrived (2026-07-16):** 4 public claude.ai artifacts
+(`3DV_2027_REVISION_STRATEGY.md`, `PRIORITY_CHECKLIST_IMMEDIATE.md`,
+`LITERATURE_REFERENCE_PLAN.md`, `EXECUTIVE_SUMMARY_REVISION_GUIDE.md`) +
+`3DV_2027_FINAL_COMPLETE_PAPER-1 (1).pdf` (20 pp, an HTML artifact printed
+via wkhtmltopdf). Same pattern as round 2: the advisor ran the submission
+through an AI. The PDF is a REWRITE SKELETON (placeholders "FILL IN TABLE
+2", "[7-44] ADD COMPLETE REFERENCES", "Revision Date: January 2025") — not
+a draft to adopt.
+
+## ⚠ Fabrications found (never paste its text)
+
+| its claim | reality (checked against our sources) |
+|---|---|
+| random controls recover **"85–95%"** of the void gain (in its abstract+intro!) | from Table S2 (B0/B4/B5): cylinder ≈77%, sphere ≈90%, cube ≈101% — the paper's "most of the gain, small shape-dependent residual" is the correct wording |
+| pot void clears floor at M=8192, "**3.1× denser** than std" | 8192/2048 = **4×**; 3.1× is the unrelated 20k-eval floor margin |
+| pot challenges: "specular metallic BRDF confuses photometric loss", "no texture" | training renders are **constant-albedo diffuse** (`make_synthetic_scene.py shade_mesh`); the aluminium exists only in the showcase figure. "DiffSoup allocates triangles to specular regions" = invented |
+| "p<.001 / p>.05" | we report Welch σ, not p-values |
+| review-score projection 6.4→8.1/10, "+1.7–2.5 points" | theater; ignore |
+| its reference list | Alliez under wrong venue; "DAVIS 3D Segmentation" does not exist; TanksAndTemples/Furukawa venues wrong |
+| names hypotheses **H1/H2/H3** | collides with homology H0/H1/H2 in the same sentences → renamed **RH1–RH3** in print |
+
+Several of its "additions" were already in the paper verbatim (discussion
+mechanism sentences, all four "threats to validity" items, the classical
+repair citations, figure error bands).
+
+## What was adopted / adapted / rejected (this commit set)
+
+**Adopted in MAIN (body still ends exactly p8; audit all-green, zero
+overfulls):**
+- intro reframed: decade-long implicit hypothesis → controlled test →
+  null result → objective-centric reformulation; **RH1 (diagnosis) / RH2
+  (specificity) / RH3 (complementarity)** named, each tied to its
+  pre-designed condition (suppl §A / C2 / C5); results-preview ¶ and
+  conclusion tag the RH verdicts; C2/C5 tagged in §3.5.
+- related work: optimization-philosophy cut (geometry-/sampling-/
+  topology-oriented) grafted onto the four-position map + pointer to new
+  suppl Table S6.
+- discussion now opens with "A local signal cannot carry a global
+  property — sparse tugs can." (merged with the sparse-tugs ¶).
+- **NEW concurrent-work citations** (see threat sweep below).
+- Paid for by trims: three duplications removed (C2g numbers now printed
+  only in Limitations; C6-sphere noise pair only in Limitations; "earns
+  its keep" only in intro), stretch-case detail + C7 internals moved to
+  suppl §B, fig widths 0.455→0.415 (series) and 0.405→0.365 (pot),
+  wording tightened throughout. Every number kept with its % src.
+
+**Adapted into SUPPL (now 10 pp incl. ~4 pp refs; builds clean):**
+- §B: pot **challenge inventory (Table S4)** — honest rows only (raw-soup
+  defects, certificate, sub-floor loops, flue-void floor rule, in-loop
+  outcome); **floor staircase (Table S5)** (1,0,0)@2048/4096 →
+  (1,0,1)@8192/20000, margin 1.20–1.23×; plus the moved stretch-case and
+  C7-internals paragraphs.
+- **NEW §D survey** "A decade of reconstruction, cut by optimization
+  philosophy": Table S6 matrix (27 methods incl. the nearest concurrent
+  work; the empty topology-objective cell is visually ours) + D.1–D.7
+  prose. refs.bib 46 → **108 entries**, every new entry web-verified
+  2026-07-16 with a provenance comment (6-agent sweep, 85 candidates →
+  58 kept). supplementary.tex now emits its own bibliography.
+
+**Rejected:** the rewrite PDF wholesale; Figure 1A paradigm cartoon (the
+taxonomy prose does the work; fig:tomyum's cutaway already serves as the
+challenge visual); 150–200-ref inflation (curated ~108); all fabricated
+numbers above; "first of its kind"/"scientific discovery" superlatives.
+
+## Concurrent-work threat sweep (de-risking, all web-verified 2026-07-16)
+
+**Verdict: the novelty gap HOLDS** — no prior/concurrent work measures a
+differentiable topological quantity of the *evolving surface* inside
+*image-based* training under a *primitive budget*. Four near-misses are
+now cited in main related work (a skimming reviewer would flag their
+titles if uncited):
+
+| work | what it actually does | our distinction |
+|---|---|---|
+| Topology-GS (AAAI 2025, `shen2025topologygs`) | PersLoss on barcodes of **rendered images** + PH-guided densification | image-space perceptual term; surface diagram unmeasured; adds primitives (no budget) |
+| Gao et al. (3DV 2026 poster, `gao2025genus`) | high-genus mesh inverse rendering; genus fixed by Gauss–Bonnet-matched **template** | topology assumed a priori, never measured in the objective |
+| Gao et al. (ICASSP 2026, `gao2026homology`) | PH computed **once** on a reference shape → camera placement | preprocessing prior, not a loss |
+| STITCH (arXiv, `jignasu2024stitch`) | differentiable PH (β₀) on a live **implicit** surface | point-cloud input: no images, no primitives, no budget |
+
+Also cited: Radiant Triangle Soup (`burgdorfer2025radiant`) — nearest
+representation neighbor (soup + "soft connectivity forces", purely
+geometric). Rebuttal one-liner: *they assume, prescribe, or render
+topology; we measure the reconstruction's own diagram in the loss, under
+a fixed budget.* Flagged for a library check (paywalled, unverifiable
+here): TopoGen (CGF 2025), TopoNet (CGF 2022), "topology-enhanced
+DeepSDF" (CAD 2026).
+
+## Reviewer-FAQ bank (corrected from the package; safe for rebuttal)
+
+- **"Why not a better geometric regularizer?"** C2 is exactly that, norm-
+  matched through the identical channel — and it is destructive (pins the
+  void 2.2× worse; erases the cube void; collapses a torus loop). The
+  gentle variant is still 1.6× worse. Ordering C1 < C0 < C2g < C2.
+- **"The allocation nulls are just bad priors."** B0–B5 include topology-
+  informed fields at two widths plus width-matched random controls; the
+  *best* torus arm is the random control (.0267 vs .0316), and
+  concentration manufactures phantoms (4.4 vs 2). Structural, not a
+  tuning failure. (Do NOT say "85–95%" — say "most of the gain,
+  shape-dependent residual: cylinder 4.6σ, sphere 2.2σ, cube tie".)
+- **"Only four external meshes; what about real scans?"** Acknowledged in
+  §7; the pot is the ingest→certify dress rehearsal (232 junction-edge
+  defects, 9 open shells → certified genus 3); bar-filtering
+  boundary-born features is the named near-term step; a synthetic
+  open-surface stress test comes first.
+- **"CUDA noise 7–10% could mask effects."** Noise enters at resampling,
+  before the loss; a loss-identical pair lands 6% apart; effects are
+  2.1–10.4× with Welch σ from 6.1 to 80.1; C7/C7h shows graceful
+  degradation under injected sensor noise.
+- **"Recruitment is ad hoc."** It repairs a *proven* zero-gradient
+  pathology of optimal matching; the toys probe its location-blindness;
+  C6 shows it is load-bearing (torus win collapses to 0.6σ from baseline
+  without it).
+- **"Why no Neuralangelo/SuGaR comparison?"** Different cost regime
+  (dense field / post-hoc extraction vs a fixed 700–2000-triangle
+  budget); the philosophy table (suppl Table S6) positions them; a
+  budget-matched comparison is future work, not a hidden loss.
+
+## Draft message to อาจารย์ (round 3)
+
+> เรียนอาจารย์ครับ
+>
+> ผมอ่านชุด revision ที่อาจารย์ส่งมา (4 ลิงก์ + PDF) ครบแล้วครับ
+> แนวคิดหลัก — เปลี่ยน framing จาก "เพิ่ม topology loss" เป็น
+> "allocation คือช่องทางที่ผิด ต้องแก้ที่ objective" — ผมเห็นด้วยและ
+> ใส่ลงเปเปอร์แล้วครับ:
+>
+> 1. **Intro เขียนใหม่** ตามโครงที่แนะนำ: สมมติฐานเดิมของสาย
+>    connectivity-free → ผลทดสอบ allocation (null result) → ย้าย
+>    topology เข้า objective พร้อมตั้ง research hypotheses
+>    **RH1/RH2/RH3** อย่างชัดเจน (ผมเปลี่ยนชื่อจาก H1–H3 เป็น RH1–RH3
+>    เพราะ H1/H2 ชนกับ homology class ในประโยคเดียวกันครับ)
+> 2. **Related work จัดกลุ่มตาม optimization philosophy**
+>    (geometry- / sampling- / topology-oriented) พร้อมตาราง
+>    methods-by-philosophy 27 วิธี (Table S6 ใน supplementary
+>    เพราะ main จำกัด 8 หน้า)
+> 3. **ตาราง stress-test ของหม้อต้มยำ** (Table S4) + ตาราง floor
+>    protocol (Table S5) — ผมตัด 2 แถวของร่าง AI ออก
+>    (specular BRDF / no texture) เพราะภาพ training จริงเป็น
+>    diffuse สีเดียว โลหะมีเฉพาะในรูป showcase ครับ
+> 4. **Literature survey เพิ่มเป็น 108 อ้างอิง** (curated ตามที่ตกลง
+>    ~100 ไม่ถึง 150–200 ของร่าง) — ทุกรายการใหม่ตรวจกับ
+>    arXiv/ACM/Crossref แล้ว เพราะร่าง AI มี citation ผิด/ไม่มีจริง
+>    ปนอยู่ครับ
+> 5. **สำคัญ:** ผมกวาดงานคู่แข่ง 2024–2026 เพิ่ม พบ 4 งานใกล้เคียง
+>    ที่ต้อง cite กันโดน reviewer ท้วง (Topology-GS ของ AAAI'25,
+>    งาน high-genus ของกลุ่ม Gu ที่ 3DV'26/ICASSP'26, และ STITCH)
+>    — ตรวจแล้ว **ช่องว่างของเรายังอยู่**: ยังไม่มีใครวัด persistence
+>    ของพื้นผิวจริงใน loss ระหว่าง train จากภาพ ภายใต้ triangle
+>    budget ครับ
+>
+> ตัวเลขทุกตัวในเปเปอร์ยังตรง audit script เดิม, เนื้อหา main จบที่
+> 8 หน้าพอดีตามเกณฑ์ 3DV ครับ ข้อเสนอบางส่วนของร่าง (คะแนน
+> review ที่คาดการณ์, ตัวเลข 85–95%, M=8192 "3.1×") เป็นตัวเลขที่
+> AI สร้างขึ้นเอง ผมแก้เป็นตัวเลขจริงจากผลทดลองแล้วครับ
+>
+> อีกเรื่องที่ค้างครับ: **SA 2026 poster (เดดไลน์ 31 ก.ค.)**
+> อาจารย์อยากให้ส่งคู่ไปด้วยไหมครับ
+
+---
+
 # PAPER 2 — 10-YEAR RELATED-WORK SWEEP (advisor request, 2026-07-13 later)
 
 **Advisor asked: หา related works 10 ปี ที่สนับสนุนหรือเห็นต่างกับแนวคิด
