@@ -1,0 +1,197 @@
+\section{A decade of reconstruction, cut by optimization philosophy}
+\label{app:survey}
+
+% Advisor round 3 (2026-07-16): systematic survey appendix. Discipline:
+% every entry cited here was verified against its landing page on
+% 2026-07-16 (provenance comment on each new refs.bib entry); the survey
+% states each method's topology treatment, never its numbers. The
+% philosophy matrix (Table S6) is referenced from the main paper's
+% related work. Closest-work verdicts in D.7 follow the verified sweep
+% (threat assessment recorded in NOTES_FOR_AUTHOR.md).
+% TODO(human): voice pass.
+
+The main paper's related work argues one sentence that this appendix
+substantiates in breadth: reconstruction methods of the differentiable
+decade, whatever their representation, optimize \emph{geometric}
+objectives (photometric fidelity plus geometric regularizers) or steer
+\emph{sampling} under such an objective --- topology, when correct, is
+correct by construction, by extraction, or by accident, never because
+the training objective measured it. Table~\ref{tab:philosophy}
+tabulates representative methods under this cut, including the nearest
+concurrent topology-aware entries; the subsections survey each family
+and the adjacent literatures this paper draws machinery or discipline
+from.
+
+\begin{table*}[t]
+\centering
+\caption{Representative reconstruction methods by optimization
+philosophy. ``Topology in objective?'' asks whether the \emph{training
+objective} measures a topological quantity of the reconstructed
+\emph{surface} (not whether the representation constrains topology, and
+not image-space summaries). Bottom block: the nearest topology-aware
+concurrent work (\S D.7).}
+\label{tab:philosophy}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lllll}
+\toprule
+method & repr. & philosophy & topology in objective? & topology from \\
+\midrule
+NeRF~\citep{mildenhall2020nerf} & density field & geometry & no & emergent \\
+OccNet~\citep{mescheder2019occupancy} & occupancy & geometry & no & construction (closed iso) \\
+DeepSDF~\citep{park2019deepsdf} & SDF & geometry & no & construction (closed iso) \\
+NeuS~\citep{wang2021neus} & SDF & geometry & no & construction (closed iso) \\
+Neuralangelo~\citep{li2023neuralangelo} & SDF & geometry & no & construction (closed iso) \\
+Pixel2Mesh~\citep{wang2018pixel2mesh} & template mesh & geometry & no & frozen at template genus \\
+Point2Mesh~\citep{hanocka2020point2mesh} & template mesh & geometry & no & frozen at template genus \\
+Mesh R-CNN~\citep{gkioxari2019meshrcnn} & voxels $\to$ mesh & geometry & no & fixed by voxelization \\
+DMTet~\citep{shen2021dmtet} & grid $+$ marching & geometry & no & extraction over the grid \\
+nvdiffrec~\citep{munkberg2022nvdiffrec} & grid $+$ marching & geometry & no & extraction over the grid \\
+FlexiCubes~\citep{shen2023flexicubes} & grid $+$ marching & geometry & no & extraction over the grid \\
+Shape-as-Points~\citep{peng2021sap} & points $\to$ implicit & geometry & no & construction (closed iso) \\
+AtlasNet~\citep{groueix2018atlasnet} & patch soup & geometry & no & unmeasured \\
+DSS~\citep{yifan2019dss} & point soup & geometry & no & unmeasured \\
+3DGS~\citep{kerbl2023gaussians} & Gaussian soup & geometry & no & unmeasured \\
+2DGS~\citep{huang20242dgs} & surfel soup & geometry & no & unmeasured \\
+SuGaR~\citep{guedon2024sugar} & Gaussians $\to$ mesh & geometry & no & post-hoc extraction \\
+MILo~\citep{guedon2025milo} & Gaussians$+$mesh & geometry & no & in-loop extraction, unmeasured \\
+Triangle Splatting~\citep{held2025trianglesplatting} & triangle soup & geometry & no & unmeasured \\
+Radiant Tri.\ Soup~\citep{burgdorfer2025radiant} & triangle soup & geometry & no & unmeasured (proximity forces) \\
+Mini-Splatting~\citep{fang2024minisplatting} & Gaussian soup & sampling & no & unmeasured (budgeted resample) \\
+DiffSoup~\citep{tojo2026diffsoup} & triangle soup & geometry & no & unmeasured \\
+DiffSoup $+$ prior (\S A) & triangle soup & sampling & no (steers only) & unmeasured; fails on loops \\
+\midrule
+Topology-GS~\citep{shen2025topologygs} & Gaussian soup & topology (image) & rendered images only & surface unmeasured \\
+Gao et al.~\citep{gao2025genus,gao2026homology} & watertight mesh & geometry & no (topology a prior) & template genus / camera prior \\
+STITCH~\citep{jignasu2024stitch} & implicit (points) & topology & yes ($\beta_0$, live surface) & construction $+$ constraint \\
+\textbf{this work} & triangle soup & \textbf{topology} & \textbf{yes} (live-surface persistence) & measured, optimized, budgeted \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Geometry-oriented: implicit fields}
+Occupancy and signed-distance learning deliver closed surfaces by
+construction~\citep{mescheder2019occupancy,park2019deepsdf,peng2020convoccnet},
+and a fitting stack matured around the level set: Eikonal
+regularization~\citep{gropp2020igr}, surface
+rendering~\citep{yariv2020idr,oechsle2021unisurf}, SDF-based volume
+rendering~\citep{yariv2021volsdf,wang2021neus}, geometric
+priors~\citep{yu2022monosdf}, high-resolution and accelerated
+variants~\citep{li2023neuralangelo,wang2023neus2,muller2022instantngp},
+meshing for deployment~\citep{yariv2023bakedsdf}, and kernel-based
+point-cloud fitting~\citep{huang2023nksr}. Across all of them the
+training objective is photometric or geometric; the guarantee of
+consistent topology comes from the representation, its \emph{correctness}
+(the right genus for the scene) is emergent, and the price is dense
+field evaluation plus post-hoc extraction --- the cost regime the
+soup family exists to avoid.
+
+\subsection{Geometry-oriented: extraction, grids, and templates}
+Where the surface is explicit, its topology is decided by an extraction
+algorithm or frozen by a template. Marching Cubes and Dual Contouring
+fix per-cell connectivity by
+convention~\citep{lorensen1987marching,ju2002dual}; Poisson
+reconstruction extracts an indicator iso-surface, watertight but with
+emergent genus~\citep{kazhdan2006poisson,kazhdan2013screened};
+differentiable iso-surfacing makes extraction trainable without making
+topology a
+target~\citep{remelli2020meshsdf,gao2020deftet,shen2021dmtet,munkberg2022nvdiffrec,shen2023flexicubes};
+learned tessellations move the per-cell decision into a
+network~\citep{chen2021nmc,chen2020bspnet}; and template pipelines fix
+topology up front and then only
+deform~\citep{wang2018pixel2mesh,hanocka2020point2mesh,gkioxari2019meshrcnn}.
+Robust meshing gives the same guarantee-by-construction for simulation
+inputs~\citep{hu2018tetwild}. In every case topology is an input or an
+artifact of the algorithm --- measured nowhere, optimized never.
+
+\subsection{Geometry-oriented: point splatting and Gaussian soups}
+The connectivity-free line runs from EWA surface
+splatting~\citep{zwicker2001splatting} through neural point
+rendering~\citep{aliev2020npbg,ruckert2022adop,xu2022pointnerf} to the
+Gaussian-splatting era~\citep{kerbl2023gaussians,yu2024mipsplatting} ---
+Pulsar's abstract advertises the family's freedom from mesh ``topology
+problems'' explicitly~\citep{lassner2021pulsar}. Its surface-minded
+members regularize geometry ever harder --- flattened
+surfels~\citep{huang20242dgs,dai2024surfels}, planar
+compression~\citep{chen2024pgsr}, opacity-field
+extraction~\citep{yu2024gof}, alignment-driven
+meshing~\citep{guedon2024sugar} --- and MILo now extracts a mesh
+differentiably at \emph{every} training
+iteration~\citep{guedon2025milo}; triangle soups follow the same
+pattern~\citep{held2025trianglesplatting,burgdorfer2025radiant,tojo2026diffsoup}.
+Yet even with connectivity in the loop, no member of the family
+measures a topological quantity of what it builds: the objectives
+remain photometric fidelity plus geometric regularity.
+
+\subsection{Sampling-oriented: steering where a fixed objective spends}
+The second occupied family changes \emph{where} primitives go, not what
+the objective asks of them: split-and-prune densification in
+3DGS~\citep{kerbl2023gaussians}, budget-constrained Gaussian
+resampling~\citep{fang2024minisplatting}, importance-driven respawn in
+DiffSoup~\citep{tojo2026diffsoup} --- and the topology-inspired
+allocation priors of our own study (\S A), which put the family's
+implicit hypothesis to a controlled test and returned the null result
+the main paper builds on. Steering allocation is a real lever for
+\emph{geometric} coverage; the study shows it is structurally the wrong
+lever for one-dimensional topology.
+
+\subsection{Topology as machinery: persistence in and around learning}
+The ingredients for topology-aware objectives have been maturing for two
+decades: persistence computation at
+scale~\citep{zomorodian2005computing,bauer2021ripser,maria2014gudhi},
+practical diagram metrics~\citep{kerber2017geometry}, stability
+theory~\citep{cohensteiner2007stability}, and vectorized
+representations~\citep{adams2017images,bubenik2015landscapes} on the
+computational side; trainable diagram
+layers~\citep{hofer2017signatures,carriere2020perslay}, filtration
+learning~\citep{hofer2020filtration}, and general differentiability
+frameworks~\citep{leygonie2022framework,carriere2021optimizing,nigmetov2024bigsteps}
+on the gradient side (surveyed
+in~\citep{chazal2021introduction,carriere2026survey}). In-loop
+topological losses already win in adjacent domains --- representation
+learning~\citep{moor2020topoae}, tubular and topologically faithful
+segmentation~\citep{shit2021cldice,stucki2023betti,hu2019topopreserving,clough2022topoloss},
+microscopy volume prediction~\citep{waibel2022topological}, point-cloud
+repair~\citep{bruel2020toporecon,poulenard2018shapematching} --- and
+differentiable non-persistence signals exist
+too~\citep{roell2024dect}. What had not happened is the transfer of
+this machinery into image-based surface reconstruction.
+
+\subsection{Topology outside the loop: repair and benchmarks}
+Before differentiable pipelines, topology was corrected after the fact:
+spurious-handle removal~\citep{guskov2001topological,wood2004excess},
+general mesh repair~\citep{attene2010repair,ju2004repair,sharf2007topologyaware}
+(surveyed in~\citep{attene2013repairing}), and soup-to-manifold
+conversion~\citep{huang2020manifoldplus,hu2018tetwild}; Thingi10K
+quantifies how pervasive soup-like defects are in the
+wild~\citep{zhou2016thingi10k} --- our tom-yum pot's raw export is a
+typical specimen. The evaluation culture matches: standard pipelines
+and benchmarks --- COLMAP~\citep{schonberger2016sfm,schonberger2016pixelwise},
+PMVS~\citep{furukawa2010pmvs}, DTU~\citep{jensen2014dtu}, Tanks and
+Temples~\citep{knapitsch2017tanks} --- score accuracy and completeness
+by point distances; none carries a topological-correctness metric, the
+blindness our Table~S1 quantifies on controlled probes.
+
+\subsection{The empty cell, and its nearest neighbours}
+Concurrent work has begun to press on the gap from several directions,
+and the distinctions matter. Topology-GS~\citep{shen2025topologygs}
+puts a persistence term \emph{inside} Gaussian-splatting training ---
+but on barcodes of \emph{rendered images}, a topological-perceptual
+loss; the surface's diagram is never measured, and densification adds
+primitives rather than budgeting them. The high-genus inverse-rendering
+line~\citep{gao2025genus,gao2026homology} reconstructs meshes whose
+genus is guaranteed by a Gauss--Bonnet-matched template or guides
+camera placement with homology computed once on a reference shape ---
+topology as a \emph{prior}, assumed rather than measured, with
+ground-truth genus required up front.
+STITCH~\citep{jignasu2024stitch} does measure a differentiable
+persistence quantity on a live implicit surface --- enforcing a single
+connected component --- but from point-cloud input: no images, no
+primitives, no budget. Topology also enters generation as conditioning
+features~\citep{hu2024topodiffusion}, again outside the reconstruction
+objective. Partition the three requirements --- (i) a topological
+quantity of the evolving \emph{surface} measured differentiably in the
+objective, (ii) image-based reconstruction through a renderer, (iii) a
+fixed primitive budget --- and each neighbour holds at most one; none
+holds all three. That cell --- the bottom row of
+Table~\ref{tab:philosophy} --- is what the main paper fills.

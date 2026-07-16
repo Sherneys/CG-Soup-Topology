@@ -14,15 +14,15 @@ views): sphere and cube
 (void class H2, $\beta{=}(1,0,1)$, budget $N{=}1200$), torus (loop class H1,
 $(1,2,1)$, $N{=}700$), two spheres (component class H0, $(2,0,2)$, $N{=}700$),
 and genus-2 double torus as a stretch case ($(1,4,1)$, $N{=}2000$). Budgets
-are the allocation study's headroom points (suppl.\ \S A): tight enough
-that baseline topology is imperfect, so there is something to win.
+are the allocation study's headroom points (suppl.\ \S A) --- tight
+enough that baseline topology is imperfect.
 % src: PHASE2B_CROSSOVER.md (headroom pilot); PHASE3_PLAN.md §6
 Four external, genus-known meshes probe generality beyond the analytic
 family (\S\ref{sec:generality}). Three are watertight benchmarks:
 \emph{spot} (genus 0) and \emph{bob} (genus 1) from the Crane model
 repository (CC0), and the \emph{fandisk} CAD benchmark (genus 0) ---
 rendered with the same pipeline (48 views, 200\,px) at unchanged class
-budgets; a seed-0 C0 pilot confirms baseline imperfection (tail bottleneck
+budgets; a seed-0 C0 pilot confirms baseline imperfection (tails
 $.043$--$.054$, inside the analytic band).
 % src: output/synth/{spot,bob,fandisk} scene builds; pilot tails = the
 % seed-0 entries of the topo3/report/results.json C0 aggregates
@@ -45,7 +45,7 @@ yielding one body of genus 3, $\beta{=}(1,6,1)$
 exact ($190{,}990$ vertices), rendered and budgeted as a void-class shape
 ($N{=}1200$, 48 views, 200\,px). Where the benchmark trio's topology is
 known by construction, the pot's is known by \emph{certificate} --- the
-pipeline real scans will need.
+pipeline real scans will need (challenge inventory: suppl.\ Table~S4).
 % naming: rendered as tom-yum pot; the asset, tags and files are named
 % kinkin internally (do not confuse with the constructed CSG pot, which is
 % NOT in this paper).
@@ -56,13 +56,12 @@ The pot also exercises the measurement floor of \S\ref{sec:discussion}
 prospectively: no H1 loop of the certified shell (handle bores, flue)
 clears the $6\,r_{\mathrm{med}}$ floor at any working $M$, while the
 narrow flue mouth caps at small $\alpha$, making the flue interior an
-enclosed chamber --- an H2 void on the pot axis. The void first
-clears the floor at $M{=}8192$ (margin $1.20$--$1.23\times$ across five
-sampling seeds), so the pre-registered floor rule builds its target
-bundle there --- the study's only protocol deviation --- and the loss
-samples the live surface at the same density (the density-matched
-contract). The bundle carries
-exactly one significant bar (H2), stable to re-sampling (${\sim}10^{-5}$).
+enclosed chamber --- an H2 void on the pot axis, first clearing the
+floor at $M{=}8192$ (margin $1.20$--$1.23\times$ across five sampling
+seeds). The pre-registered floor rule builds its target bundle there ---
+the study's only protocol deviation --- and the loss samples the live
+surface at the same density. The bundle carries exactly one significant
+bar (H2), stable to re-sampling (${\sim}10^{-5}$).
 % src: PHASE3_STATUS.md Post-3e (make_kinkin_asset.py preflight staircase:
 % (1,0,0)@2048/4096 -> (1,0,1)@8192/20000; margins recomputed live by
 % scripts/make_kinkin_brief_docx.py); floor rule: experiments/density_bound.py
@@ -74,20 +73,17 @@ plus the recruitment ablation C6), replication shapes (cube, two spheres) 3
 seeds (C0/C1/C2), double torus 2 seeds. A sensor-noise stress test
 (C7/C7h $=$ C1 $+$ noise; decisive shapes, 3 seeds) perturbs the cloud the
 loss \emph{plan} sees with i.i.d.\ Gaussian noise at every refresh,
-$\sigma = 0.5\%/1\%$ of the target diagonal (${\approx}0.5/1.0\times$ the
-median sample spacing at $M{=}2048$): pairing, Gabriel gates, and
-recruitment decide on the noisy observation; the pulls apply to the true
-live positions.
+$\sigma = 0.5\%/1\%$ of the target diagonal (${\approx}0.5/1.0$ median
+sample spacings at $M{=}2048$): the plan decides on the noisy
+observation, the pulls apply to the true live positions.
 % src: methods/topological_loss.py TopoLossState(noise=...); r_med at 2048:
 % experiments/density_bound.py (torus .0104, i.e. 1% of diag ~= 1 spacing)
-The torus restricts the loss to H1: its own void bar is sub-threshold
-at $M{=}2048$, and a loss must not act on features it cannot reliably measure
-at its sampling density. For the same reason the double torus targets its two
-measurable loops (of four) --- matching what the reconstruction itself can
-express at any feasible budget. The generality wave runs C0/C1/C2, three
-seeds; bob (fat tube, unlike the thin torus) has both loops \emph{and}
-void significant at $M{=}2048$ and runs the full bundle; the tom-yum pot
-runs at the floor-rule density above.
+The torus restricts the loss to H1 (its own void bar is sub-threshold at
+$M{=}2048$ --- a loss must not act on features it cannot reliably
+measure); the double torus likewise targets its two measurable loops of
+four. The generality wave runs C0/C1/C2, three seeds; bob (fat tube) has
+both loops \emph{and} void significant at $M{=}2048$ and runs the full
+bundle; the pot runs at the floor-rule density above.
 % src: PHASE3_PLAN.md Appendix C (bundle preflights) + PHASE2B (2/4 loops);
 % spot/bob/fandisk bundle preflights 2026-07-09 (H bars printed at build)
 
@@ -100,10 +96,9 @@ at Chamfer parity --- a topological win a dumb regularizer can match is not a
 topological win. \emph{Chamfer parity}, formally: the passing arm's
 seed-mean Chamfer must satisfy
 $\mathrm{Ch}(\mathrm{C1})\le 1.15\,\mathrm{Ch}(\mathrm{C0})$; the $15\%$
-headroom absorbs seed variance and CUDA nondeterminism and in practice
-never did any work --- every passing arm's Chamfer was at or below
-baseline. (CUDA nondeterminism itself is quantified in
-\S\ref{sec:limitations}.)
+headroom absorbs seed variance and CUDA nondeterminism (quantified in
+\S\ref{sec:limitations}) and in practice never did any work --- every
+passing arm's Chamfer was at or below baseline.
 % src: experiments/topo_loss_report.py PARITY_MULT = 1.15; per-arm
 % chamfer_mean in topo3/report/results.json (all passing arms <= C0)
 % src: experiments/topo_loss_report.py verdict rule; PHASE3_PLAN.md App. B

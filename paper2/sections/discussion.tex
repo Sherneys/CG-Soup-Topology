@@ -5,7 +5,14 @@
 % 3DV pass 2026-07-13: appendix/fig refs -> supplementary; tightened.
 % All numbers verbatim.
 
-\paragraph{Sparse tugs vs.\ budget allocation.} Each significant pair
+\paragraph{A local signal cannot carry a global property --- sparse
+tugs can.} A pixel's photometric gradient reaches only the few vertices
+rasterizing to it; topology is global and categorical --- a wrong genus
+is not approached smoothly, and the blindness probes quantify the gap
+(Chamfer equal \emph{by construction}, bottleneck apart $35$--$40\times$;
+suppl.\ Table~S1) --- so no geometric proxy stands in for the
+measurement. The persistence term supplies it with a usable gradient.
+Each significant pair
 back-propagates through the $3$--$7$ sample positions of its birth and
 death simplices: \emph{precise but sparse} pulls, iterated by re-pairing
 --- the toys show surgery ``walking'' around a defect a few points at a
@@ -21,10 +28,10 @@ pins at that equilibrium (identical across seeds), then drags, while
 near-diagonal phantom bars accumulate (diagram trajectories: suppl.\
 Fig.~S1), and thin structures collapse ($\beta_2$ on the cube, $\beta_1$
 on the torus). The loss has no length-scale constraint --- it pulls the
-death coordinate itself and the geometry follows. So the control argument
-sharpens: the same gradient budget through the same channel
-\emph{without} topological information is not neutral but harmful ---
-C1's wins cannot be an artifact of extra regularization.
+death coordinate itself. The control argument sharpens: the same
+gradient budget through the same channel \emph{without} topological
+information is not neutral but harmful --- C1's wins cannot be an
+artifact of extra regularization.
 
 \paragraph{Measurability at the loss's density.} A persistence loss can only
 enforce features that clear the significance floor at its sampling density
@@ -37,7 +44,7 @@ itself can express at feasible budgets.
 
 The floor is quantifiable: a bar is significant iff its lifetime exceeds
 $6\,r_{\mathrm{med}}(M)$ ($r_{\mathrm{med}}$ = median nearest-neighbour
-spacing, the implementation's self-calibrating threshold), and
+spacing), and
 $r_{\mathrm{med}}$ follows the uniform-sampling law $\propto M^{-1/2}$
 (measured $.0090{\to}.0028$ over $M{=}2048{\to}20000$; ratio $3.16$ vs
 $\sqrt{9.77}{=}3.13$). The
@@ -52,17 +59,14 @@ noise: its second loop clears the clean floor by only $1.33\times$, a
 margin the live cloud's noise consumes --- why it is chronically
 sub-threshold in training and recruitment is its only gradient path (C6).
 Recruitment is thus how the loss reaches below its own significance floor
-on the live side: landscape-guided in practice (unproductive tears
-self-extinguish at the local detour scale; suppl.\ \S C), with the
-location-blindness caveat for target features beyond any achievable
-detour.
-Suppl.\ Table~S3 tabulates the counts across $M$ (at $4096$ all four
-double-torus loops clear). The tom-yum pot ran the rule
-\emph{prospectively} (\S\ref{sec:setup}), picking observable class and
-bundle density before any training run; the in-loop result
-(Table~\ref{tab:gen}) validated it. Adaptive or multi-scale density is
-the natural extension; the trade is explicit, since persistence cost
-grows $O(M\log M)$.
+on the live side: landscape-guided in practice (suppl.\ \S C), with the
+location-blindness caveat for targets beyond any achievable detour.
+Suppl.\ Table~S3 tabulates counts across $M$ (at $4096$ all four
+double-torus loops clear); the tom-yum pot ran the rule
+\emph{prospectively} (\S\ref{sec:setup}), and the in-loop result
+(Table~\ref{tab:gen}) validated it. Adaptive density is the natural
+extension; the trade is explicit --- persistence cost grows
+$O(M\log M)$.
 % src: kinkin staircase/margins: PHASE3_STATUS.md Post-3e (preflight of
 % scripts/make_kinkin_asset.py; live recompute in make_kinkin_brief_docx.py)
 % src: experiments/density_bound.py — persistence_from_target on the GT

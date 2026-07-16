@@ -63,3 +63,106 @@ activates. \emph{Bottom}, repulsion control: the void is pinned and
 dragged away while near-diagonal phantom bars accumulate.}
 \label{fig:pdtraj}
 \end{figure}
+
+\paragraph{The genus-2 stretch case, in full.}
+% Moved from main §5.1 for the 3DV page limit (2026-07-16); numbers and
+% srcs verbatim.
+On the double torus every arm --- baseline, loss, control --- returns a
+bottleneck of exactly $.0264$ (sd $0$ over seeds), and Wasserstein is
+equally pinned ($.0527$--$.0528$): the two tube loops are unexpressable
+at feasible budgets (replicating the allocation study's floor, \S A) and
+dominate both diagram metrics regardless of guidance. The loss adds no
+phantoms ($\#$sig $\beta_1$ $=2$ every run) at marginally best Chamfer.
+% src: topo3/report/{results.json,cache/double_torus_*} (W2 check 2026-07-07)
+
+\paragraph{Sensor-noise internals (C7/C7h).}
+% Moved from main §5.1 for the 3DV page limit (2026-07-16); numbers and
+% srcs verbatim.
+Recruitment absorbs the injected noise: at $\sigma{=}1\%$ the torus's
+second loop is sub-threshold at every refresh, with zero unreached
+targets. Calibration is the noisiest stage ($\lambda_{\mathrm{peak}}$
+spreads ${\approx}3\times$ across seeds), yet tails stay tight ---
+consistent with the flat $\rho$ response reported in the main paper.
+% src: topo3/report/results.json (C7/C7h arms) + topo3/_train/*_C7*/
+% topo_loss_log.json ("refreshes": n_gabriel_fail / recruit /
+% target_unreached per refresh; lam_peak per run)
+
+\paragraph{The tom-yum pot: challenge inventory and prospective floor
+protocol.}
+% Advisor round 3 (2026-07-16): pot stress-test tables. Rows are
+% certificate- or measurement-backed only — the advisor package's
+% "specular BRDF / no texture" rows were dropped (training renders are
+% constant-albedo diffuse; aluminium exists only in the showcase figure).
+The generality wave's artist mesh (main paper \S4, \S5.2) compounds the
+failure modes real scans will bring. Table~\ref{tab:potchal} inventories
+them with the measured consequence of each --- every row is backed by
+the ingest certificate or by a measurement in this study, none is
+asserted. Table~\ref{tab:potstair} records the staircase behind the flue
+row: the certified shell's significant-bar signature across sampling
+density, which fixed the observable class (H2) and the bundle density
+($M{=}8192$) \emph{before} any training run.
+% src: kinkin_src_cert.json (raw-soup + certificate rows);
+% PHASE3_STATUS.md Post-3e (staircase, margins, bundle content,
+% re-sample stability); topo3/quicklook.json (in-loop outcome, 2026-07-10)
+
+\begin{table}[tb]
+\centering
+\caption{Tom-yum pot challenge inventory: what makes the shape hard, and
+the measured consequence in this study.}
+\label{tab:potchal}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{p{0.315\linewidth}p{0.615\linewidth}}
+\toprule
+challenge & measured consequence \\
+\midrule
+% src: kinkin_src_cert.json (raw-soup counts)
+raw artist export: 9 open shells, mixed quad/12-gon faces, 50 boundary
+edges after exact weld, 232 non-manifold junction edges & no trustworthy
+ground-truth topology as exported; ingest-and-certify required (weld,
+offset-solidify, drop 804 enclosed pocket shells) \\
+% src: kinkin_src_cert.json (certificate)
+certified shell: one body, genus 3, $\beta{=}(1,6,1)$ exact,
+$190{,}990$ vertices & ground truth known by \emph{certificate} (exact
+simplicial homology; watertightness cross-check; bit-identical
+rebuilds), not by construction \\
+% src: PHASE3_STATUS.md Post-3e (all H1 sub-floor at working M)
+six thin handle/vent loops & every H1 loop sits below the significance
+floor at every working density --- H1 is unusable as the loss
+observable \\
+% src: PHASE3_STATUS.md Post-3e (staircase + margins)
+narrow flue mouth, capping at small $\alpha$ & the flue interior reads
+as an enclosed on-axis chamber --- an H2 void, first measurable at
+$M{=}8192$ (margin $1.20$--$1.23\times$, five sampling seeds); the
+floor rule picks class and density prospectively
+(Table~\ref{tab:potstair}) \\
+% src: topo3/quicklook.json (kinkin C0/C1/C2, seeds 0-2)
+in-loop outcome & C1 cuts the void's error $3.9\times$ at Chamfer
+parity; the repulsion control \emph{destroys} it ($\beta_2\,1{\to}0$,
+all seeds, $1.36\times$ worse Chamfer) --- main paper Table~2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\centering
+\caption{Tom-yum pot staircase (seed 0; the $M{=}8192$ margin spans
+seeds 0--4): significant-bar signature
+$(\beta_0,\beta_1,\beta_2)$ of the certified shell vs.\ sampling density
+$M$, floor $=6\,r_{\mathrm{med}}(M)$. The bundle is built at the first
+density where the discriminating feature clears ($M{=}8192$: exactly one
+significant bar, H2, stable to re-sampling at ${\sim}10^{-5}$).}
+\label{tab:potstair}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lcccc}
+\toprule
+ & $M{=}2048$ & $M{=}4096$ & $M{=}8192$ & $M{=}20000$ \\
+\midrule
+% src: PHASE3_STATUS.md Post-3e staircase (recomputed live by
+% scripts/make_kinkin_brief_docx.py from the certified mesh)
+sig.\ bars & $(1,0,0)$ & $(1,0,0)$ & $(1,0,1)$ & $(1,0,1)$ \\
+\bottomrule
+\end{tabular}
+\end{table}

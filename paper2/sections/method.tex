@@ -22,9 +22,9 @@ where $V$ are the soup's vertex positions and $L_{\mathrm{topo}}$ compares the
 persistence diagram of the live surface to a fixed \emph{target bundle}
 $\mathcal{T}$: the significant finite bars of the ground-truth shape's
 diagram, computed once at the sampling density $M$ the loss will see
-(alpha values shift with point spacing: density matching is a correctness
-requirement) and normalized by the target's bounding-box diagonal, locked
-for all live evaluations.
+(alpha values shift with spacing: density matching is a correctness
+requirement), normalized by the target's bounding-box diagonal, and
+locked for all live evaluations.
 
 \subsection{Live diagram and pair-frozen backward}
 At each refresh we draw $M$ surface samples ($M{=}2048$ unless the
@@ -56,18 +56,18 @@ We verify, per pairing, that the re-expressed value matches the filtration
 value (relative $10^{-6}$); a pair failing this Gabriel test is
 \emph{detached} --- it keeps its (correct) value in the loss but propagates
 no gradient through that simplex, so an exactness failure can never inject
-a wrong gradient; the worst case is a missing tug for one refresh interval.
+a wrong gradient.
 In practice the gate never fires: 100\% of significant pairs are
 Gabriel-exact on all six shapes' clean clouds, with zero
 failures in the stress test's $2{,}400$ noisy refreshes
-(\S\ref{sec:results}). The per-refresh failure count is logged, and
-stronger fallbacks (dropping failing pairs, subgradient surrogates,
-locally raising $M$) remain compatible with the gate.
+(\S\ref{sec:results}); the per-refresh count is logged, and stronger
+fallbacks (dropping pairs, subgradients, locally raising $M$) stay
+compatible.
 % src: PHASE3_PLAN.md Appendix A (mapping + Gabriel gates, 22/22)
 The pairing is treated as locally constant --- the standard pair-frozen
 device~\citep{gabrielsson2020topologylayer,carriere2021optimizing} ---
 refreshed every $K{=}10$ steps and, necessarily, after every resampling
-event, which replaces the vertex and face tensors wholesale.
+event (which replaces the vertex and face tensors wholesale).
 
 \subsection{Matching, diagonal pressure, and recruitment}
 Let $D$ be the live significant bars and $\mathcal{T}$ the target bars of one
@@ -103,8 +103,8 @@ k(j) &= \operatorname*{arg\,min}_{k\,\in\,\mathcal{A}_j}
 \end{split}
 \end{equation}
 where $\mathcal{A}_j$ is the pool remaining after earlier recruitments;
-recruited bars are excluded from the diagonal term. Both coordinates of a
-recruited bar back-propagate through the same circumradius machinery.
+recruited bars are excluded from the diagonal term and back-propagate
+through the same circumradius machinery.
 This deliberately departs from a metric-faithful $W_2$;
 \S\ref{sec:results} probes its known pathology (location-blindness)
 directly, and the C6 ablation shows the term is load-bearing in training.
@@ -120,11 +120,10 @@ $\rho\in\{0.03,0.1,0.3\}$, and an uncalibrated-schedule ablation (constant
 $\lambda$ from step one) matches the ramped version --- calibration, not
 scheduling, is what makes the knob safe.
 % src: PHASE3_PLAN.md Appendix C (rho sweep) + Appendix D (C3 vs C1)
-The window carries no measurable sensitivity either: alternative ramps
-($10$--$40\%$, $30$--$60\%$; sphere, three seeds) land at
-$.0154{\pm}.0017$ / $.0179{\pm}.0019$ vs the default's $.0156{\pm}.0013$
---- within seed noise; $20{:}50$ is a conservative choice, not a tuned
-hyperparameter.
+Alternative windows ($10$--$40\%$, $30$--$60\%$; sphere, three seeds)
+land at $.0154{\pm}.0017$ / $.0179{\pm}.0019$ vs the default's
+$.0156{\pm}.0013$ --- within seed noise; $20{:}50$ is conservative, not
+tuned.
 % src: ramp_1040/quicklook.json + ramp_3060/quicklook.json (2026-07-09)
 
 \subsection{Conditions}
@@ -132,12 +131,12 @@ hyperparameter.
 C0: baseline (photometric only). C1: $+L_{\mathrm{topo}}$. C2: $+$ a
 short-range repulsion on the \emph{same} frozen samples, calibrated with the
 \emph{same} $\rho$ --- a norm-matched non-topological control through the
-identical channel (C2g: a gentler radius). C3: C1 without the ramp.
+identical channel, the RH2 test (C2g: a gentler radius). C3: C1 without
+the ramp.
 C5: C1 $+$ the best prior of our allocation study (the spread topological
-field B4; suppl.\ \S A).
+field B4; suppl.\ \S A) --- the RH3 test.
 C6: C1 with the recruitment term removed
 (pure matching $+$ diagonal, all else identical) --- does recruitment matter
-in-loop, or only for cold-start repair? The hook adds one loss line to the
-training loop; flag off, no new code executes, and a $\rho{=}0$ run is
-divergence-equivalent to baseline under CUDA nondeterminism.
-% src: PHASE3_PLAN.md Appendix B (cleanliness, revised criterion)
+in-loop, or only for cold-start repair?
+% src: PHASE3_PLAN.md Appendix B (cleanliness, revised criterion; the
+% one-loss-line hook / flag-off / rho=0-divergence note trimmed 2026-07-16)

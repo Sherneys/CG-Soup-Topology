@@ -75,18 +75,17 @@ Resampling priors can steer \emph{where} a differentiable triangle-soup
 reconstruction spends its triangle budget, but our controlled study of that
 channel (supplementary material) found their topological value carried
 largely by spatial \emph{width}, and no prior shape repairs
-one-dimensional features: concentrated priors manufacture phantom handles,
-spread priors never beat a random control. We move topology
+one-dimensional features. We move topology
 from the allocation channel into the \emph{objective}:
 $L=\mathrm{photometric}+\lambda(t)\,L_{\mathrm{topo}}$, where
 $L_{\mathrm{topo}}$ is an optimally-matched distance between the live surface's
 persistence diagram and a fixed target diagram. Gradients flow through a
-pair-frozen backward pass: matched birth/death simplices are re-expressed
-as closed-form circumradii of live sample positions --- exact for Gabriel
-simplices, which constitute all significant pairs in practice --- and a
-recruitment term restores the gradient optimal matching provably lacks
-when a target feature is missing. A single ratio knob $\rho$ sets the
-loss scale by gradient-norm calibration; a curriculum proved unnecessary.
+pair-frozen backward: matched birth/death simplices re-expressed as
+closed-form circumradii of live sample positions (exact for Gabriel
+simplices --- all significant pairs in practice), plus a recruitment term
+restoring the gradient optimal matching provably lacks when a target
+feature is missing; one ratio knob $\rho$ sets the scale by
+gradient-norm calibration, and a curriculum proved unnecessary.
 % src: PHASE3_PLAN.md Appendix D / topo3/report/results.json
 On budget-starved synthetic scenes the loss is topology-specific where a
 norm-matched non-topological control is not: enclosed voids improve

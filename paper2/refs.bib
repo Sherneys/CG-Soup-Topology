@@ -463,3 +463,596 @@
   pages     = {5354--5363},
   year      = {2024}
 }
+
+% ============================================================================
+% Round-3 additions (2026-07-16): concurrent/nearest topology-in-
+% reconstruction work, cited in the MAIN paper's related work. Every entry
+% verified against its landing page on 2026-07-16 (URL in the comment).
+% ============================================================================
+
+% [W 2026-07-16: https://ojs.aaai.org/index.php/AAAI/article/view/32732 —
+%  title/authors/vol/pages/DOI read off the AAAI proceedings page. PersLoss
+%  = barcode term on RENDERED IMAGES (2D), not the surface diagram.]
+@inproceedings{shen2025topologygs,
+  author    = {Shen, Tianqi and Liu, Shaohua and Feng, Jiaqi and Ma, Ziye and An, Ning},
+  title     = {Topology-Aware {3D} {Gaussian} Splatting: Leveraging Persistent Homology for Optimized Structural Integrity},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume    = {39},
+  pages     = {6823--6832},
+  year      = {2025}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2511.18680 — title/authors + "3DV
+%  2026 accepted as poster" read off the arXiv abs page. Genus fixed by
+%  Gauss-Bonnet-matched template init; topology NOT in the objective.]
+@misc{gao2025genus,
+  author       = {Gao, Xiang and Wang, Xinmu and Wu, Xiaolong and Li, Jiazhi and Shi, Jingyu and Guo, Yu and Liu, Yuanpeng and Song, Xiyun and Yu, Heather and Lin, Zongfang and Gu, Xianfeng David},
+  title        = {Inverse Rendering for High-Genus Surface Meshes from Multi-View Images},
+  howpublished = {arXiv:2511.18680},
+  note         = {3DV 2026},
+  year         = {2025}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2601.12155 — title/authors + "ICASSP
+%  2026 accepted" read off the arXiv abs page; HTML full text confirms PH is
+%  computed once on a reference shape to guide CAMERA PLACEMENT only.]
+@misc{gao2026homology,
+  author       = {Gao, Xiang and Wang, Xinmu and Liu, Yuanpeng and Wang, Yue and Huang, Junqi and Chen, Wei and Gu, Xianfeng},
+  title        = {Inverse Rendering for High-Genus {3D} Surface Meshes from Multi-view Images with Persistent Homology Priors},
+  howpublished = {arXiv:2601.12155},
+  note         = {ICASSP 2026},
+  year         = {2026}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2412.18696 — title/authors read off
+%  the arXiv abs page (no venue listed as of v2). Differentiable PH loss on
+%  a live implicit surface, but point-cloud input: no images, no budget.]
+@misc{jignasu2024stitch,
+  author       = {Jignasu, Anushrut and Herron, Ethan and Jiang, Zhanhong and Sarkar, Soumik and Hegde, Chinmay and Ganapathysubramanian, Baskar and Balu, Aditya and Krishnamurthy, Adarsh},
+  title        = {{STITCH}: Surface Reconstruction using Implicit Neural Representations with Topology Constraints and Persistent Homology},
+  howpublished = {arXiv:2412.18696},
+  year         = {2024}
+}
+
+% [W 2026-07-16: https://conferences.miccai.org/2022/papers/081-Paper2332.html
+%  + https://link.springer.com/chapter/10.1007/978-3-031-16440-8_15 —
+%  title/authors/venue/pages read off the MICCAI and Springer pages.]
+@inproceedings{waibel2022topological,
+  author    = {Waibel, Dominik J. E. and Atwell, Scott and Meier, Matthias and Marr, Carsten and Rieck, Bastian},
+  title     = {Capturing Shape Information with Multi-Scale Topological Loss Terms for {3D} Reconstruction},
+  booktitle = {Medical Image Computing and Computer Assisted Intervention (MICCAI)},
+  pages     = {150--159},
+  year      = {2022}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2505.23642 — title/authors read off
+%  the arXiv abs page (no venue listed). Triangle-soup radiance primitives
+%  with geometric "soft connectivity forces"; no topological measurement.]
+@misc{burgdorfer2025radiant,
+  author       = {Burgdorfer, Nathaniel and Mordohai, Philippos},
+  title        = {Radiant Triangle Soup with Soft Connectivity Forces for {3D} Reconstruction and Novel View Synthesis},
+  howpublished = {arXiv:2505.23642},
+  year         = {2025}
+}
+
+% ============================================================================
+% Round-3 survey appendix entries (2026-07-16), cited ONLY from
+% supplementary §D. Curated from a 6-agent verified sweep (85 candidates ->
+% 52 kept); every entry was verified against the landing page in its
+% comment on 2026-07-16 (arXiv abs / proceedings page / publisher-deposited
+% Crossref-DataCite DOI record where the publisher 403s fetchers).
+% ============================================================================
+
+% ---- D.1 implicit fields ----
+
+% [W 2026-07-16: https://arxiv.org/abs/2002.10099 — "ICML 2020" off abs page]
+@inproceedings{gropp2020igr,
+  author    = {Gropp, Amos and Yariv, Lior and Haim, Niv and Atzmon, Matan and Lipman, Yaron},
+  title     = {Implicit Geometric Regularization for Learning Shapes},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://papers.nips.cc/paper/2020/hash/1a77befc3b608d6ed363567685f70e1e-Abstract.html — NeurIPS 33 proceedings page; author order per arXiv 2003.09852]
+@inproceedings{yariv2020idr,
+  author    = {Yariv, Lior and Kasten, Yoni and Moran, Dror and Galun, Meirav and Atzmon, Matan and Basri, Ronen and Lipman, Yaron},
+  title     = {Multiview Neural Surface Reconstruction by Disentangling Geometry and Appearance},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2003.04618 — "ECCV 2020 (Spotlight)" off abs page]
+@inproceedings{peng2020convoccnet,
+  author    = {Peng, Songyou and Niemeyer, Michael and Mescheder, Lars and Pollefeys, Marc and Geiger, Andreas},
+  title     = {Convolutional Occupancy Networks},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2104.10078 — "ICCV 2021 oral" off abs page]
+@inproceedings{oechsle2021unisurf,
+  author    = {Oechsle, Michael and Peng, Songyou and Geiger, Andreas},
+  title     = {{UNISURF}: Unifying Neural Implicit Surfaces and Radiance Fields for Multi-View Reconstruction},
+  booktitle = {IEEE/CVF International Conference on Computer Vision (ICCV)},
+  year      = {2021}
+}
+
+% [W 2026-07-16: https://papers.nips.cc/paper/2021/hash/25e2a30f44898b9f3e978b1786dcd85c-Abstract.html — NeurIPS 34 proceedings page]
+@inproceedings{yariv2021volsdf,
+  author    = {Yariv, Lior and Gu, Jiatao and Kasten, Yoni and Lipman, Yaron},
+  title     = {Volume Rendering of Neural Implicit Surfaces},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2021}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2201.05989 — journal-ref "ACM Trans. Graph. 41(4), Article 102 (2022)" off abs page]
+@article{muller2022instantngp,
+  author  = {M{\"u}ller, Thomas and Evans, Alex and Schied, Christoph and Keller, Alexander},
+  title   = {Instant Neural Graphics Primitives with a Multiresolution Hash Encoding},
+  journal = {ACM Transactions on Graphics},
+  volume  = {41},
+  number  = {4},
+  year    = {2022}
+}
+
+% [W 2026-07-16: https://papers.nips.cc/paper_files/paper/2022/hash/9f0b1220028dfa2ee82ca0a0e0fc52d1-Abstract-Conference.html — NeurIPS 35 proceedings page]
+@inproceedings{yu2022monosdf,
+  author    = {Yu, Zehao and Peng, Songyou and Niemeyer, Michael and Sattler, Torsten and Geiger, Andreas},
+  title     = {{MonoSDF}: Exploring Monocular Geometric Cues for Neural Implicit Surface Reconstruction},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2022}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2212.05231 — "ICCV 2023" off abs page]
+@inproceedings{wang2023neus2,
+  author    = {Wang, Yiming and Han, Qin and Habermann, Marc and Daniilidis, Kostas and Theobalt, Christian and Liu, Lingjie},
+  title     = {{NeuS2}: Fast Learning of Neural Implicit Surfaces for Multi-view Reconstruction},
+  booktitle = {IEEE/CVF International Conference on Computer Vision (ICCV)},
+  year      = {2023}
+}
+
+% [W 2026-07-16: https://history.siggraph.org/learning/bakedsdf-meshing-neural-sdfs-for-real-time-view-synthesis-by-yariv-hedman-reiser-verbin-srinivasan-et-al/ — SIGGRAPH 2023 archive page + arXiv 2302.14859]
+@inproceedings{yariv2023bakedsdf,
+  author    = {Yariv, Lior and Hedman, Peter and Reiser, Christian and Verbin, Dor and Srinivasan, Pratul P. and Szeliski, Richard and Barron, Jonathan T. and Mildenhall, Ben},
+  title     = {{BakedSDF}: Meshing Neural {SDFs} for Real-Time View Synthesis},
+  booktitle = {ACM SIGGRAPH 2023 Conference Proceedings},
+  year      = {2023}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2305.19590 — "CVPR 2023" off abs page]
+@inproceedings{huang2023nksr,
+  author    = {Huang, Jiahui and Gojcic, Zan and Atzmon, Matan and Litany, Or and Fidler, Sanja and Williams, Francis},
+  title     = {Neural Kernel Surface Reconstruction},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2023}
+}
+
+% ---- D.2 iso-surfacing, grids, templates ----
+
+% [W 2026-07-16: https://api.crossref.org/works/10.1145/37401.37422 — Crossref publisher-deposited record (dl.acm.org 403s)]
+@inproceedings{lorensen1987marching,
+  author    = {Lorensen, William E. and Cline, Harvey E.},
+  title     = {Marching Cubes: A High Resolution {3D} Surface Construction Algorithm},
+  booktitle = {Proceedings of the 14th Annual Conference on Computer Graphics and Interactive Techniques (SIGGRAPH)},
+  pages     = {163--169},
+  year      = {1987}
+}
+
+% [W 2026-07-16: https://api.crossref.org/works/10.1145/566570.566586 — Crossref publisher-deposited record]
+@inproceedings{ju2002dual,
+  author    = {Ju, Tao and Losasso, Frank and Schaefer, Scott and Warren, Joe},
+  title     = {Dual Contouring of {Hermite} Data},
+  booktitle = {Proceedings of the 29th Annual Conference on Computer Graphics and Interactive Techniques (SIGGRAPH)},
+  pages     = {339--346},
+  year      = {2002}
+}
+
+% [W 2026-07-16: https://api.datacite.org/dois/10.2312/SGP/SGP06/061-070 — DataCite publisher-deposited record (Eurographics)]
+@inproceedings{kazhdan2006poisson,
+  author    = {Kazhdan, Michael and Bolitho, Matthew and Hoppe, Hugues},
+  title     = {{Poisson} Surface Reconstruction},
+  booktitle = {Proceedings of the Fourth Eurographics Symposium on Geometry Processing (SGP)},
+  pages     = {61--70},
+  year      = {2006}
+}
+
+% [W 2026-07-16: https://api.crossref.org/works/10.1145/2487228.2487237 — Crossref publisher-deposited record]
+@article{kazhdan2013screened,
+  author  = {Kazhdan, Michael and Hoppe, Hugues},
+  title   = {Screened {Poisson} Surface Reconstruction},
+  journal = {ACM Transactions on Graphics},
+  volume  = {32},
+  number  = {3},
+  year    = {2013}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2006.03997 — "NeurIPS 2020" off abs-page comments]
+@inproceedings{remelli2020meshsdf,
+  author    = {Remelli, Edoardo and Lukoianov, Artem and Richter, Stephan R. and Guillard, Beno{\^i}t and Bagautdinov, Timur and Baque, Pierre and Fua, Pascal},
+  title     = {{MeshSDF}: Differentiable Iso-Surface Extraction},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2011.01437 — "Accepted to NeurIPS 2020" off abs page]
+@inproceedings{gao2020deftet,
+  author    = {Gao, Jun and Chen, Wenzheng and Xiang, Tommy and {Fuji Tsang}, Clement and Jacobson, Alec and McGuire, Morgan and Fidler, Sanja},
+  title     = {Learning Deformable Tetrahedral Meshes for {3D} Reconstruction},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2106.11272 — journal-ref "ACM Trans. Graph. 40(6), Article 251 (2021)" off abs page]
+@article{chen2021nmc,
+  author  = {Chen, Zhiqin and Zhang, Hao},
+  title   = {Neural Marching Cubes},
+  journal = {ACM Transactions on Graphics},
+  volume  = {40},
+  number  = {6},
+  year    = {2021}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/1911.06971 — "CVPR 2020 Best Student Paper Award" off abs page]
+@inproceedings{chen2020bspnet,
+  author    = {Chen, Zhiqin and Tagliasacchi, Andrea and Zhang, Hao},
+  title     = {{BSP-Net}: Generating Compact Meshes via Binary Space Partitioning},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/1906.02739 + Crossref 10.1109/iccv.2019.00988 — ICCV 2019, pages 9784-9794]
+@inproceedings{gkioxari2019meshrcnn,
+  author    = {Gkioxari, Georgia and Malik, Jitendra and Johnson, Justin},
+  title     = {Mesh {R-CNN}},
+  booktitle = {IEEE/CVF International Conference on Computer Vision (ICCV)},
+  pages     = {9784--9794},
+  year      = {2019}
+}
+
+% [W 2026-07-16: https://api.crossref.org/works/10.1145/3197517.3201353 — Crossref publisher-deposited record]
+@article{hu2018tetwild,
+  author  = {Hu, Yixin and Zhou, Qingnan and Gao, Xifeng and Jacobson, Alec and Zorin, Denis and Panozzo, Daniele},
+  title   = {Tetrahedral Meshing in the Wild},
+  journal = {ACM Transactions on Graphics},
+  volume  = {37},
+  number  = {4},
+  year    = {2018}
+}
+
+% ---- D.3 point splatting and Gaussian soups ----
+
+% [W 2026-07-16: https://api.crossref.org/works/10.1145/383259.383300 — Crossref publisher-deposited record, SIGGRAPH 2001 pp. 371-378]
+@inproceedings{zwicker2001splatting,
+  author    = {Zwicker, Matthias and Pfister, Hanspeter and van Baar, Jeroen and Gross, Markus},
+  title     = {Surface Splatting},
+  booktitle = {Proceedings of the 28th Annual Conference on Computer Graphics and Interactive Techniques (SIGGRAPH)},
+  pages     = {371--378},
+  year      = {2001}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/1906.08240 + Crossref 10.1007/978-3-030-58542-6_42 — ECCV 2020, pp. 696-712]
+@inproceedings{aliev2020npbg,
+  author    = {Aliev, Kara-Ali and Sevastopolsky, Artem and Kolos, Maria and Ulyanov, Dmitry and Lempitsky, Victor},
+  title     = {Neural Point-Based Graphics},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  pages     = {696--712},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2004.07484 + Crossref 10.1109/cvpr46437.2021.00149 — CVPR 2021, pp. 1440-1449; abstract advertises avoiding mesh "topology problems"]
+@inproceedings{lassner2021pulsar,
+  author    = {Lassner, Christoph and Zollh{\"o}fer, Michael},
+  title     = {Pulsar: Efficient Sphere-Based Neural Rendering},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {1440--1449},
+  year      = {2021}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2110.06635 + Crossref 10.1145/3528223.3530122 — ACM TOG 41(4) 2022]
+@article{ruckert2022adop,
+  author  = {R{\"u}ckert, Darius and Franke, Linus and Stamminger, Marc},
+  title   = {{ADOP}: Approximate Differentiable One-Pixel Point Rendering},
+  journal = {ACM Transactions on Graphics},
+  volume  = {41},
+  number  = {4},
+  year    = {2022}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2201.08845 — "CVPR 2022 (Oral)" + journal-ref pp. 5438-5448 off abs page]
+@inproceedings{xu2022pointnerf,
+  author    = {Xu, Qiangeng and Xu, Zexiang and Philip, Julien and Bi, Sai and Shu, Zhixin and Sunkavalli, Kalyan and Neumann, Ulrich},
+  title     = {Point-{NeRF}: Point-Based Neural Radiance Fields},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {5438--5448},
+  year      = {2022}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2311.16493 + https://cvpr.thecvf.com/virtual/2024/poster/29873 — CVPR 2024 poster page]
+@inproceedings{yu2024mipsplatting,
+  author    = {Yu, Zehao and Chen, Anpei and Huang, Binbin and Sattler, Torsten and Geiger, Andreas},
+  title     = {Mip-Splatting: Alias-Free {3D} {Gaussian} Splatting},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2024}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2403.14166 + https://eccv.ecva.net/virtual/2024/poster/2402 — ECCV 2024 poster page; budgeted Gaussian resampling]
+@inproceedings{fang2024minisplatting,
+  author    = {Fang, Guangchi and Wang, Bing},
+  title     = {Mini-Splatting: Representing Scenes with a Constrained Number of {Gaussians}},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2024}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2404.17774 + Crossref 10.1145/3641519.3657441 — SIGGRAPH 2024 Conference Papers]
+@inproceedings{dai2024surfels,
+  author    = {Dai, Pinxuan and Xu, Jiamin and Xie, Wenxiang and Liu, Xinguo and Wang, Huamin and Xu, Weiwei},
+  title     = {High-Quality Surface Reconstruction Using {Gaussian} Surfels},
+  booktitle = {ACM SIGGRAPH 2024 Conference Papers},
+  year      = {2024}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2404.10772 + Crossref 10.1145/3687937 — ACM TOG 43(6) 2024]
+@article{yu2024gof,
+  author  = {Yu, Zehao and Sattler, Torsten and Geiger, Andreas},
+  title   = {{Gaussian} Opacity Fields: Efficient Adaptive Surface Reconstruction in Unbounded Scenes},
+  journal = {ACM Transactions on Graphics},
+  volume  = {43},
+  number  = {6},
+  year    = {2024}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2406.06521 — journal-ref "IEEE TVCG, doi:10.1109/TVCG.2024.3494046" off abs page]
+@article{chen2024pgsr,
+  author  = {Chen, Danpeng and Li, Hai and Ye, Weicai and Wang, Yifan and Xie, Weijian and Zhai, Shangjin and Wang, Nan and Liu, Haomin and Bao, Hujun and Zhang, Guofeng},
+  title   = {{PGSR}: Planar-Based {Gaussian} Splatting for Efficient and High-Fidelity Surface Reconstruction},
+  journal = {IEEE Transactions on Visualization and Computer Graphics},
+  year    = {2024}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2506.24096 + Crossref 10.1145/3763339 — ACM TOG 44(6) 2025; mesh-in-the-loop, topology still unmeasured]
+@article{guedon2025milo,
+  author  = {Gu{\'e}don, Antoine and Gomez, Diego and Maruani, Nissim and Gong, Bingchen and Drettakis, George and Ovsjanikov, Maks},
+  title   = {{MILo}: Mesh-in-the-Loop {Gaussian} Splatting for Detailed and Efficient Surface Reconstruction},
+  journal = {ACM Transactions on Graphics},
+  volume  = {44},
+  number  = {6},
+  year    = {2025}
+}
+
+% ---- D.5 persistent homology: computation, layers, in-loop losses ----
+
+% [W 2026-07-16: https://link.springer.com/article/10.1007/s00454-004-1146-y — Springer journal page, DCG 33 pp. 249-274]
+@article{zomorodian2005computing,
+  author  = {Zomorodian, Afra and Carlsson, Gunnar},
+  title   = {Computing Persistent Homology},
+  journal = {Discrete \& Computational Geometry},
+  volume  = {33},
+  pages   = {249--274},
+  year    = {2005}
+}
+
+% [W 2026-07-16: https://link.springer.com/article/10.1007/s41468-021-00071-5 — Springer journal page, JACT 5 pp. 391-423]
+@article{bauer2021ripser,
+  author  = {Bauer, Ulrich},
+  title   = {{Ripser}: Efficient Computation of {Vietoris--Rips} Persistence Barcodes},
+  journal = {Journal of Applied and Computational Topology},
+  volume  = {5},
+  pages   = {391--423},
+  year    = {2021}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/1606.03357 — title/authors off abs page; JEA 22, Article 1.4 per the ACM DL listing surfaced by search (ACM page 403s)]
+@article{kerber2017geometry,
+  author  = {Kerber, Michael and Morozov, Dmitriy and Nigmetov, Arnur},
+  title   = {Geometry Helps to Compare Persistence Diagrams},
+  journal = {ACM Journal of Experimental Algorithmics},
+  volume  = {22},
+  year    = {2017}
+}
+
+% [W 2026-07-16: https://jmlr.org/papers/v18/16-337.html — JMLR journal page, 18(8):1-35]
+@article{adams2017images,
+  author  = {Adams, Henry and Emerson, Tegan and Kirby, Michael and Neville, Rachel and Peterson, Chris and Shipman, Patrick and Chepushtanova, Sofya and Hanson, Eric and Motta, Francis and Ziegelmeier, Lori},
+  title   = {Persistence Images: A Stable Vector Representation of Persistent Homology},
+  journal = {Journal of Machine Learning Research},
+  volume  = {18},
+  number  = {8},
+  pages   = {1--35},
+  year    = {2017}
+}
+
+% [W 2026-07-16: https://jmlr.org/papers/v16/bubenik15a.html — JMLR journal page, 16(3):77-102]
+@article{bubenik2015landscapes,
+  author  = {Bubenik, Peter},
+  title   = {Statistical Topological Data Analysis using Persistence Landscapes},
+  journal = {Journal of Machine Learning Research},
+  volume  = {16},
+  number  = {3},
+  pages   = {77--102},
+  year    = {2015}
+}
+
+% [W 2026-07-16: https://papers.nips.cc/paper/2017/hash/883e881bb4d22a7add958f2d6b052c9f-Abstract.html — NIPS 30 proceedings page]
+@inproceedings{hofer2017signatures,
+  author    = {Hofer, Christoph and Kwitt, Roland and Niethammer, Marc and Uhl, Andreas},
+  title     = {Deep Learning with Topological Signatures},
+  booktitle = {Advances in Neural Information Processing Systems (NIPS)},
+  year      = {2017}
+}
+
+% [W 2026-07-16: https://proceedings.mlr.press/v119/hofer20b.html — PMLR 119:4314-4323, ICML 2020]
+@inproceedings{hofer2020filtration,
+  author    = {Hofer, Christoph and Graf, Florian and Rieck, Bastian and Niethammer, Marc and Kwitt, Roland},
+  title     = {Graph Filtration Learning},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  pages     = {4314--4323},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://proceedings.mlr.press/v108/carriere20a.html — PMLR 108:2786-2796, AISTATS 2020]
+@inproceedings{carriere2020perslay,
+  author    = {Carri{\`e}re, Mathieu and Chazal, Fr{\'e}d{\'e}ric and Ike, Yuichi and Lacombe, Th{\'e}o and Royer, Martin and Umeda, Yuhei},
+  title     = {{PersLay}: A Neural Network Layer for Persistence Diagrams and New Graph Topological Signatures},
+  booktitle = {International Conference on Artificial Intelligence and Statistics (AISTATS)},
+  pages     = {2786--2796},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://proceedings.mlr.press/v119/moor20a.html — PMLR 119:7045-7054, ICML 2020]
+@inproceedings{moor2020topoae,
+  author    = {Moor, Michael and Horn, Max and Rieck, Bastian and Borgwardt, Karsten},
+  title     = {Topological Autoencoders},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  pages     = {7045--7054},
+  year      = {2020}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2003.07311 — "CVPR 2021" venue field off abs page (CVF page 403s)]
+@inproceedings{shit2021cldice,
+  author    = {Shit, Suprosanna and Paetzold, Johannes C. and Sekuboyina, Anjany and Ezhov, Ivan and Unger, Alexander and Zhylka, Andrey and Pluim, Josien P. W. and Bauer, Ulrich and Menze, Bjoern H.},
+  title     = {{clDice} -- A Novel Topology-Preserving Loss Function for Tubular Structure Segmentation},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2021}
+}
+
+% [W 2026-07-16: https://proceedings.mlr.press/v202/stucki23a.html — PMLR 202:32698-32727, ICML 2023]
+@inproceedings{stucki2023betti,
+  author    = {Stucki, Nico and Paetzold, Johannes C. and Shit, Suprosanna and Menze, Bjoern and Bauer, Ulrich},
+  title     = {Topologically Faithful Image Segmentation via Induced Matching of Persistence Barcodes},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  pages     = {32698--32727},
+  year      = {2023}
+}
+
+% [W 2026-07-16: https://www.frontiersin.org/articles/10.3389/frai.2021.667963/full — Frontiers journal page]
+@article{chazal2021introduction,
+  author  = {Chazal, Fr{\'e}d{\'e}ric and Michel, Bertrand},
+  title   = {An Introduction to Topological Data Analysis: Fundamental and Practical Aspects for Data Scientists},
+  journal = {Frontiers in Artificial Intelligence},
+  volume  = {4},
+  pages   = {667963},
+  year    = {2021}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2603.24613 — title/authors off abs page (preprint)]
+@misc{carriere2026survey,
+  author       = {Carri{\`e}re, Mathieu and Ike, Yuichi and Lacombe, Th{\'e}o and Nishikawa, Naoki},
+  title        = {Persistence-Based Topological Optimization: A Survey},
+  howpublished = {arXiv:2603.24613},
+  year         = {2026}
+}
+
+% ---- D.6 classical repair, wild meshes, pipelines, benchmarks ----
+
+% [W 2026-07-16: https://api.datacite.org/dois/10.20380%2FGI2001.03 — DataCite record, Graphics Interface 2001 pp. 19-26]
+@inproceedings{guskov2001topological,
+  author    = {Guskov, Igor and Wood, Zo{\"e}},
+  title     = {Topological Noise Removal},
+  booktitle = {Proceedings of Graphics Interface},
+  pages     = {19--26},
+  year      = {2001}
+}
+
+% [W 2026-07-16: Crossref 10.1145/990002.990007 — ACM TOG 23(2):190-208]
+@article{wood2004excess,
+  author  = {Wood, Zo{\"e} and Hoppe, Hugues and Desbrun, Mathieu and Schr{\"o}der, Peter},
+  title   = {Removing Excess Topology from Isosurfaces},
+  journal = {ACM Transactions on Graphics},
+  volume  = {23},
+  number  = {2},
+  pages   = {190--208},
+  year    = {2004}
+}
+
+% [W 2026-07-16: Crossref 10.1145/2431211.2431214 — ACM Computing Surveys 45(2)]
+@article{attene2013repairing,
+  author  = {Attene, Marco and Campen, Marcel and Kobbelt, Leif},
+  title   = {Polygon Mesh Repairing: An Application Perspective},
+  journal = {ACM Computing Surveys},
+  volume  = {45},
+  number  = {2},
+  year    = {2013}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2005.11621 — arXiv-only, title/authors off abs page]
+@misc{huang2020manifoldplus,
+  author       = {Huang, Jingwei and Zhou, Yichao and Guibas, Leonidas},
+  title        = {{ManifoldPlus}: A Robust and Scalable Watertight Manifold Surface Generation Method for Triangle Soups},
+  howpublished = {arXiv:2005.11621},
+  year         = {2020}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/1605.04797 — arXiv-only, title/authors off abs page]
+@misc{zhou2016thingi10k,
+  author       = {Zhou, Qingnan and Jacobson, Alec},
+  title        = {{Thingi10K}: A Dataset of 10,000 {3D}-Printing Models},
+  howpublished = {arXiv:1605.04797},
+  year         = {2016}
+}
+
+% [W 2026-07-16: Crossref 10.1109/CVPR.2016.445 — CVPR 2016 pp. 4104-4113]
+@inproceedings{schonberger2016sfm,
+  author    = {Sch{\"o}nberger, Johannes L. and Frahm, Jan-Michael},
+  title     = {Structure-from-Motion Revisited},
+  booktitle = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {4104--4113},
+  year      = {2016}
+}
+
+% [W 2026-07-16: Crossref 10.1007/978-3-319-46487-9_31 — ECCV 2016 pp. 501-518]
+@inproceedings{schonberger2016pixelwise,
+  author    = {Sch{\"o}nberger, Johannes L. and Zheng, Enliang and Frahm, Jan-Michael and Pollefeys, Marc},
+  title     = {Pixelwise View Selection for Unstructured Multi-View Stereo},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  pages     = {501--518},
+  year      = {2016}
+}
+
+% [W 2026-07-16: Crossref 10.1109/TPAMI.2009.161 — TPAMI 32(8):1362-1376 (venue commonly misremembered as CVPR)]
+@article{furukawa2010pmvs,
+  author  = {Furukawa, Yasutaka and Ponce, Jean},
+  title   = {Accurate, Dense, and Robust Multiview Stereopsis},
+  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume  = {32},
+  number  = {8},
+  pages   = {1362--1376},
+  year    = {2010}
+}
+
+% [W 2026-07-16: Crossref 10.1109/CVPR.2014.59 + roboimagedata.compute.dtu.dk — CVPR 2014 pp. 406-413; "Engin Tola" per the DTU page (IEEE metadata typo "Engil")]
+@inproceedings{jensen2014dtu,
+  author    = {Jensen, Rasmus and Dahl, Anders and Vogiatzis, George and Tola, Engin and Aan{\ae}s, Henrik},
+  title     = {Large Scale Multi-view Stereopsis Evaluation},
+  booktitle = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {406--413},
+  year      = {2014}
+}
+
+% [W 2026-07-16: https://www.tanksandtemples.org/ — official site's requested citation: ACM TOG 36(4) 2017 (journal, not a conference)]
+@article{knapitsch2017tanks,
+  author  = {Knapitsch, Arno and Park, Jaesik and Zhou, Qian-Yi and Koltun, Vladlen},
+  title   = {Tanks and Temples: Benchmarking Large-Scale Scene Reconstruction},
+  journal = {ACM Transactions on Graphics},
+  volume  = {36},
+  number  = {4},
+  year    = {2017}
+}
+
+% ---- D.7 recent topology-adjacent (survey-only; the four nearest works are
+%       cited in the MAIN paper) ----
+
+% [W 2026-07-16: https://arxiv.org/abs/2401.17603 — title/authors off abs page; CGF 2025 journal version noted there]
+@misc{hu2024topodiffusion,
+  author       = {Hu, Jiangbei and Fei, Ben and Xu, Baixin and Hou, Fei and Yang, Weidong and Wang, Shengfa and Lei, Na and Qian, Chen and He, Ying},
+  title        = {Topology-Aware Latent Diffusion for {3D} Shape Generation},
+  howpublished = {arXiv:2401.17603},
+  year         = {2024}
+}
+
+% [W 2026-07-16: https://arxiv.org/abs/2310.07630 + https://iclr.cc/virtual/2024/poster/18824 — ICLR 2024 poster page]
+@inproceedings{roell2024dect,
+  author    = {Roell, Ernst and Rieck, Bastian},
+  title     = {Differentiable Euler Characteristic Transforms for Shape Classification},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024}
+}

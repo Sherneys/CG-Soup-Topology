@@ -2,12 +2,14 @@
 %  SUPPLEMENTARY MATERIAL — 3DV 2027 submission (due 2026-09-02)
 %  Build:  cd paper2 && tectonic supplementary.tex
 %
-%  Contents: the two former in-paper appendices, moved here for the 3DV page
-%  limit (author decision anticipated in appendix_companion.tex since
-%  2026-07-09). Section files are shared with the old single-document build;
-%  their % src: grounding comments are unchanged. Counters are S-prefixed so
-%  the main paper can cite "suppl. Table S1 / Fig. S1" unambiguously.
-%  No \cite here, so no bibliography is emitted.
+%  Contents: the two former in-paper appendices (moved here for the 3DV page
+%  limit; author decision anticipated in appendix_companion.tex since
+%  2026-07-09), plus the round-3 survey appendix (2026-07-16). Section files
+%  are shared with the old single-document build; their % src: grounding
+%  comments are unchanged. Counters are S-prefixed so the main paper can
+%  cite "suppl. Table S1 / Fig. S1" unambiguously.
+%  The survey appendix cites: this document now emits its own bibliography
+%  (same refs.bib; only entries cited here are printed).
 % ============================================================================
 \documentclass[10pt,twocolumn,letterpaper]{article}
 
@@ -44,5 +46,13 @@
 \input{sections/appendix_companion}
 \input{sections/appendix_diagnostics}
 \input{sections/appendix_extra_figs}
+\input{sections/appendix_survey}
+
+\clearpage  % flush floats (incl. Table S6) before the bibliography
+{
+  \small
+  \bibliographystyle{ieeenat_fullname}
+  \bibliography{refs}
+}
 
 \end{document}

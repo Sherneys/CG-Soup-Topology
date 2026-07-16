@@ -6,16 +6,15 @@
 % 3DV pass 2026-07-13: tightened; content unchanged.
 
 We moved topology out of the resampler's allocation channel into the
-training objective. Four things carry it: a matched
-persistence loss whose
-pair-frozen backward is \emph{certified} per pairing by a Gabriel-exactness
-gate; a recruitment term restoring the gradient optimal matching
-provably lacks for missing features (load-bearing for
-loops); channel-controlled evaluation (every gain beats a norm-matched
-non-topological control at Chamfer parity); and a quantified account of
-the floors (measurement, $6\,r_{\mathrm{med}}(M)$; representation,
-budget $N$). The verdicts replicate, without per-shape
-tuning, on external genus-known meshes (one a raw artist mesh certified
-by measurement) and degrade gracefully under noise.
-The prescription: correct topology in the \emph{loss}, allocate with a
-\emph{wide} prior, combine; next: open surfaces and real scans.
+training objective, carried by a matched persistence loss with a
+per-pairing Gabriel-\emph{certified} backward, a recruitment term
+restoring the gradient optimal matching provably lacks for missing
+features (load-bearing for loops), channel-controlled evaluation ---
+every gain beats a norm-matched control at Chamfer parity --- and a
+quantified account of the measurement ($6\,r_{\mathrm{med}}(M)$) and
+representation ($N$) floors. The hypotheses hold --- root cause in the objective
+(RH1), signal specifically topological (RH2), channels composing (RH3)
+--- and the verdicts replicate on external genus-known meshes (one a
+raw artist mesh, certified), degrading gracefully under noise.
+Prescription: correct topology in the \emph{loss}, allocate with a
+\emph{wide} prior, combine. Next: open surfaces, real scans.
