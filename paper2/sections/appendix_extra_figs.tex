@@ -144,3 +144,47 @@ at $2\times$ worse Chamfer, while baseline and loss both read two ---
 the loss at half the baseline's tail error (main Table~2).}
 \label{fig:bobmatrix}
 \end{figure*}
+
+% Round-4 (advisor Fig-2/3 concepts, placed here under the main page
+% budget): the system pipeline with the recruitment schematic inset.
+% src: scripts/make_pipeline_figure.py (diagram; the inset is a
+% mechanism SCHEMATIC, labeled as such — not measured data).
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\linewidth]{pipeline.png}
+\caption{The system, schematically. DiffSoup's photometric path (gray)
+is untouched; the topological branch (orange) samples the live soup
+($M{=}2048$, frozen barycentric weights), computes exact alpha-complex
+persistence, matches and recruits against the fixed target bundle
+(refresh every $K{=}10$ steps and after every resample), and
+back-propagates through the pair-frozen circumradius re-expressions
+into the same vertices (main \S3). \emph{Inset} (schematic): an absent
+target bar (star) receives no gradient under optimal matching (main
+Lemma~1); recruitment attaches the nearest unclaimed live bar --- the
+sparse tug.}
+\label{fig:pipeline}
+\end{figure*}
+
+% Round-4 (advisor Fig-5 concept, right panel): the measurement floor
+% vs density. Every plotted value is a recorded measurement (2026-07-09
+% density sweep — the Table-S3 source — plus main §6's floor/lifetime
+% quantities); regeneration via density_bound.py is currently blocked
+% by Smart App Control (gudhi DLL), so the script transcribes the
+% recorded values with their sources.
+% src: scripts/make_floor_figure.py
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{floor.png}
+\caption{The measurement floor, visualized (all values from the
+recorded density sweep behind Table~\ref{tab:msens} and main \S6). The
+floor $6\,r_{\mathrm{med}}(M)$ falls as $M^{-1/2}$ (dotted: the law
+anchored at the torus $M{=}2048$ point, reaching the $M{=}20000$
+evaluation floor $.0171$), while a feature's lifetime is fixed --- a
+feature becomes measurable where the falling floor crosses it. The
+double torus's tube loops ($.045$--$.046$ band) sit below the floor at
+$M{=}2048$ and clear it by $M{=}4096$, matching Table~\ref{tab:msens}'s
+counts; the torus's second loop clears by only $1.33\times$ at
+$M{=}2048$ (lifetime marked at $1.33\times$ the $.0623$ floor) --- the
+thin margin that live-cloud noise consumes (main \S6, C6).}
+\label{fig:floor}
+\end{figure}
