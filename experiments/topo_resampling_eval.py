@@ -65,7 +65,16 @@ SHAPE_DIM = {"torus": 1, "two_spheres": 0, "sphere": 2, "cube": 2, "cylinder": 2
              # hidden chamber): sig (1,0,1) from M=8192, margin 1.20-1.23x over
              # seeds 0-4, localized on the pot axis. H2 class => N=1200,
              # bundle_n 8192 (floor rule).
-             "kinkin": 2}
+             "kinkin": 2,
+             # Open-surface probe bowls (OPEN_SURFACE_PROBE_PLAN.md,
+             # pre-registered 2026-07-17; scripts/make_bowl_assets.py):
+             # polar-cap-removed analytic sphere, certified disk topology
+             # (1 rim, chi=1). The pre-registered staircase read BOTH as
+             # H2 (interior chamber; narrow 3.79x / wide 2.34x floor at
+             # M=2048) with the rim H1 sub-floor (0.42-0.57x) at every
+             # tested M — the floor rule picks H2 @ M=2048 (default).
+             # H2 class => N=1200.
+             "bowl_narrow": 2, "bowl_wide": 2}
 
 ENV = dict(os.environ, PYTHONUTF8="1", DIFFSOUP_ROOT=DIFFSOUP_ROOT, TOPO_ROOT=_TOPO_ROOT)
 

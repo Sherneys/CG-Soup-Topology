@@ -76,10 +76,13 @@ none of the added code (no renderer or resampler edits).
 % flag-off executes zero Phase-3 code; no renderer/core edits)
 2{,}500 steps; resampling every 100 steps (untouched);
 $\rho{=}0.1$, ramp $0.2{:}0.5$, refresh $K{=}10$, $M{=}2048$; decisive shapes
-(sphere, torus) run 5 seeds with the full condition set (C0/C1/C2/C3/C5,
-plus the recruitment ablation C6), replication shapes (cube, two spheres) 3
-seeds (C0/C1/C2), double torus 2 seeds (descriptive;
-\S\ref{sec:cmatrix}). A sensor-noise stress test
+(sphere, torus) and the double torus run 5 seeds (the former with the
+full condition set C0/C1/C2/C3/C5 plus the recruitment ablation C6),
+replication shapes (cube, two spheres) 3 seeds (C0/C1/C2).
+% Round-4: double torus raised 2 -> 5 seeds (2026-07-17, same
+% pre-registered flags, gudhi 3.11 verified equivalent); every arm
+% still returns exactly .026372 in every seed — the saturation claim
+% now carries five seeds. src: topo3/report/results.json A sensor-noise stress test
 (C7/C7h $=$ C1 $+$ noise; decisive shapes, 3 seeds) perturbs the cloud the
 loss \emph{plan} sees with i.i.d.\ Gaussian noise at every refresh,
 $\sigma = 0.5\%/1\%$ of the target diagonal (${\approx}0.5/1.0$ median
@@ -106,7 +109,7 @@ Secondary: significant-feature counts (phantom check) and Chamfer parity.
 % n=5; ranges at n=3; descriptive at n=2.
 Reporting policy: mean$\pm$sd over seeds; Welch $\sigma$ only where both
 arms ran five seeds; three-seed verdicts rest on disjoint per-seed
-ranges (suppl.\ Table~S7); two-seed arms are descriptive.
+ranges (suppl.\ Table~S7).
 \emph{Verdict rule} --- this study's core evaluation principle:
 C1 must beat C0 \textbf{and} every norm-matched control
 at Chamfer parity --- a topological win a dumb regularizer can match is not a

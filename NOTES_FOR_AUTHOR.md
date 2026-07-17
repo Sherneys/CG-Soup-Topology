@@ -102,23 +102,31 @@ pass**; no rendered kinkin/TODO; anonymity intact.
    every plotted value transcribed from the RECORDED 2026-07-09 density
    sweep with sources, since regeneration is blocked, below). Main-text
    pointers added in §3.2 and §6; body still ends exactly p8.
-2. **⚠ BLOCKER — Windows Smart App Control (state: On) now blocks
-   gudhi's native DLLs** in the dentistry venv (`DLL load failed …
-   An Application Control policy has blocked this file`; .pyds unchanged
-   since 06-29, worked 07-07..10 → SAC recently entered enforcement).
-   This killed the **double-torus seeds 2–4 rerun** (flags confirmed
-   from PHASE3_PLAN: N=2000, H1-only, C0/C1/C2 — the launched command
-   was exactly `--shapes double_torus --seeds 2 3 4 --conditions C0 C1
-   C2 --rhos 0.1 --steps 2500 --max_faces 2000 --loss_dims 1`) and
-   blocks `density_bound.py` + all bundle building. **Your decision:**
-   Smart App Control → Off (Settings > App & browser control; Windows
-   makes this IRREVERSIBLE without reinstall) or an alternative env
-   (WSL rebuild). torch / open3d / tectonic are unaffected.
-3. **Open-surface probe: PRE-REGISTERED, not run** —
-   `OPEN_SURFACE_PROBE_PLAN.md` (bowl_narrow/bowl_wide, floor-rule
-   bundle, designed-rim vs scan-noise boundary policy, C0/C1/C2 × 3
-   seeds, range-based verdicts; execution steps marked blocked on the
-   same SAC issue; renderer backface check is the one pre-gudhi item).
+2. **⚠→✔ SAC blocker WORKED AROUND (2026-07-17, later).** Windows Smart
+   App Control (On) blocks gudhi **3.12.0**'s DLLs — but the verdicts
+   are per-binary and the **gudhi 3.11.0 wheel passes**. Stable copy:
+   `tools\gudhi311` (gitignored, next to tectonic), activated via
+   `$env:PYTHONPATH = "D:\Project\CG-Soup-Topology\tools\gudhi311"`.
+   **Numerical equivalence verified BEFORE use**: `density_bound.py`
+   under 3.11.0 reproduces every recorded 3.12.0 number exactly
+   (floors, tube lifetimes, 1.33× margin, r_med ratio 3.16, eval floor
+   .0171). Version substitution recorded here for protocol
+   transparency; SAC itself untouched (turning it off is irreversible
+   — remains your call whether to bother now that the workaround
+   holds). **Double-torus seeds 2–4 relaunched under 3.11** (exact
+   pre-registered flags: `--shapes double_torus --seeds 2 3 4
+   --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 2000
+   --loss_dims 1`).
+3. **Open-surface probe: pre-registered AND prepped** —
+   `OPEN_SURFACE_PROBE_PLAN.md`: bowls built + certified (disk
+   topology, 1 rim, χ=1), staircase executed — **both bowls read one
+   significant H2 void (narrow 3.79×, wide 2.34× floor at M=2048) and
+   the designed rim's H1 never clears (0.42–0.57×)**, so the floor
+   rule picks H2 @ M=2048 for both; the plan's bowl_wide expectation
+   (rim-H1 observable) was WRONG and the delta is recorded as a
+   finding. Shape wiring done (SHAPE_DIM + report target counts).
+   Remaining: scene renders + backface check (GPU was busy), then the
+   C-matrix runs (command in the plan file).
 4. Voice pass (unchanged TODO(human) markers), paper ID, 2027-kit swap.
 
 ## Draft message to อาจารย์ (round 4 — merges the unsent round-3 reply; SEND THIS)

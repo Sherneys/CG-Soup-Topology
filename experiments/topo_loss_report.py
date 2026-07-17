@@ -170,7 +170,10 @@ def make_plots(shape: str, series: dict, agg: dict, out_dir: str) -> None:
         ax.plot(steps, curves.mean(0), color=COLORS.get(cond, "k"),
                 label=LABELS.get(cond, cond))
     tgt_n = {"sphere": 1, "cube": 1, "torus": 2, "two_spheres": 1,
-             "double_torus": 2, "spot": 1, "bob": 2, "fandisk": 1}.get(shape)
+             "double_torus": 2, "spot": 1, "bob": 2, "fandisk": 1,
+             # open-surface probe bowls: staircase-certified 1 significant
+             # H2 bar each (OPEN_SURFACE_PROBE_PLAN.md, 2026-07-17)
+             "bowl_narrow": 1, "bowl_wide": 1}.get(shape)
     if tgt_n is not None:
         ax.axhline(tgt_n, color="k", ls="--", lw=0.8, alpha=0.6)
     # The random-init transient (hundreds of sub-scale bars at step 0) swamps

@@ -6,14 +6,39 @@ commits to it as the near-term step. This file pre-registers the design
 BEFORE any run, following the tom-yum pot's prospective-floor-rule
 precedent — the rule is registered, not the outcome.
 
-**STATUS: BLOCKED at execution (2026-07-17).** Windows Smart App Control
-(state: On) blocks gudhi's native DLLs in the dentistry venv
-(`ImportError: … An Application Control policy has blocked this file`),
-which kills bundle building, `density_bound.py`, and training-side
-persistence. The same block stopped the double-torus seeds-2–4 rerun.
-Unblocking is a USER decision (SAC off is irreversible per Windows) or
-an alternative environment (e.g. WSL rebuild). Everything below is
-implementable the moment persistence tooling runs again.
+**STATUS UPDATE (2026-07-17, later): UNBLOCKED + assets built.** The
+Smart App Control block (which stopped gudhi 3.12.0's DLLs) does NOT
+apply to the gudhi **3.11.0** wheel — per-binary verdicts. A stable
+copy lives at `tools\gudhi311` (gitignored, like tectonic), used via
+`PYTHONPATH`. **Numerical equivalence verified before any use**:
+`density_bound.py` under 3.11.0 reproduces every recorded 3.12.0
+number exactly (floors .05394/.06233 @2048, tube lifetimes
+.0460/.0449 = 0.85/0.83×, torus 2nd loop .0832 = 1.33×, r_med
+.00899→.00284 = 3.16 ratio, eval floor .01707).
+
+**Steps 1–3 EXECUTED (`scripts/make_bowl_assets.py`):** both bowls
+built and certified (disk topology: 1 boundary loop, edge-manifold,
+consistently oriented, χ=1; measured openings 0.140R / 0.499R; certs in
+`_meshes/bowl_{narrow,wide}_src_cert.json`). **Pre-registered staircase
+result — the certified reading overrides the plan's expectation:**
+
+| M | bowl_narrow sig(H0,H1,H2) | top H2 | bowl_wide sig | top H2 | top H1 (both) |
+|---|---|---|---|---|---|
+| 2048 | (0,0,1) | 3.79× | (0,0,1) | 2.34× | 0.42–0.47× |
+| 4096 | (0,0,1) | 5.50× | (0,0,1) | 3.50× | 0.51–0.57× |
+| 8192 | (0,0,1) | 7.82× | (0,0,1) | 4.94× | 0.45–0.46× |
+
+The plan EXPECTED bowl_wide to lose its H2 bar to the rim's H1; the
+measurement says otherwise — even a 0.5R mouth caps at these densities,
+the interior reads as an enclosed chamber for both bowls, and the
+designed rim's H1 never clears the floor. Per the registered rule:
+**observable = H2 for both, bundle density M=2048** (first-clearing),
+budget N=1200 (H2 class), `--loss_dims 2` (rim H1 sub-floor ⇒ restrict,
+the torus precedent). The expectation-vs-measurement delta is itself a
+reportable finding about open-surface alpha readings.
+
+Shape wiring done: `SHAPE_DIM` (topo_resampling_eval.py) and the
+report's target-count table (topo_loss_report.py) carry both bowls.
 
 ## Shapes (analytic, built from the existing sphere generator)
 
@@ -52,14 +77,18 @@ implementable the moment persistence tooling runs again.
 
 ## Implementation checklist (in order)
 
-1. Mesh builder: cap-removal on the analytic sphere mesh (mask faces by
-   z-threshold; weld; verify: one shell, 1 boundary loop, expected Euler
-   characteristic). Export to `_meshes/bowl_{narrow,wide}_src.ply` with
-   a certificate JSON like the pot's.
-2. **Renderer check**: `make_synthetic_scene.py --mesh` on an OPEN mesh —
-   verify no backface-culling holes in training views (the pot was
-   solidified precisely to avoid this; if culling bites, render
-   two-sided or thicken minimally and re-certify — record whichever).
-3. Staircase + bundle preflight (BLOCKED: gudhi).
-4. Runs + report regen + range-based verdicts (BLOCKED: gudhi/GPU path).
+1. ~~Mesh builder + certificates~~ **DONE** (`scripts/make_bowl_assets.py`).
+2. **Renderer check** (NEXT, after the GPU frees from the double-torus
+   runs): `make_synthetic_scene.py --shape bowl_narrow --mesh
+   output\synth\_meshes\bowl_narrow_src.ply --out output\synth\bowl_narrow
+   --views 48 --res 200` (and bowl_wide) — verify no backface-culling
+   holes in training views (the pot was solidified precisely to avoid
+   this; if culling bites, render two-sided or thicken minimally and
+   re-certify — record whichever).
+3. ~~Staircase~~ **DONE** (table above); bundle builds automatically at
+   run launch (`ensure_bundle`, M=2048 default).
+4. Runs: `topo_loss_eval.py --shapes bowl_narrow bowl_wide --seeds 0 1 2
+   --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 1200
+   --loss_dims 2` (PYTHONPATH=tools\gudhi311) + report regen +
+   range-based verdicts (n=3).
 5. Paper: §5.2 or §7 upgrade + suppl row; audit extensions.
