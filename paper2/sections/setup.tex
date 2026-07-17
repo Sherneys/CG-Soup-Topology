@@ -18,59 +18,68 @@ are the allocation study's headroom points (suppl.\ \S A) --- tight
 enough that baseline topology is imperfect.
 % src: PHASE2B_CROSSOVER.md (headroom pilot); PHASE3_PLAN.md §6
 Four external, genus-known meshes probe generality beyond the analytic
-family (\S\ref{sec:generality}). Three are watertight benchmarks:
+family (\S\ref{sec:generality}). Three are watertight benchmarks ---
 \emph{spot} (genus 0) and \emph{bob} (genus 1) from the Crane model
 repository (CC0), and the \emph{fandisk} CAD benchmark (genus 0) ---
 rendered with the same pipeline (48 views, 200\,px) at unchanged class
 budgets; a seed-0 C0 pilot confirms baseline imperfection (tails
-$.043$--$.054$, inside the analytic band).
+$.043$--$.054$, in the analytic band).
 % src: output/synth/{spot,bob,fandisk} scene builds; pilot tails = the
 % seed-0 entries of the topo3/report/results.json C0 aggregates
 % (.0429/.0429/.0540 — the pilot's 2026-07-09 quicklook.json was later
 % overwritten by the tomyum/kinkin quicklook, so cite results.json);
 % bundles topo3/fields/{spot,bob,fandisk}_diag.npz
-The fourth, the \emph{tom-yum pot} (Fig.~\ref{fig:tomyum}), probes the step
+The fourth, the \emph{tom-yum pot} (Fig.~\ref{fig:matrix}, bottom row;
+aluminium showcase: suppl.\ Fig.~S7), probes the step
 every real deployment needs: a raw artist-authored mesh
 rather than a clean benchmark. As exported from Blender it is textbook
-triangle soup --- $6{,}318$ vertices in 9 overlapping open shells, mixed
-quad/12-gon faces, 50 boundary edges after exact welding, 232 non-manifold
-junction edges --- with no trustworthy ground-truth topology (the same
-defect that excluded ShapeNet). An ingest-and-certify pass makes it usable:
-exact-duplicate weld, offset-solidification into a thin closed shell
-(exact unsigned distance field $+$ marching cubes at iso $\varepsilon$),
-dropping 804 enclosed pocket shells, then \emph{certification by
-measurement} (closed, edge-manifold, consistently oriented; exact
-simplicial homology; watertightness cross-check; bit-identical rebuilds),
-yielding one body of genus 3, $\beta{=}(1,6,1)$
-exact ($190{,}990$ vertices), rendered and budgeted as a void-class shape
-($N{=}1200$, 48 views, 200\,px). Where the benchmark trio's topology is
-known by construction, the pot's is known by \emph{certificate} --- the
-pipeline real scans will need (challenge inventory: suppl.\ Table~S4).
+triangle soup (9 overlapping open shells, 232 non-manifold junction
+edges) with no trustworthy ground-truth topology --- the same defect
+that excluded ShapeNet. An ingest-and-certify pass (exact weld,
+offset-solidification into a thin closed shell, then \emph{certification
+by measurement}: exact simplicial homology, watertightness cross-check,
+bit-identical rebuilds) yields one body of genus 3, $\beta{=}(1,6,1)$
+exact, rendered and budgeted as a void-class shape ($N{=}1200$, 48
+views, 200\,px). This ingest pipeline is a test fixture here, not a
+claimed contribution. Where the benchmark trio's topology is known by
+construction, the pot's is known by \emph{certificate} --- what real
+scans will need (mechanics and challenge inventory: suppl.\ \S B,
+Table~S4).
+% Round-4 trim: raw-soup counts (6,318 verts, quad/12-gon mix, 50
+% boundary edges, 804 dropped shells, distance-field/marching-cubes
+% detail, 190,990 certified verts) now live ONLY in suppl. Table S4 —
+% numbers unchanged there, % srcs intact.
 % naming: rendered as tom-yum pot; the asset, tags and files are named
 % kinkin internally (do not confuse with the constructed CSG pot, which is
 % NOT in this paper).
 % src: output/synth/_meshes/kinkin_src_cert.json (components/genus/betti/
 % verts + raw-soup counts) + scripts/make_kinkin_asset.py (ingest+certify,
 % bit-identical rebuild check); scene: output/synth/kinkin
-The pot also exercises the measurement floor of \S\ref{sec:discussion}
-prospectively: no H1 loop of the certified shell (handle bores, flue)
-clears the $6\,r_{\mathrm{med}}$ floor at any working $M$, while the
-narrow flue mouth caps at small $\alpha$, making the flue interior an
-enclosed chamber --- an H2 void on the pot axis, first clearing the
-floor at $M{=}8192$ (margin $1.20$--$1.23\times$ across five sampling
-seeds). The pre-registered floor rule builds its target bundle there ---
-the study's only protocol deviation --- and the loss samples the live
-surface at the same density. The bundle carries exactly one significant
-bar (H2), stable to re-sampling (${\sim}10^{-5}$).
+The pot also exercises the floor rule of \S\ref{sec:discussion}
+prospectively: every H1 loop of the certified shell sits below the
+$6\,r_{\mathrm{med}}$ floor at every working $M$, while the narrow flue
+mouth caps at small $\alpha$ --- an H2 void on the pot axis, first
+clearing the floor at $M{=}8192$ (margin $1.20$--$1.23\times$, five
+sampling seeds). The pre-registered rule builds the bundle there (the
+study's only protocol deviation; the loss samples at the same density):
+exactly one significant bar, stable to re-sampling (${\sim}10^{-5}$).
 % src: PHASE3_STATUS.md Post-3e (make_kinkin_asset.py preflight staircase:
 % (1,0,0)@2048/4096 -> (1,0,1)@8192/20000; margins recomputed live by
 % scripts/make_kinkin_brief_docx.py); floor rule: experiments/density_bound.py
 
-\paragraph{Protocol.} 2{,}500 steps; resampling every 100 steps (untouched);
+\paragraph{Protocol.}
+% Round-4: implementation provenance made explicit (review item 148-154).
+All conditions share one implementation: C0 is the unmodified DiffSoup
+trainer; the loss enters as one additive term, and disabled it executes
+none of the added code (no renderer or resampler edits).
+% src: PHASE3_STATUS.md "What was built" (ONE loss line after reg_normal;
+% flag-off executes zero Phase-3 code; no renderer/core edits)
+2{,}500 steps; resampling every 100 steps (untouched);
 $\rho{=}0.1$, ramp $0.2{:}0.5$, refresh $K{=}10$, $M{=}2048$; decisive shapes
 (sphere, torus) run 5 seeds with the full condition set (C0/C1/C2/C3/C5,
 plus the recruitment ablation C6), replication shapes (cube, two spheres) 3
-seeds (C0/C1/C2), double torus 2 seeds. A sensor-noise stress test
+seeds (C0/C1/C2), double torus 2 seeds (descriptive;
+\S\ref{sec:cmatrix}). A sensor-noise stress test
 (C7/C7h $=$ C1 $+$ noise; decisive shapes, 3 seeds) perturbs the cloud the
 loss \emph{plan} sees with i.i.d.\ Gaussian noise at every refresh,
 $\sigma = 0.5\%/1\%$ of the target diagonal (${\approx}0.5/1.0$ median
@@ -88,16 +97,24 @@ bundle; the pot runs at the floor-rule density above.
 % spot/bob/fandisk bundle preflights 2026-07-09 (H bars printed at build)
 
 \paragraph{Metrics and verdict.} Primary: bottleneck distance to the target
-diagram in the shape's discriminating dimension, tail-averaged over the last
-trajectory dumps, seed-averaged (20k evaluation samples, target-normalized).
+diagram in the shape's discriminating dimension, tail-averaged over the
+last three trajectory dumps (steps $2{,}300$--$2{,}500$), seed-averaged
+(20k evaluation samples, target-normalized).
+% src: experiments/topo_loss_report.py (--tail default 3; dumps every 100)
 Secondary: significant-feature counts (phantom check) and Chamfer parity.
-\emph{Verdict rule:} C1 must beat C0 \textbf{and} every norm-matched control
+% Round-4 reporting policy (statistical-hygiene items): sigma only at
+% n=5; ranges at n=3; descriptive at n=2.
+Reporting policy: mean$\pm$sd over seeds; Welch $\sigma$ only where both
+arms ran five seeds; three-seed verdicts rest on disjoint per-seed
+ranges (suppl.\ Table~S7); two-seed arms are descriptive.
+\emph{Verdict rule} --- this study's core evaluation principle:
+C1 must beat C0 \textbf{and} every norm-matched control
 at Chamfer parity --- a topological win a dumb regularizer can match is not a
 topological win. \emph{Chamfer parity}, formally: the passing arm's
 seed-mean Chamfer must satisfy
 $\mathrm{Ch}(\mathrm{C1})\le 1.15\,\mathrm{Ch}(\mathrm{C0})$; the $15\%$
-headroom absorbs seed variance and CUDA nondeterminism (quantified in
-\S\ref{sec:limitations}) and in practice never did any work --- every
+headroom absorbs seed variance and nondeterminism
+(\S\ref{sec:limitations}) and never did any work --- every
 passing arm's Chamfer was at or below baseline.
 % src: experiments/topo_loss_report.py PARITY_MULT = 1.15; per-arm
 % chamfer_mean in topo3/report/results.json (all passing arms <= C0)

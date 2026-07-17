@@ -25,3 +25,7 @@ paper2/*.xdv
 
 # Local tool binaries (tectonic.exe lives here; not for the repo)
 tools/
+
+# Round-4 matrix figure: per-cell render intermediates (regenerate via
+# scripts/make_matrix_figure.py; only the assembled matrix*.png ship)
+paper2/figures/matrix_cells/

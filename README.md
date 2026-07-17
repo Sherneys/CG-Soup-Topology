@@ -13,16 +13,21 @@ differentiable *topological loss* (Phase 3), and both paper drafts.
 - Paper 1 — *Concentrate or Spread? Shaping Topological Resampling Priors for
   Differentiable Triangle-Soup Reconstruction* — prebuilt at `paper/main.pdf`.
   Author notes, grounding log, open items: `NOTES_FOR_AUTHOR.md`.
-- Paper 2 — *Topology-Correcting Differentiable Triangle-Soup
-  Reconstruction via Persistent Homology* — prebuilt at `paper2/main.pdf`
-  (19 pp preprint). Complete and fully self-contained (the allocation study
-  is reported first-hand in its Appendix A; no dependence on paper 1), with
-  two advisor revision rounds folded in. Goes out FIRST; target venue
-  3DV 2027 (deadline 2026-08-28). Remaining: author voice pass + venue
-  template/compression. Plan + revision-response logs: `NOTES_FOR_AUTHOR.md`.
+- Paper 2 — *Topology-Aware Differentiable Triangle-Soup
+  Reconstruction via Persistent Homology* — prebuilt at `paper2/main.pdf`,
+  in 3DV 2027 double-blind review format (8 pp body + references,
+  anonymous; page-1 teaser matrix with measured-count badges), plus
+  `paper2/supplementary.pdf` (12 pp: allocation study, diagnostics,
+  extra figures, literature survey, per-seed & sweep tables). Complete
+  and fully self-contained (the allocation study is reported first-hand
+  in the supplementary; no dependence on paper 1), with four advisor
+  revision rounds folded in. Goes out FIRST; target 3DV 2027 (papers due
+  2026-08-28, supplementary Sep 2). Remaining: author voice pass,
+  OpenReview paper ID, official 2027 author-kit swap when posted. Plan +
+  revision-response logs: `NOTES_FOR_AUTHOR.md`.
 
 (Both build with `latexmk -pdf main.tex` or `tectonic main.tex` inside their
-directory.)
+directory; paper 2's `supplementary.tex` builds the same way.)
 
 ## The story in five results
 
@@ -165,9 +170,10 @@ tests/test_topo_loss.py  10/10: Phase-3 stage-3a gate (gradchecks, alpha-complex
                        assumption gates, defect-repair toys -> figures/phase3_toy/)
 scripts/               builders for the Thai .docx reports (Phases 1, 2 & 3)
 paper/                 paper 1 ("Concentrate or Spread?"): LaTeX, figures, prebuilt main.pdf
-paper2/                paper 2 ("Topology-Correcting ... via Persistent Homology"):
-                       LaTeX, figures, appendices (allocation study + diagnostics),
-                       prebuilt main.pdf — the submit-first paper
+paper2/                paper 2 ("Topology-Aware ... via Persistent Homology"):
+                       3DV 2027 review format — main.tex (8 pp body) + supplementary.tex
+                       (allocation study, diagnostics, extra figures, survey);
+                       prebuilt PDFs — the submit-first paper
 figures/  docs/        Phase-1 outputs + Phase-3 toy artifacts (phase3_toy/);
                        Thai reports (CG-Soup_Topology_Phase{1,2,3}_TH.docx)
 ```

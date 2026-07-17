@@ -123,16 +123,73 @@ for shape, exp in [("sphere", 4.0), ("cube", 7.9), ("torus", 2.3),
 check("sphere C5 reduction", red("sphere", "C5"), 7.6, tol=0.06)
 check("torus C5 reduction", red("torus", "C5"), 3.2, tol=0.06)
 
-for shape, n0, n1, exp in [("sphere", 5, 5, 16.2), ("cube", 3, 3, 18.5),
-                            ("torus", 5, 5, None), ("spot", 3, 3, 6.1),
-                            ("bob", 3, 3, 26.1), ("fandisk", 3, 3, 35.7)]:
+# Round-4 reporting policy (2026-07-17): Welch sigma is PRINTED only at
+# n=5 (sphere 16.2 stays a hard check); the retired n=3 sigmas
+# (cube 18.5, spot 6.1, bob 26.1, fandisk 35.7) are informational.
+for shape, n0, n1, exp in [("sphere", 5, 5, 16.2), ("cube", 3, 3, None),
+                            ("torus", 5, 5, None), ("spot", 3, 3, None),
+                            ("bob", 3, 3, None), ("fandisk", 3, 3, None)]:
     nn0 = nseeds(shape, "C0") or n0
     nn1 = nseeds(shape, "C1") or n1
     s = welch(mean(shape, "C1"), sd(shape, "C1"), nn1, mean(shape, "C0"), sd(shape, "C0"), nn0)
     if exp:
         check(f"{shape} Welch C1 vs C0 (n={nn1},{nn0})", s, exp, tol=0.35)
     else:
-        print(f"         {shape} Welch C1 vs C0 = {s:.1f}")
+        print(f"         {shape} Welch C1 vs C0 = {s:.1f} (not printed; n<5 or unquoted)")
+
+print("\n---- round-4 range reporting (tab:gen brackets, cube prose, suppl Table S7) ----")
+def tails(shape, arm):
+    return agg(shape, arm)["tails"]
+
+def check_range(name, vals, exp_lo, exp_hi):
+    lo, hi = min(vals), max(vals)
+    ok = abs(lo - exp_lo) <= 5e-5 and abs(hi - exp_hi) <= 5e-5
+    mark = "OK" if ok else "MISMATCH"
+    if not ok:
+        issues.append(f"{mark} {name}: paper [{exp_lo},{exp_hi}], source [{lo:.5f},{hi:.5f}]")
+    print(f"{mark:8s} {name}: paper [{exp_lo},{exp_hi}] | source [{lo:.5f},{hi:.5f}]")
+
+def check_disjoint(name, c1_vals, c0_vals):
+    ok = max(c1_vals) < min(c0_vals)
+    mark = "OK" if ok else "MISMATCH"
+    if not ok:
+        issues.append(f"{mark} {name}: C1 max {max(c1_vals):.5f} !< C0 min {min(c0_vals):.5f}")
+    print(f"{mark:8s} {name}: C1 max {max(c1_vals):.5f} < C0 min {min(c0_vals):.5f}")
+
+def check_seedlist(name, vals, printed):
+    # printed values are 4-dp roundings; allow a half-ulp at 4 dp
+    ok = (len(vals) == len(printed) and
+          all(abs(v - p) <= 5.05e-5 for v, p in zip(vals, printed)))
+    got = [round(v, 4) for v in vals]
+    mark = "OK" if ok else "MISMATCH"
+    if not ok:
+        issues.append(f"{mark} {name}: paper {printed}, source {got}")
+    print(f"{mark:8s} {name}: paper {printed} | source {got}")
+
+# tab:gen bracket column (printed to 4 dp)
+for shape, c0r, c1r in [("spot", (.0429, .0584), (.0237, .0237)),
+                        ("bob", (.0413, .0437), (.0200, .0216)),
+                        ("fandisk", (.0515, .0559), (.0042, .0058))]:
+    check_range(f"{shape} C0 range", tails(shape, "C0"), *c0r)
+    check_range(f"{shape} C1 range", tails(shape, "C1"), *c1r)
+    check_disjoint(f"{shape} ranges disjoint", tails(shape, "C1"), tails(shape, "C0"))
+# cube prose ranges (§5.1)
+check_range("cube C0 range (prose)", tails("cube", "C0"), .0551, .0636)
+check_range("cube C1 range (prose)", tails("cube", "C1"), .0064, .0086)
+check_disjoint("cube ranges disjoint", tails("cube", "C1"), tails("cube", "C0"))
+# suppl Table S7 per-seed values (run order, 4 dp)
+check_seedlist("S7 spot C0", tails("spot", "C0"), [.0429, .0584, .0550])
+check_seedlist("S7 spot C1", tails("spot", "C1"), [.0237, .0237, .0237])
+check_seedlist("S7 bob C0", tails("bob", "C0"), [.0429, .0413, .0437])
+check_seedlist("S7 bob C1", tails("bob", "C1"), [.0200, .0207, .0216])
+check_seedlist("S7 fandisk C0", tails("fandisk", "C0"), [.0540, .0515, .0559])
+check_seedlist("S7 fandisk C1", tails("fandisk", "C1"), [.0058, .0055, .0042])
+check_seedlist("S7 cube C0", tails("cube", "C0"), [.0560, .0551, .0636])
+check_seedlist("S7 cube C1", tails("cube", "C1"), [.0071, .0064, .0086])
+check_seedlist("S7 two_spheres C0", tails("two_spheres", "C0"), [.0060, .0074, .0062])
+check_seedlist("S7 two_spheres C1", tails("two_spheres", "C1"), [.0007, .0009, .0005])
+check_seedlist("S7 two_spheres C2", tails("two_spheres", "C2"), [.0009, .0009, .0006])
+check("C6 sphere sd (tab:main round 4)", sd("sphere", "C6"), .0005)
 
 print("\n---- prose claims ----")
 check("sphere C2g mean", mean("sphere", "C2g"), .0972)
@@ -191,6 +248,13 @@ ch2 = msd([r["chamfer_pct"] for r in rows("C2")])[0]
 check("pot chamfer parity C1/C0", ch1 / ch0, 0.99, tol=0.006)
 check("pot chamfer C2/C0 1.36x", ch2 / ch0, 1.36, tol=0.006)
 print("         pot nsig H2:", {c: [r["nsig_H2"] for r in rows(c)] for c in ("C0", "C1", "C2")})
+# Round-4 range reporting for the pot (tab:gen bracket + §5.2 prose + S7)
+check_range("pot C0 range", c0, .0218, .0223)
+check_range("pot C1 range", c1, .0056, .0059)
+check_disjoint("pot ranges disjoint", c1, c0)
+check_seedlist("S7 pot C0", c0, [.0218, .0223, .0223])
+check_seedlist("S7 pot C1", c1, [.0059, .0056, .0056])
+check_seedlist("S7 pot C2", c2, [.0223, .0223, .0223])
 
 print("\n---- appendix A: h2_unified + crossover + blindness ----")
 hk = sorted(next(iter(H2U["summary"]["sphere"].values())).keys())
@@ -207,7 +271,7 @@ for shape, exp in [("sphere", (.0535, .0546, .0438, .0440, .0357, .0374)),
     for arm, e in zip(("B0", "B1", "B2", "B3", "B4", "B5"), exp):
         if e is not None:
             check(f"h2u {shape} {arm}", h2(shape, arm), e)
-print(f"         C5-vs-prior-alone: sphere C5 {mean('sphere','C5'):.4f} vs B4 {h2('sphere','B4'):.4f} = {h2('sphere','B4')/mean('sphere','C5'):.2f}x (paper: ~.038, 4.6x)")
+print(f"         C5-vs-prior-alone: sphere C5 {mean('sphere','C5'):.4f} vs B4 {h2('sphere','B4'):.4f} = {h2('sphere','B4')/mean('sphere','C5'):.2f}x (paper: 4.4x)")
 def xo(arm):
     a = XO["summary"]["torus"][arm]
     for k in MK:

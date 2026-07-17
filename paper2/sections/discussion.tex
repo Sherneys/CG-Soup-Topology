@@ -9,38 +9,34 @@
 tugs can.} A pixel's photometric gradient reaches only the few vertices
 rasterizing to it; topology is global and categorical --- a wrong genus
 is not approached smoothly, and the blindness probes quantify the gap
-(Chamfer equal \emph{by construction}, bottleneck apart $35$--$40\times$;
-suppl.\ Table~S1) --- so no geometric proxy stands in for the
-measurement. The persistence term supplies it with a usable gradient.
-Each significant pair
-back-propagates through the $3$--$7$ sample positions of its birth and
-death simplices: \emph{precise but sparse} pulls, iterated by re-pairing
+(\S\ref{sec:related}) --- no geometric proxy stands in. The persistence
+term supplies the measurement with a usable gradient: each significant
+pair back-propagates through the $3$--$7$ sample positions of its birth
+and death simplices --- \emph{precise but sparse} pulls, iterated by
+re-pairing
 --- the toys show surgery ``walking'' around a defect a few points at a
 time; the resampling prior is the opposite --- broad, indirect,
-budget-limited. The results sort cleanly along this axis: 1-D loops, which
-allocation can only over- or under-tessellate, respond to value pressure
-(H1 win); wide 2-D shells benefit from both (prior helps, loss helps more,
-composition best); 0-D structure needs neither (H0 null, three channels).
+budget-limited. The results sort along this axis: loops respond to value
+pressure (H1 win), wide shells to both channels (composition best),
+components to neither (H0 null).
 
 \paragraph{Why the control damages topology.} The norm-matched repulsion
 imposes a length-scale floor on the sampled surface: the void's death
-pins at that equilibrium (identical across seeds), then drags, while
-near-diagonal phantom bars accumulate (diagram trajectories: suppl.\
-Fig.~S1), and thin structures collapse ($\beta_2$ on the cube, $\beta_1$
-on the torus). The loss has no length-scale constraint --- it pulls the
-death coordinate itself. The control argument sharpens: the same
-gradient budget through the same channel \emph{without} topological
-information is not neutral but harmful --- C1's wins cannot be an
-artifact of extra regularization.
+pins at that equilibrium (identical across seeds) and drags while
+near-diagonal phantom bars accumulate (suppl.\ Fig.~S1) and thin
+structures collapse (the cube's $\beta_2$, the torus's $\beta_1$); the
+loss has no length scale --- it pulls the death coordinate itself. This
+sharpens the control argument: the same gradient budget through the same
+channel \emph{without} topological information is actively harmful, so
+C1's wins cannot be extra-regularization artifacts.
 
 \paragraph{Measurability at the loss's density.} A persistence loss can only
 enforce features that clear the significance floor at its sampling density
 $M$: the torus void and the double torus's two tube loops do not, at
-$M{=}2048$. We treat this as a principle, not a nuisance: the target
-bundle is built (and audited) at the same $M$, sub-floor features are
-excluded from the objective, and the double torus is evaluated
-against its two measurable loops --- all the reconstruction
-itself can express at feasible budgets.
+$M{=}2048$. We treat this as a principle, not a nuisance: the bundle is
+built (and audited) at the same $M$, sub-floor features are excluded,
+and the double torus is evaluated against its two measurable loops ---
+all the reconstruction can express at feasible budgets.
 
 The floor is quantifiable: a bar is significant iff its lifetime exceeds
 $6\,r_{\mathrm{med}}(M)$ ($r_{\mathrm{med}}$ = median nearest-neighbour
@@ -54,18 +50,15 @@ by a $15\%$ margin, clearing it only from $M\!\approx\!3{\times}10^{3}$ ---
 while at the evaluation density ($M{=}20000$, floor $.0171$) they clear it
 $3.1\times$; the binding constraint there is the \emph{representation}
 (the soup never expresses the tubes), so raising $M$
-alone cannot close the gap. The torus quantifies the interaction with
-noise: its second loop clears the clean floor by only $1.33\times$, a
-margin the live cloud's noise consumes --- why it is chronically
-sub-threshold in training and recruitment is its only gradient path (C6).
-Recruitment is thus how the loss reaches below its own significance floor
-on the live side: landscape-guided in practice (suppl.\ \S C), with the
-location-blindness caveat for targets beyond any achievable detour.
-Suppl.\ Table~S3 tabulates counts across $M$ (at $4096$ all four
-double-torus loops clear); the tom-yum pot ran the rule
-\emph{prospectively} (\S\ref{sec:setup}), and the in-loop result
-(Table~\ref{tab:gen}) validated it. Adaptive density is the natural
-extension; the trade is explicit --- persistence cost grows
+alone cannot close the gap --- the \emph{measurement} floor recedes as
+$M^{-1/2}$, the \emph{representation} floor is set by the budget $N$
+and no $M$ lowers it, and the double torus sits on the second. The torus quantifies the noise interaction: its second loop clears the
+clean floor by only $1.33\times$ --- a margin live-cloud noise consumes,
+leaving recruitment as its only gradient path (C6), the loss reaching
+below its own floor (suppl.\ \S C).
+Suppl.\ Table~S3 tabulates counts across $M$; the pot ran the rule
+\emph{prospectively} (\S\ref{sec:setup}), validated in-loop
+(Table~\ref{tab:gen}); adaptive density is the natural extension, at
 $O(M\log M)$.
 % src: kinkin staircase/margins: PHASE3_STATUS.md Post-3e (preflight of
 % scripts/make_kinkin_asset.py; live recompute in make_kinkin_brief_docx.py)

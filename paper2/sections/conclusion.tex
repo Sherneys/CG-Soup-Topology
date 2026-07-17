@@ -5,16 +5,18 @@
 % TODO(human): voice pass.
 % 3DV pass 2026-07-13: tightened; content unchanged.
 
-We moved topology out of the resampler's allocation channel into the
-training objective, carried by a matched persistence loss with a
-per-pairing Gabriel-\emph{certified} backward, a recruitment term
-restoring the gradient optimal matching provably lacks for missing
-features (load-bearing for loops), channel-controlled evaluation ---
-every gain beats a norm-matched control at Chamfer parity --- and a
-quantified account of the measurement ($6\,r_{\mathrm{med}}(M)$) and
-representation ($N$) floors. The hypotheses hold --- root cause in the objective
-(RH1), signal specifically topological (RH2), channels composing (RH3)
---- and the verdicts replicate on external genus-known meshes (one a
-raw artist mesh, certified), degrading gracefully under noise.
-Prescription: correct topology in the \emph{loss}, allocate with a
-\emph{wide} prior, combine. Next: open surfaces, real scans.
+We moved topology from the resampler's allocation channel into the
+training objective: a matched persistence loss with a
+Gabriel-\emph{certified} backward and a recruitment term for missing
+features (load-bearing for loops); every gain must beat a norm-matched
+control at Chamfer parity. The
+hypotheses hold (RH1: root cause in the objective; RH2: signal
+specifically topological; RH3: channels compose); verdicts
+replicate on external meshes, degrading gracefully under noise.
+Prescription: correct topology in the \emph{loss}, allocate \emph{wide},
+combine; next: open surfaces, real scans.
+% Round-4: reproducibility commitment (heavily weighted at 3DV; author
+% approved the release commitment 2026-07-17).
+\textbf{Reproducibility}: CUDA training is not bit-reproducible
+(\S\ref{sec:limitations}); we release code, scenes, target bundles,
+logs, and seed lists on acceptance.

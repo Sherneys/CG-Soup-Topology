@@ -1,6 +1,9 @@
 % ============================================================================
-%  Topology-Correcting Differentiable Triangle-Soup Reconstruction via
+%  Topology-Aware Differentiable Triangle-Soup Reconstruction via
 %  Persistent Homology  —  PAPER 2, 3DV 2027 submission format
+%  (Title tempered from "Topology-Correcting" per advisor round 4, 2026-07-17:
+%  the H0 null + measurement/representation floors bound what "correcting"
+%  can honestly claim.)
 %  Build:  cd paper2 && tectonic main.tex        (+ tectonic supplementary.tex)
 %
 %  VENUE (advisor confirmed 2026-07-13): 3DV 2027 — IEEE, Thessaloniki.
@@ -45,8 +48,9 @@
 
 \graphicspath{{figures/}}
 \newcommand{\TODO}[1]{\textcolor{red}{\textbf{[\,TODO: #1\,]}}}
+\newtheorem{lemma}{Lemma}   % round 4: the zero-gradient fact as a lemma
 
-\title{Topology-Correcting Differentiable Triangle-Soup Reconstruction\\
+\title{Topology-Aware Differentiable Triangle-Soup Reconstruction\\
        via Persistent Homology}
 
 % ----------------------------------------------------------------------------
@@ -64,46 +68,87 @@
 \author{}
 
 \begin{document}
-\maketitle
+% ---------------------------------------------------------------------------
+% Round-4 teaser (advisor figures 1+4 merged under the 8-page budget):
+% the qualitative matrix doubles as the front-page figure. A plain
+% figure*[t] defers to p2 (twocolumn dbl-float rule), so the figure is
+% injected into the full-width title block — article.cls's \maketitle is
+% \twocolumn[\@maketitle] in twocolumn mode; we call \@maketitle inside
+% our own \twocolumn[...] and append the figure via \captionof (caption
+% pkg is loaded by cvpr.sty). Renders: scripts/make_matrix_figure.py
+% (seed-0 final_params.pt of the committed runs; CPU raycast). Badge
+% data: results.json nsig_final + quicklook.json nsig_H2 — identical
+% across seeds for every entry shown.
+% ---------------------------------------------------------------------------
+\makeatletter
+\twocolumn[{%
+  \@maketitle
+  \centering
+  \vspace{-1.2em}
+  \captionsetup{type=figure}
+  \includegraphics[width=0.78\textwidth]{matrix.png}
+  \captionof{figure}{Geometry cannot carry the verdict --- measurement
+  can. Final reconstructions (seed 0), identical budgets: ground truth;
+  photometric baseline (C0); a norm-matched \emph{non-topological}
+  repulsion control through the same gradient channel (C2); the
+  persistence loss (C1, ours), at equal-or-better Chamfer on every row
+  (\S\ref{sec:generality}). A topological error need not be visible in a
+  render, so each cell is badged with its \emph{measured}
+  significant-feature count (blue outline = correct, filled orange =
+  wrong; identical across seeds): the control erases both enclosed voids
+  --- and collapses a loop on bob (suppl.\ Fig.~S8) --- while the loss
+  reads correct everywhere and cuts tail error $2.1$--$10.4\times$
+  (Tables~\ref{tab:main}--\ref{tab:gen}).}%
+  \label{fig:matrix}
+  \vspace{-0.5em}
+}]
+\makeatother
 
 % ----------------------------------------------------------------------------
 % ABSTRACT — numbers grounded per the contract.
 % TODO(human): voice pass.
 % ----------------------------------------------------------------------------
 \begin{abstract}
-Resampling priors can steer \emph{where} a differentiable triangle-soup
-reconstruction spends its triangle budget, but our controlled study of that
-channel (supplementary material) found their topological value carried
-largely by spatial \emph{width}, and no prior shape repairs
-one-dimensional features. We move topology
-from the allocation channel into the \emph{objective}:
-$L=\mathrm{photometric}+\lambda(t)\,L_{\mathrm{topo}}$, where
-$L_{\mathrm{topo}}$ is an optimally-matched distance between the live surface's
-persistence diagram and a fixed target diagram. Gradients flow through a
-pair-frozen backward: matched birth/death simplices re-expressed as
-closed-form circumradii of live sample positions (exact for Gabriel
-simplices --- all significant pairs in practice), plus a recruitment term
-restoring the gradient optimal matching provably lacks when a target
-feature is missing; one ratio knob $\rho$ sets the scale by
-gradient-norm calibration, and a curriculum proved unnecessary.
-% src: PHASE3_PLAN.md Appendix D / topo3/report/results.json
-On budget-starved synthetic scenes the loss is topology-specific where a
-norm-matched non-topological control is not: enclosed voids improve
-$4.0$--$7.9\times$ and --- the channel's distinguishing result --- torus loops
-improve $2.3\times$ with zero phantom handles across seeds, while the control
-collapses a loop. The channels compose: loss plus the best prior reaches
-$7.6\times$ below baseline at the best Chamfer. Component
-counting (H0) is again matched by the generic control --- this class needs
-no topological information. All verdicts
-replicate, with no per-shape tuning, on four external genus-known meshes
---- one a raw artist mesh ingested and \emph{certified} rather than
-constructed --- at $2.1$--$10.4\times$ and equal-or-better Chamfer, and the
-loss degrades gracefully (never below baseline) under sensor noise up to
-one sample spacing.
-% src: topo3/report/results.json (spot/bob/fandisk) +
+% Round-4 rewrite (2026-07-17): top-down per the review — problem, idea,
+% mechanism, headline results with meaning, explicit scope caveat;
+% "channel" defined at first use; numbers cut to the headline set.
+Differentiable triangle-soup reconstruction inherits a blind spot from its
+objective: photometric and geometric losses cannot see topology, so a
+reconstruction with a collapsed loop or a punctured enclosed void can
+score exactly as well as a correct one (on Chamfer-equal probes the
+diagrams differ $35$--$40\times$ in bottleneck distance).
+% src: figures/summary.md / blindness_results.json (suppl. Table S1)
+The implicit standard remedy --- steer \emph{where} the resampler spends
+its triangle budget --- does not repair this: in a controlled study of
+that allocation channel, a topology-informed prior is largely matched by
+an equally wide random one, and no prior shape repairs loops.
+% src: h2_unified + crossover reports (suppl. §A)
+We therefore move topology into the objective: a differentiable
+persistence term compares the evolving surface's diagram, measured on
+live surface samples, to a fixed target; gradients flow through a
+pair-frozen backward re-expressing matched birth/death simplices as
+closed-form circumradii (exact for Gabriel simplices, verified per
+pairing), plus a recruitment term restoring the gradient optimal
+matching provably lacks when a target feature is missing; one ratio
+knob calibrates the loss against the photometric gradient, no
+curriculum needed.
+Every claim passes a channel-controlled verdict: the loss must beat a
+norm-matched \emph{non-topological} control through the identical
+gradient channel, at Chamfer parity. Under that rule the loss is
+topology-specific for enclosed voids ($4.0$--$7.9\times$ lower error) and
+--- the class every allocation prior failed --- for loops ($2.3\times$,
+zero phantom handles, while the control collapses one); loss and prior
+compose; component counts (H0) are an honest null, matched by the
+generic control. All verdicts replicate without per-shape tuning on four
+external genus-known meshes ($2.1$--$10.4\times$; one a raw artist mesh,
+ingested and \emph{certified}), degrading gracefully under sensor
+noise.
+% src: PHASE3_PLAN.md Appendix D / topo3/report/results.json +
 % topo3/quicklook.json (kinkin, 2026-07-10)
-Prescription: correct topology in the loss, allocate with a wide prior, and
-combine.
+Scope: all evidence is synthetic, closed-surface, single-machine, with
+the target diagram known in advance --- the regime where correction can
+be measured exactly; open surfaces and blind capture are future work.
+Prescription: correct topology in the loss, allocate wide, combine.
 \end{abstract}
 
 \input{sections/intro}

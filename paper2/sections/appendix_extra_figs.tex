@@ -14,6 +14,7 @@
 Fig.~\ref{fig:gen} shows the generality-wave training trajectories
 (main paper \S5.2, Table~2); Fig.~\ref{fig:tails} the per-seed tail
 spread behind the sphere row of main-paper Table~1;
+% (round-4 final numbering: main Table 1 = C-matrix, Table 2 = generality)
 Fig.~\ref{fig:nsig} the torus significant-count check behind
 \S5.1's zero-phantom-handles claim.
 
@@ -83,3 +84,63 @@ case where plain optimal matching provably has zero gradient. (T3,
 mis-spaced components, $1229\times$: omitted for space.)}
 \label{fig:toys}
 \end{figure}
+
+% Round-4 (2026-07-17): the decisive-shape trajectory figure moved here
+% from main §5.1 (page budget for the round-4 teaser + qualitative
+% matrix). Appended AFTER fig:toys so S2-S5 keep their numbers; this is
+% Fig. S6. The full-width canvas also answers the review's Fig-1
+% legibility note (many overlapping arms). Caption verbatim from main.
+\begin{figure*}[t]
+\centering
+% src: topo3/report/{sphere,torus}_series.png (topo_loss_report.py; line =
+% seed mean, band = seed min-max; underlying numbers in results.json)
+\includegraphics[width=0.495\linewidth]{sphere_series.png}\hfill
+\includegraphics[width=0.495\linewidth]{torus_series.png}
+\caption{Topology error over training: bottleneck to target in the
+discriminating dimension (line = seed mean, band = seed min--max).
+\emph{Left}, sphere (H2): every loss arm (C1, C3, C5, C6, both $\rho$
+variants, noise pair C7/C7h) converges to a fraction of baseline; the
+norm-matched repulsion control C2 is \emph{destructive}, and its gentle
+variant C2g still ends worse than baseline. \emph{Right}, torus (H1), the
+class no prior won: same ordering, C5 best; noise arms descend shallower
+but never approach baseline; the no-recruitment ablation C6 rides it.}
+\label{fig:mainseries}
+\end{figure*}
+
+% Round-4 (2026-07-17): fig:tomyum moved here from main §5.2 (page
+% budget); appended after fig:mainseries so it is Fig. S7. The pot's
+% showcase render re-enters main inside the qualitative matrix. Caption
+% verbatim except the cross-doc \ref -> plain "main paper §4".
+\begin{figure}[t]
+\centering
+% src: figures/tomyum_pot_alu{,_cut}.png (scripts/make_kinkin_figure.py ---
+% CPU ray-traced render of the certified shell _meshes/kinkin_src.ply;
+% aluminium material per advisor request 2026-07-11; rendered name
+% tom-yum pot = internal asset name kinkin)
+\includegraphics[width=0.365\linewidth]{tomyum_pot_alu.png}\hfill
+\includegraphics[width=0.365\linewidth]{tomyum_pot_alu_cut.png}
+\caption{The \emph{tom-yum pot}: an artist-authored Blender model (raw
+export: 9 open shells, 232 non-manifold junction edges) ingested and
+certified to a single genus-3 shell, $\beta{=}(1,6,1)$ exact
+(main paper \S4). \emph{Right}: cutaway --- the narrow flue mouth caps
+at small $\alpha$, so the flue interior reads as an enclosed chamber: the
+on-axis H2 void the floor rule selects at $M{=}8192$ (all H1 loops sit
+below the floor).}
+\label{fig:tomyum}
+\end{figure}
+
+% Round-4: the loop-class row of the qualitative matrix (main Fig. 1
+% holds the two H2 rows under the page budget). Same renderer, badges,
+% and camera discipline as Fig. 1; Fig. S8.
+% src: scripts/make_matrix_figure.py (bob strip; seed-0 final_params.pt;
+% badge = results.json nsig_final, identical across seeds)
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{matrix_bob.png}
+\caption{The loop-class row of the main paper's Fig.~1 matrix: bob
+(genus 1, H1). The repulsion control's reconstruction reads one
+significant loop against the true two ($\beta_1\,2{\to}1$, all seeds)
+at $2\times$ worse Chamfer, while baseline and loss both read two ---
+the loss at half the baseline's tail error (main Table~2).}
+\label{fig:bobmatrix}
+\end{figure*}

@@ -10,13 +10,17 @@ topological loss gives topology-specific wins on voids (H2) AND loops (H1) —
 the class the Phase-2 resampling channel failed — the two channels stack, the
 result survives the family change and sensor noise, and its one essential
 ingredient is recruitment.** Everything is written into paper 2 (`paper2/`,
-19 pp, both advisor revision rounds answered — see `NOTES_FOR_AUTHOR.md`).
+now in 3DV 2027 double-blind review format — 8 pp body + 12 pp supplementary;
+four advisor revision rounds answered, round 4 incl. the p1 teaser-matrix
+and the n≥5-only Welch policy — see `NOTES_FOR_AUTHOR.md`).
 Remaining (deferred by design, out of the paper): C4 curvature-weighted mask
 and the dental showcase (Phase-4 items; see PHASE3_PLAN.md §9).
 **Post-freeze addition (2026-07-10, additive `topo3/` tags only — nothing
 frozen was touched): the constructed genus-9 `tomyum` mesh replicates the
 C-matrix as a 4th external shape (2.3×, 5.8σ, control 1.4× worse); see the
-"Post-3e" section — held out of paper 2 pending the advisor's call.**
+"Post-3e" section — held out of paper 2 pending the advisor's call
+(resolved 2026-07-11: the artist `kinkin` variant below went into paper 2
+instead, printed as "the tom-yum pot"; this CSG pot stays out).**
 **Post-freeze 2 (2026-07-10, later, additive again): the tomyum showcase
 SOURCE swapped to the user's artist-authored `kinkin` mesh via a new
 ingest→certify path (non-manifold Blender soup → certified genus-3 thin
@@ -252,11 +256,11 @@ Caveats, honestly: (1) C2's failure mode here is DEGRADE-not-destroy — the
 count survives (the Ø104 chimney is too fat for ρ=0.1 repulsion to sever,
 unlike bob's b₁ 2→1), and its separation from C0 is 2.8σ at n=3 (two more
 seeds would firm it up). (2) C0 already gets the count right, so as with bob
-this is a value-accuracy win, not count repair. (3) NOT in paper 2: the 3e
-table is frozen and the recorded decision is to broaden the shape set only if
-reviewers ask — the advisor brief with the inclusion question is
-`docs/CG-Soup_Tomyum_Brief_TH.docx` (commit `e8ed503`). All runs are additive
-new tags under `topo3/` — no published number changed.
+this is a value-accuracy win, not count repair. (3) NOT in paper 2 — the
+inclusion question in `docs/CG-Soup_Tomyum_Brief_TH.docx` (commit `e8ed503`)
+was resolved 2026-07-11 in favor of the artist `kinkin` pot (next section),
+which entered paper 2 as its 4th external mesh; this CSG row stays out. All
+runs are additive new tags under `topo3/` — no published number changed.
 
 ## Post-3e (2026-07-10, later): kinkin — the artist-authored pot replaces the CSG pot as the tomyum showcase
 
@@ -316,9 +320,11 @@ is a value-accuracy win, not count repair. (2) The 80.1σ headline reflects an
 unusually tight seed spread at n=3 (C1 sd .0002); the honest summary is
 "3.9× with non-overlapping seed ranges", and 3.9× (from unrounded means,
 3.88) sits inside the study's 2.1–10.4× span. (3) Certified-by-measurement,
-not by-construction. (4) NOT in paper 2 (3e table frozen); the open advisor
-question now has two candidate rows: the CSG pot (H1, by-construction) or
-kinkin (H2, artist ingest). Advisor brief:
+not by-construction. (4) RESOLVED 2026-07-11: kinkin IS in paper 2 as the
+4th external mesh — generality-table row (3.9×, 80.1σ) + the aluminium
+showcase figure, printed throughout as "the tom-yum pot" (zero rendered
+"kinkin"); the CSG pot stays out, and the frozen 3e result set is unchanged
+(all kinkin runs are additive `topo3/` tags). Advisor brief:
 `docs/CG-Soup_Kinkin_Brief_TH.docx` (regen: `scripts/make_kinkin_brief_docx.py`
 — reads quicklook.json + the cert json live and recomputes the staircase, so
 it cannot drift).

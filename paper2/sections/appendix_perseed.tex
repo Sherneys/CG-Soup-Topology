@@ -1,0 +1,80 @@
+\section{Per-seed values and calibration sweeps}
+\label{app:perseed}
+
+% Round-4 statistics fix (2026-07-17): the main paper quotes no Welch
+% sigma at n=3; its range-based verdicts (main Table 2; cube in §5.1)
+% rest on the per-seed tail values tabulated here. This section sits
+% AFTER the survey so Table S6's number (cited from main related work)
+% is unchanged; this table is S7.
+% src: topo3/report/results.json ("tails" arrays, seed order 0/1/2 as
+% logged) for spot/bob/fandisk/cube; topo3/quicklook.json
+% (kinkin_C{0,1,2}_* seeds 0-2, 2026-07-10) for the tom-yum pot.
+
+The main paper's reporting policy (\S 4) quotes Welch $\sigma$
+separations only where both arms ran five seeds; every three-seed
+verdict instead rests on disjoint per-seed ranges.
+Table~\ref{tab:perseed} lists the underlying per-seed tail bottlenecks
+for the generality wave and the three-seed analytic shapes. In every
+row the largest C1 seed is well below the smallest C0 seed; C2's
+identical values across seeds are genuine (the repulsion equilibrium
+pins the diagram, main paper \S 6), not rounding.
+
+\begin{table*}[t]
+\centering
+\caption{Per-seed tail bottlenecks (seeds 0/1/2, run order) behind the
+three-seed verdicts. Spot's C1 value repeats across seeds at this
+precision; the pot rows are the quicklook values behind main
+Table~2.}
+\label{tab:perseed}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llll}
+\toprule
+shape (dim) & C0 & C1 loss & C2 control \\
+\midrule
+% src: topo3/report/results.json tails (seed order)
+spot (H2)    & .0429 / .0584 / .0550 & .0237 / .0237 / .0237 & .0652 $\times$3 \\
+bob (H1)     & .0429 / .0413 / .0437 & .0200 / .0207 / .0216 & .0437 $\times$3 \\
+fandisk (H2) & .0540 / .0515 / .0559 & .0058 / .0055 / .0042 & .0571 $\times$3 \\
+% src: topo3/quicklook.json (kinkin seeds 0/1/2)
+tom-yum pot (H2) & .0218 / .0223 / .0223 & .0059 / .0056 / .0056 & .0223 $\times$3 \\
+% src: topo3/report/results.json cube + two_spheres tails (run order)
+cube (H2)    & .0560 / .0551 / .0636 & .0071 / .0064 / .0086 & .1346 $\times$3 \\
+two spheres (H0) & .0060 / .0074 / .0062 & .0007 / .0009 / .0005 & .0009 / .0009 / .0006 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+% Round-4: the rho-sweep and ramp-window numbers moved here from main
+% §3.4/§5.1 prose (the review asked for them "in a small table rather
+% than inline prose"; page budget agreed). Table S8.
+Table~\ref{tab:knobs} tabulates the two calibration-knob sweeps whose
+verdicts the main paper states in \S 3.4 and \S 5.1: the $\rho$
+response is flat over a $10\times$ range, and the ramp window is
+immaterial --- all alternatives land within seed noise of the default.
+
+\begin{table}[t]
+\centering
+\caption{Calibration-knob sweeps (sphere, tail bottleneck). \emph{Top}:
+$\rho$ response, matched seed-0 sweep --- the five-seed $\rho{=}0.1$ arm
+is main Table~1's C1 ($.0156{\pm}.0013$). \emph{Bottom}: ramp-window
+pilot, three seeds each.}
+\label{tab:knobs}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lccc}
+\toprule
+$\rho$ (seed 0) & $0.03$ & $0.1$ & $0.3$ \\
+\midrule
+% src: PHASE3_PLAN.md Appendix C (rho mini-sweep, sphere seed 0,
+% tail = last 3 dumps)
+tail & .0181 & .0172 & .0177 \\
+\midrule
+ramp window & $10$--$40\%$ & $20$--$50\%$ (default) & $30$--$60\%$ \\
+\midrule
+% src: ramp_1040/quicklook.json + ramp_3060/quicklook.json (2026-07-09);
+% default = topo3/report/results.json sphere C1
+tail & .0154$\pm$.0017 & .0156$\pm$.0013 & .0179$\pm$.0019 \\
+\bottomrule
+\end{tabular}
+\end{table}

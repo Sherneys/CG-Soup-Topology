@@ -117,11 +117,15 @@ the measured consequence in this study.}
 \toprule
 challenge & measured consequence \\
 \midrule
-% src: kinkin_src_cert.json (raw-soup counts)
-raw artist export: 9 open shells, mixed quad/12-gon faces, 50 boundary
+% src: kinkin_src_cert.json (raw-soup counts; 6,318-vertex count moved
+% here from main §4 in the round-4 trim)
+raw artist export ($6{,}318$ vertices): 9 open shells, mixed quad/12-gon
+faces, 50 boundary
 edges after exact weld, 232 non-manifold junction edges & no trustworthy
 ground-truth topology as exported; ingest-and-certify required (weld,
-offset-solidify, drop 804 enclosed pocket shells) \\
+offset-solidify into a thin shell via an exact unsigned distance field
+$+$ marching cubes at iso $\varepsilon$, drop 804 enclosed pocket
+shells) \\
 % src: kinkin_src_cert.json (certificate)
 certified shell: one body, genus 3, $\beta{=}(1,6,1)$ exact,
 $190{,}990$ vertices & ground truth known by \emph{certificate} (exact

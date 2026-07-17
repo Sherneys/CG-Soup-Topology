@@ -25,6 +25,12 @@ diagram, computed once at the sampling density $M$ the loss will see
 (alpha values shift with spacing: density matching is a correctness
 requirement), normalized by the target's bounding-box diagonal, and
 locked for all live evaluations.
+% Round-4: "significant" was used ~30x before its §6 definition — the
+% one-line definition now sits at first use; §6 keeps the scaling law.
+Throughout, a bar is \emph{significant} iff its lifetime exceeds the
+measurement floor $6\,r_{\mathrm{med}}(M)$ ($r_{\mathrm{med}}$ = median
+nearest-neighbour sample spacing; derived and validated in
+\S\ref{sec:discussion}).
 
 \subsection{Live diagram and pair-frozen backward}
 At each refresh we draw $M$ surface samples ($M{=}2048$ unless the
@@ -58,23 +64,31 @@ value (relative $10^{-6}$); a pair failing this Gabriel test is
 no gradient through that simplex, so an exactness failure can never inject
 a wrong gradient.
 In practice the gate never fires: 100\% of significant pairs are
-Gabriel-exact on all six shapes' clean clouds, with zero
-failures in the stress test's $2{,}400$ noisy refreshes
-(\S\ref{sec:results}); the per-refresh count is logged, and stronger
-fallbacks (dropping pairs, subgradients, locally raising $M$) stay
-compatible.
-% src: PHASE3_PLAN.md Appendix A (mapping + Gabriel gates, 22/22)
+Gabriel-exact on all six shapes' clean clouds, and the logged
+per-refresh failure count is zero at every one of the $5{,}500{+}$
+logged refreshes (including all $2{,}400$ noisy ones,
+\S\ref{sec:results}) --- a constant $100\%$ pass rate, not an
+aggregate. Stronger fallbacks (dropping pairs, subgradients, locally
+raising $M$) remain available.
+% src: PHASE3_PLAN.md Appendix A (mapping + Gabriel gates, 22/22);
+% per-refresh sum recomputed 2026-07-17 over every topo_loss_log.json
+% with the refresh schema: 5,560 refreshes, n_gabriel_fail = 0 throughout
+% (scratchpad gabriel_scan.py over output/synth/**/topo_loss_log.json)
 The pairing is treated as locally constant --- the standard pair-frozen
 device~\citep{gabrielsson2020topologylayer,carriere2021optimizing} ---
 refreshed every $K{=}10$ steps and, necessarily, after every resampling
-event (which replaces the vertex and face tensors wholesale).
+event (which replaces the vertex and face tensors wholesale); $K{=}10$
+is an amortization choice, not a tuned knob --- it bounds refresh cost
+($174$\,ms each; the fixed ${\approx}46$\,s of \S\ref{sec:results})
+while the pairing stays local.
+% src: PHASE3_PLAN.md Appendix B-D (174 ms refresh; +46 s fixed cost)
 
 \subsection{Matching, diagonal pressure, and recruitment}
 Let $D$ be the live significant bars and $\mathcal{T}$ the target bars of one
 dimension. An optimal partial matching (Hungarian on the standard augmented
 cost; equivalently $W_2$) splits bars into matched pairs, unmatched live, and
 unmatched target:
-\begin{equation}
+\begin{equation}\label{eq:matching}
 \begin{split}
 L_{\mathrm{topo}} = \!\!\sum_{(i,j)\,\mathrm{matched}}\!\!\!
   \big[(b_i-b^*_j)^2+(d_i-d^*_j)^2\big]\\[-2pt]
@@ -84,10 +98,22 @@ L_{\mathrm{topo}} = \!\!\sum_{(i,j)\,\mathrm{matched}}\!\!\!
 \end{equation}
 The first term pulls matched features to their target coordinates; the second
 pushes spurious features to the diagonal. The third exists because optimal
-matching has a blind spot: when a target feature is entirely missing, the
-cheapest transport diagonalizes both sides and the gradient is exactly
-zero. Recruitment restores a
-descent direction. Let $\mathcal{T}_{\mathrm{miss}}$ be the unmatched target
+matching has a blind spot that is provable, not merely observed:
+% Round-4: stated as a lemma (the review asked the provable fact to be
+% separated cleanly from recruitment's *empirical* self-correction, §7).
+\begin{lemma}\label{lem:zerograd}
+If a target bar $t\in\mathcal{T}$ is unmatched under the optimal partial
+matching, then $L_{\mathrm{topo}}$ without $L_{\mathrm{recruit}}$ is
+locally independent of $t$: no component of its gradient in $V$ acts to
+create the missing feature.
+\end{lemma}
+\noindent\emph{Proof sketch.} The unmatched target's augmented cost is its
+diagonal penalty $\big((d^*_t-b^*_t)/2\big)^2$, constant in the live
+coordinates; every $V$-dependent term of Eq.~\ref{eq:matching} references
+live bars only, and the matching is locally constant in $V$ (the
+pair-frozen regime) --- no gradient term is directed at $t$.\hfill$\square$
+
+Recruitment restores a descent direction. Let $\mathcal{T}_{\mathrm{miss}}$ be the unmatched target
 bars, processed in decreasing persistence order, and let the candidate pool
 $\mathcal{A}$ hold every live bar not claimed by the matching --- unmatched
 significant bars and, crucially, \emph{sub-threshold} bars, which matching
@@ -109,30 +135,36 @@ This deliberately departs from a metric-faithful $W_2$;
 \S\ref{sec:results} probes its known pathology (location-blindness)
 directly, and the C6 ablation shows the term is load-bearing in training.
 % src: methods/topological_loss.py plan_topo_loss (greedy recruit loop)
+% Round-4: greedy-vs-optimal justification, grounded in the refresh logs
+% (torus profile: exactly one unreached target at every refresh, all
+% seeds — results.tex C6 ¶ carries the same numbers).
+Greedy rather than optimal assignment is deliberate: in every logged
+regime the missing-target set is a single bar (torus: one unreached
+target at every refresh, every seed; \S\ref{sec:results}), where the two
+coincide; when they diverge, decreasing-persistence order spends the
+pool on the most significant features first.
 
 \subsection{Calibration instead of curriculum}
 $\lambda(t)$ ramps linearly from 20\% to 50\% of training, with peak set once
 by a gradient-norm ratio at the first active step:
 $\lambda_{\mathrm{peak}}=\rho\,\lVert\nabla_V L_{\mathrm{photo}}\rVert /
 \lVert\nabla_V L_{\mathrm{topo}}\rVert$. The single knob $\rho$ is
-dimensionless; $\rho{=}0.1$ throughout. The tail error is flat across
-$\rho\in\{0.03,0.1,0.3\}$, and an uncalibrated-schedule ablation (constant
-$\lambda$ from step one) matches the ramped version --- calibration, not
-scheduling, is what makes the knob safe.
-% src: PHASE3_PLAN.md Appendix C (rho sweep) + Appendix D (C3 vs C1)
-Alternative windows ($10$--$40\%$, $30$--$60\%$; sphere, three seeds)
-land at $.0154{\pm}.0017$ / $.0179{\pm}.0019$ vs the default's
-$.0156{\pm}.0013$ --- within seed noise; $20{:}50$ is conservative, not
-tuned.
-% src: ramp_1040/quicklook.json + ramp_3060/quicklook.json (2026-07-09)
+dimensionless ($\rho{=}0.1$ throughout); the tail error is flat across
+$\rho\in\{0.03,0.1,0.3\}$, a constant-$\lambda$ ablation matches the
+ramped version, and alternative ramp windows land within seed noise
+(suppl.\ Table~S8) --- calibration, not scheduling, makes the knob safe.
+% src: PHASE3_PLAN.md Appendix C (rho sweep) + Appendix D (C3 vs C1);
+% ramp_1040/quicklook.json + ramp_3060/quicklook.json (2026-07-09)
+% — window numbers now printed in suppl. Table S8 (round-4 page budget)
 
 \subsection{Conditions}
 \label{sec:conditions}
 C0: baseline (photometric only). C1: $+L_{\mathrm{topo}}$. C2: $+$ a
 short-range repulsion on the \emph{same} frozen samples, calibrated with the
-\emph{same} $\rho$ --- a norm-matched non-topological control through the
-identical channel, the RH2 test (C2g: a gentler radius). C3: C1 without
-the ramp.
+\emph{same} $\rho$ --- the norm-matched control, the RH2 test (C2g: a
+gentler radius). C3: C1 without the ramp.
+(C4, a curvature-weighted variant, is deferred to follow-up work; the
+numbering gap keeps condition tags comparable across studies.)
 C5: C1 $+$ the best prior of our allocation study (the spread topological
 field B4; suppl.\ \S A) --- the RH3 test.
 C6: C1 with the recruitment term removed

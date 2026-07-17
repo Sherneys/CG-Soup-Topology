@@ -1,3 +1,164 @@
+# PAPER 2 — ADVISOR ROUND 4 (mock review + figure specs) — EXECUTED 2026-07-17
+
+**What arrived (2026-07-17, Downloads):**
+`3DV2027_review_actionable_revisions.pdf` (an AI-generated mock 3DV
+review — verdict "Weak Accept, borderline", 3 Major items, per-paragraph
+table) + `Revision list (9).pdf` (advisor Thai: 5 figure specs, the
+fandisk-vs-pot question for Fig 4, "check the page limit / draft me a
+short outline", "example images lack texture", 2 AI actionable tables,
+an AI restructure skeleton with placeholders).
+
+## Audit verdict (vs round 3's 85–95% fabrications: this round is largely grounded)
+
+- The mock review was generated against the REAL current main.pdf — its
+  citation numbers [14]/[15]=gao2025genus/gao2026homology,
+  [24]=jignasu2024stitch, [45]=shen2025topologygs match our alphabetical
+  bibliography exactly; even the teaser's "0.977" is the real Table-S1
+  punctured-void Chamfer.
+- FALSE: "[90] Thingi10K lacks year" (refs.bib has year=2016, verified).
+  Garbled: "232 boundary edges" (= 232 non-manifold junction edges; 50
+  boundary after weld). PDF-2's [41]/[73] numbering is the SUPPL
+  bibliography's. The Fig-4 spec's "double torus: baseline fuses loops"
+  contradicts our data (saturated identically in every arm) and
+  "phantom handles circled in C2" mislabels the mechanism (C2 DESTROYS
+  features; phantoms = allocation-B2 4.4-vs-2 and spot's C0).
+- `paper2/main.bbl` on disk is a stale pre-round-3 artifact — never
+  diagnose from it; the PDF is fresh.
+
+## What was executed (2026-07-17, all rebuilt + audited green)
+
+**Title tempered** `Topology-Correcting` → **`Topology-Aware`** (both
+docs; the advisor's own table asked for it; H0 null + floors ground it).
+
+**Statistics hygiene (the review's cleanest hit):** Welch σ now quoted
+only where both arms ran five seeds. tab:gen's n=3 σ column
+(6.1/26.1/35.7/80.1σ) retired → verdicts rest on disjoint per-seed
+ranges; **new suppl Table S7** (per-seed tails, run order, all
+three-seed shapes incl. pot from quicklook) + reporting-policy sentence
+in §4 + cube's 18.5σ replaced by ranges in prose. Double torus marked
+descriptive (n=2). σ kept: sphere 16.2 (n=5), C6 0.6/12.4/1.5 (n=5).
+
+**Figures (the round's core):**
+- **Fig. 1 = teaser + qualitative matrix merged** (p1, in the title
+  block via `\twocolumn[{\@maketitle …\captionof{figure}…}]` — a plain
+  figure* defers to p2). Rows fandisk + tom-yum pot (the advisor's own
+  lead pair), cols GT/C0/C2/C1, rendered from seed-0 `final_params.pt`
+  by **NEW `scripts/make_matrix_figure.py`** (CPU raycast, neutral gray
+  per the advisor's teaser spec; GT normalized into the scene frame —
+  fandisk.obj is in raw CAD coords, scale 0.268).
+  **Honesty decision:** the advisor's red-circled "phantom handles"
+  don't exist visually (topology is a diagram READING) — each cell
+  instead carries a **measured-count badge** (true #sig vs read;
+  Okabe-Ito blue-outline=correct / filled-vermillion=wrong,
+  grayscale-safe). Badge data = results.json nsig_final +
+  quicklook nsig_H2, identical across seeds.
+- **bob strip → suppl Fig. S8** (loop-class row of the matrix; β₁ 2→1
+  under C2). fig:series → **suppl Fig. S6**; fig:tomyum → **suppl
+  Fig. S7** (numbers preserved; S2–S5 numbering untouched by appending
+  after S5). The blindness mini-table built mid-round was folded back
+  to prose (all three probe ratios now inline in §2) once Fig. 1
+  covered the visual form — suppl Table S1 unchanged.
+- **NEW suppl Table S8**: ρ sweep + ramp-window numbers moved from
+  main prose (the review asked for exactly this table).
+
+**Main-text additions:** Lemma 1 (zero-gradient under absence, proof
+sketch; separated from recruitment's *empirical* self-correction in §7);
+greedy≡optimal justification from the refresh logs (missing-target set
+is a single bar in every logged regime); "significant" defined at first
+use in §3.1; per-refresh Gabriel claim strengthened (verified 2026-07-17:
+**zero failures in all 5,560 logged refreshes** — scratchpad
+gabriel_scan.py over every topo_loss_log.json with the refresh schema);
+K=10 justified as amortization; C4 numbering-gap note in §3.5;
+DiffSoup-implementation provenance in §4; tail window stated (last 3
+dumps = steps 2,300–2,500, per topo_loss_report.py --tail default);
+overhead projection 46/(T+46) (≈7% of a 10-min run); C7 framed as a
+probe, not scan realism (+ non-Gaussian ack in §7); spot count-limit in
+§7; **reproducibility statement** in §8 (release commitment approved by
+author 2026-07-17); abstract rewritten top-down with the scope caveat
+(synthetic/closed/known-target = not blind capture); RH1–3 now a
+numbered list (review ask), contribution bullets run-in; suppl §D.7's
+three-criteria partition promoted to §2 as the per-method infeasibility
+argument (chosen over an empirical STITCH/Topology-GS comparison —
+inputs/outputs/cost regimes don't align).
+
+**Page fit:** body ends **exactly p8** again (refs pp9–11 main;
+suppl now 12 pp, refs from p9). Paid by: fig:series+fig:tomyum+bob-row
+to suppl, tab:gen single-column (all-PASS folded into caption; 2.3%
+resizebox), pot-ingest mechanics compressed into suppl Table S4 (raw
+6,318-vert count added there), ρ/window numbers → S8, and a
+document-wide redundancy pass (~6 rounds; every number kept verbatim
+with its % src; the only numbers that left main went to suppl tables).
+Zero overfull hboxes in both docs. `audit_paper2.py` extended
+(range-disjointness + printed-range + per-seed-list + C6-sd checks;
+n=3 Welch checks downgraded to informational) — **all numeric checks
+pass**; no rendered kinkin/TODO; anonymity intact.
+
+## Remaining from round 4 (deliberately deferred, in order)
+
+1. **Suppl pipeline+recruitment diagram** (advisor Fig 2+3; suppl-only
+   after the page-budget call) and **M-vs-significance floor chart**
+   (advisor Fig 5 → S1-area upgrade; data = density_bound.py).
+2. **Double-torus seeds 2–4** (kills the n=2 flag): read PHASE3_PLAN
+   Appendix C/D for the EXACT pre-registered flags first (guessing
+   flags violates the protocol discipline) — likely
+   `--shapes double_torus --seeds 2 3 4 --conditions C0 C1 C2 --rhos
+   0.1 --steps 2500 --max_faces 2000 --loss_dims 1`, then report regen
+   + audit + table/caption updates (expect saturation to replicate).
+3. **Synthetic open-surface probe** (the round's one new-science ask;
+   limitations already promises it "comes first"): design the
+   boundary-born-bar handling BEFORE running — pre-register the scene
+   (e.g. hemisphere / disk-cut sphere), the observable, and the bundle
+   rule, then C0/C1/C2 × 3 seeds. Fallback stays the sharpened scope
+   framing already in the abstract.
+4. Voice pass (unchanged TODO(human) markers), paper ID, 2027-kit swap.
+
+## Draft message to อาจารย์ (round 4 — merges the unsent round-3 reply; SEND THIS)
+
+> เรียนอาจารย์ครับ
+>
+> ผมได้รับชุด revision รอบใหม่ (review report + revision list) ครบแล้ว
+> และดำเนินการหลักเสร็จแล้วครับ ตรวจตัวเลขทุกตัวกับผลทดลองจริงก่อนใช้
+> — รอบนี้เอกสาร AI แม่นกว่ารอบก่อนมาก (เลข citation ตรงกับ PDF จริง
+> ทุกตัว) มีคลาดเคลื่อนเล็กน้อย เช่น entry Thingi10K มีปีอยู่แล้ว และ
+> double torus ในสเปครูปที่ 4 — ผลจริงอิ่มตัวเท่ากันทุก arm จึงไม่มีภาพ
+> ความต่างให้โชว์ครับ
+>
+> **จำนวนหน้า:** 3DV บังคับ 8 หน้ารวมรูป/ตาราง (หน้า references
+> ไม่นับ, supplementary แยกส่ง 2 ก.ย.) — ตอนนี้เนื้อหาจบหน้า 8 พอดี
+> หลังใส่รูปใหม่แล้วครับ
+>
+> **สิ่งที่ทำแล้วตามลิสต์อาจารย์:**
+> 1. **รูป Teaser + Qualitative Matrix รวมเป็น Figure 1 หน้าแรก**
+>    ("ภาพเดียวจบ" ตามคอนเซปต์อาจารย์): แถว fandisk + หม้อต้มยำ
+>    (คู่ที่อาจารย์เสนอ) × คอลัมน์ GT / baseline / control / ours
+>    เรนเดอร์จากผลเทรนจริง seed 0 — แถว bob (loop) อยู่ใน suppl Fig S8
+>    เพราะพื้นที่ 8 หน้าครับ จุดสำคัญ: "phantom handles" วงแดงตามสเปค
+>    ไม่มีให้เห็นในภาพจริง (topology เป็นค่าที่วัดจาก diagram ไม่ใช่สิ่ง
+>    ที่ตามองเห็นเสมอ) ผมจึงใส่ป้ายตัวเลข #sig ที่วัดได้จริงในทุกช่องแทน
+>    — ซื่อสัตย์กว่าและกรรมการตรวจสอบได้ครับ
+> 2. **ลดชื่อเรื่องเป็น "Topology-Aware"** ตามตารางของอาจารย์
+>    (ผล H0 null + measurement floor ทำให้ "Correcting" แรงเกินหลักฐาน)
+> 3. **แก้สถิติทั้งเล่ม:** เลิกใช้ Welch σ กับ n=3 (ตาราง generality
+>    เปลี่ยนเป็น per-seed ranges ที่แยกขาดกันทุกตัว + ตารางค่า per-seed
+>    ใน suppl Table S7), เพิ่ม Lemma zero-gradient, ตาราง ρ/ramp sweep
+>    (suppl Table S8), reproducibility statement, เกณฑ์แยกงานคู่แข่ง
+>    3 ข้อจาก suppl D.7 ยกเข้า main แล้วครับ
+> 4. **เรื่อง texture:** ภาพ training ตั้งใจเป็นสีเดียว (แยก channel
+>    topology จาก photometric — ระบุในเปเปอร์) ส่วนรูป showcase
+>    มี material ครับ (หม้ออะลูมิเนียมอยู่ suppl Fig S7; Figure 1 ใช้
+>    เทาอ่อน studio ตามสเปคอาจารย์)
+>
+> **คิวถัดไป:** รูป pipeline diagram + กราฟ measurement floor ลง
+> supplementary, รัน double torus เพิ่มเป็น 5 seeds, และ open-surface
+> stress test ครับ
+>
+> **ค้างจากรอบก่อนครับ: SA 2026 poster (เดดไลน์ 31 ก.ค.)** อาจารย์
+> อยากให้ส่งคู่ขนานไปด้วยไหมครับ
+>
+> ขอบพระคุณครับ
+
+---
+
 # PAPER 2 — ADVISOR ROUND 3 (AI revision package) — EXECUTED 2026-07-16
 
 **What arrived (2026-07-16):** 4 public claude.ai artifacts
@@ -63,6 +224,35 @@ overfulls):**
 taxonomy prose does the work; fig:tomyum's cutaway already serves as the
 challenge visual); 150–200-ref inflation (curated ~108); all fabricated
 numbers above; "first of its kind"/"scientific discovery" superlatives.
+
+## Post-commit verification (2026-07-17, clean tree @ `7f634e9`)
+
+Independent full rebuild + re-audit after the round-3 commits — **all
+green**:
+
+- `audit_paper2.py`: every numeric check passes (main tables, generality
+  table, pot row, reductions/σ, prose claims, allocation-study numbers,
+  ramp pilots). Its "C5-vs-prior" line used to print a stale "(paper:
+  ~.038, 4.6x)" annotation from before the 07-11 fix — the paper prints
+  4.4× (source 4.37×); the annotation is now corrected in the script.
+- tectonic: both docs compile clean; **zero overfull hboxes** in either
+  log.
+- PDF-extracted checks: body ends **exactly at p. 8**; supplementary is
+  **10 pp**; zero rendered "kinkin"/"TODO"; fully anonymous (no author
+  name/affiliation/email renders); paperID = ***** in both docs; suppl
+  Tables S1–S6 and Figures S1–S5 all present and numbered in order.
+- **New since the last record: main refs now fill pp. 9–11** — the
+  round-3 concurrent-work cites pushed the final entry's three-line tail
+  onto a near-empty p. 11. Compliant (3DV counts only the 8-page body;
+  reference pages are free), purely cosmetic — re-glance after the voice
+  pass / 2027-kit swap, pagination reflows anyway.
+- refs.bib has carried two never-cited spares since the first skeleton
+  (`edelsbrunner2010book`, `palfinger2022remeshing`); they render
+  nowhere. Optional: cite Edelsbrunner–Harer as PH background during the
+  voice pass, or leave them.
+- **3DV 2027 author kit: still NOT posted** (3dvconf.github.io/2027 main
+  + call-for-papers pages checked 2026-07-16). Keep the vendored 2026
+  kit; re-check around early August.
 
 ## Concurrent-work threat sweep (de-risking, all web-verified 2026-07-16)
 
