@@ -1,0 +1,84 @@
+\section{The open-surface probe}
+\label{app:probe}
+
+% Round-4 new science (2026-07-17/18): the synthetic open-surface stress
+% test §7 previously promised, run under a PRE-REGISTERED design
+% (OPEN_SURFACE_PROBE_PLAN.md in the release bundle): shapes, floor-rule
+% bundle policy, designed-rim boundary policy, conditions, and the
+% range-based verdict were all fixed before any measurement.
+% src: scripts/make_bowl_assets.py (build + certificates + staircase);
+%      topo3/report/results.json (bowl_narrow / bowl_wide aggregates,
+%      2026-07-18); _meshes/bowl_{narrow,wide}_src_cert.json
+
+Two open bowls are cut from the analytic sphere's ground-truth mesh by
+removing a polar cap (measured openings $0.14\,R$ and $0.50\,R$), then
+certified by measurement as disk topology: one shell, exactly one
+boundary loop, edge-manifold, consistently oriented, Euler
+characteristic $1$. The pre-registered bundle rule (the pot's) applies
+unchanged: the density staircase decides the observable and density ---
+and it overruled our own expectation. We predicted the wide bowl would
+lose its enclosed void to the rim; instead \emph{both} bowls read
+exactly one significant H2 bar at every tested density (the mouth caps
+at small $\alpha$, so the interior reads as a chamber --- the pot's
+mechanism on an open surface), while the \emph{designed} rim's H1 bar
+never clears the floor (Table~\ref{tab:probestair}). The rule therefore
+sets H2 at $M{=}2048$ for both, budget $N{=}1200$, loss restricted to
+H2 (the torus precedent for sub-floor features). A designed rim is a
+\emph{real} feature of the open target, distinct from the noise-born
+boundary bars real scans will add --- the bar-filtering step named in
+main \S7 concerns the latter.
+
+\begin{table}[t]
+\centering
+\caption{Probe staircase (seed 0): top bar lifetime over the floor, per
+dimension. Both bowls read exactly $(0,0,1)$ significant bars at every
+density --- one H2 void, no significant H1 --- so the table gives the
+margins.}
+\label{tab:probestair}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lccc}
+\toprule
+top bar / floor & $M{=}2048$ & $M{=}4096$ & $M{=}8192$ \\
+\midrule
+% src: scripts/make_bowl_assets.py staircase printout 2026-07-17
+narrow: H2 / H1 & $3.79\times$ / $0.47\times$ & $5.50\times$ / $0.57\times$ & $7.82\times$ / $0.45\times$ \\
+wide: H2 / H1   & $2.34\times$ / $0.42\times$ & $3.50\times$ / $0.51\times$ & $4.94\times$ / $0.46\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The C-matrix (C0/C1/C2, three seeds, protocol otherwise unchanged)
+passes the verdict rule on both bowls at better-than-baseline Chamfer
+(Table~\ref{tab:probe}): the loss cuts the void's error $4.2\times$
+(narrow) and $4.1\times$ (wide) with disjoint per-seed ranges, inside
+the study's $2.1$--$10.4\times$ span. The control replicates its
+closed-surface failure modes: on the narrow bowl it pins the void at
+its repulsion equilibrium ($2.1\times$ worse than baseline, identical
+across seeds) at $3.5\times$ worse Chamfer; on the wide bowl it
+\emph{erases} the void in two of three seeds ($\beta_2\,1{\to}0$) at
+$3.1\times$ worse Chamfer. Every C0/C1 seed reads the correct count.
+
+\begin{table}[t]
+\centering
+\caption{Open-surface probe C-matrix: tail bottleneck (mean$\pm$sd, 3
+seeds; per-seed values in run order beneath); $\times$ = reduction vs
+C0. Both shapes \textbf{pass} the verdict rule; no Welch $\sigma$ at
+$n{=}3$ (main \S4).}
+\label{tab:probe}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llll}
+\toprule
+shape & C0 & C1 loss & C2 control \\
+\midrule
+% src: topo3/report/results.json bowl_narrow / bowl_wide aggregates
+% (tails in run order; chamfer_mean; nsig_final), 2026-07-18
+bowl$_{\mathrm{narrow}}$ & .0588$\pm$.0035 & \textbf{.0138$\pm$.0013} (4.2$\times$) & .1249 (pinned) \\
+\;\footnotesize per-seed & \footnotesize .0619/.0550/.0593 & \footnotesize .0137/.0126/.0151 & \footnotesize .1249 $\times$3 \\
+bowl$_{\mathrm{wide}}$ & .0560$\pm$.0098 & \textbf{.0137$\pm$.0003} (4.1$\times$) & .0770 ($\beta_2\,1{\to}0$, 2/3) \\
+\;\footnotesize per-seed & \footnotesize .0448/.0602/.0630 & \footnotesize .0141/.0136/.0135 & \footnotesize .0770 $\times$3 \\
+\bottomrule
+\end{tabular}}
+\end{table}

@@ -256,6 +256,30 @@ check_seedlist("S7 pot C0", c0, [.0218, .0223, .0223])
 check_seedlist("S7 pot C1", c1, [.0059, .0056, .0056])
 check_seedlist("S7 pot C2", c2, [.0223, .0223, .0223])
 
+print("\n---- open-surface probe (round-4 new science; suppl §F + main §7) ----")
+for shape, exp in [("bowl_narrow", (.0588, .0035, .0138, .0013, .1249)),
+                   ("bowl_wide",   (.0560, .0098, .0137, .0003, .0770))]:
+    c0m, c0s, c1m, c1s, c2m = exp
+    check(f"{shape} C0 mean", mean(shape, "C0"), c0m)
+    check(f"{shape} C0 sd", sd(shape, "C0"), c0s)
+    check(f"{shape} C1 mean", mean(shape, "C1"), c1m)
+    check(f"{shape} C1 sd", sd(shape, "C1"), c1s)
+    check(f"{shape} C2 mean", mean(shape, "C2"), c2m)
+    check_disjoint(f"{shape} ranges disjoint",
+                   tails(shape, "C1"), tails(shape, "C0"))
+check("bowl_narrow reduction (main §7 4.2x)", red("bowl_narrow"), 4.2, tol=0.06)
+check("bowl_wide reduction (main §7 4.1x)", red("bowl_wide"), 4.1, tol=0.06)
+check("bowl_narrow chamfer C1/C0", cham("bowl_narrow", "C1") / cham("bowl_narrow", "C0"), 0.89, tol=0.006)
+check("bowl_wide chamfer C1/C0", cham("bowl_wide", "C1") / cham("bowl_wide", "C0"), 0.87, tol=0.006)
+# suppl Table S10 per-seed triplets (run order)
+check_seedlist("SF bowl_narrow C0", tails("bowl_narrow", "C0"), [.0619, .0550, .0593])
+check_seedlist("SF bowl_narrow C1", tails("bowl_narrow", "C1"), [.0137, .0126, .0151])
+check_seedlist("SF bowl_wide C0", tails("bowl_wide", "C0"), [.0448, .0602, .0630])
+check_seedlist("SF bowl_wide C1", tails("bowl_wide", "C1"), [.0141, .0136, .0135])
+print("         bowl nsig:", {s: {c: agg(s, c)["nsig_final"]
+                                  for c in ("C0", "C1", "C2")}
+                              for s in ("bowl_narrow", "bowl_wide")})
+
 print("\n---- appendix A: h2_unified + crossover + blindness ----")
 hk = sorted(next(iter(H2U["summary"]["sphere"].values())).keys())
 print("h2_unified arm keys:", hk)

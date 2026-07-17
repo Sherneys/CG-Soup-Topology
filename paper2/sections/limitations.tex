@@ -6,17 +6,25 @@
 % 3DV pass 2026-07-13: tightened ~25%; all five topics and every number
 % kept.
 
-\textbf{Synthetic, closed, single-machine.} All quantitative claims are on
-synthetic renders of closed surfaces with known topology: an
+\textbf{Synthetic, single-machine.} All quantitative claims are on
+synthetic renders with known topology: an
 analytic family plus four external genus-known meshes
 (\S\ref{sec:generality}; one a certified raw artist mesh --- the
-intended path for scans), short of a public benchmark. C7's Gaussian
+intended path for scans), short of a public benchmark. All surfaces
+are closed except a first \emph{open-surface} probe, pre-registered
+and passed: two bowls cut from the sphere (openings $0.14R$/$0.50R$,
+certified disk topology) still read one significant void (the designed
+rim's H1 never clears the floor); the loss cuts its error
+$4.2\times$/$4.1\times$ at better-than-baseline Chamfer, ranges
+disjoint, while the control erases the wide bowl's void in two of
+three seeds (suppl.\ \S F).
+% src: topo3/report/results.json bowl_narrow/bowl_wide (2026-07-18);
+% design pre-registered in OPEN_SURFACE_PROBE_PLAN.md
+C7's Gaussian
 probe bounds the loss's noise response, not scan realism (real noise
-brings outliers, missing regions, registration error). A real
-open-surface demonstration remains future work --- scan boundaries
-contaminate H1 and no clean ground-truth diagram exists;
-bar-filtering of boundary-born features is the pragmatic near-term
-step, a synthetic open-surface stress test first.
+brings outliers, missing regions, registration error). Real scans
+remain future work: their boundaries add \emph{noise-born} H1 bars
+(unlike a designed rim); bar-filtering them is the near-term step.
 
 \textbf{Density floor.} The loss cannot see features below the significance
 floor at its density (torus void; two of four double-torus loops at
@@ -33,8 +41,7 @@ our first candidate; class-level diagram priors) are untested.
 \textbf{Control strength.} The repulsion control is aggressive (it destroys
 topology at calibrated magnitude); a gentler variant at half radius is
 still $1.6\times$ worse (sphere: $.0972$ vs $.0623$), so verdicts do not
-hinge on control tuning --- though control \emph{design} deserves more
-variety.
+hinge on control tuning.
 % src: topo3/report/results.json
 
 \textbf{Nondeterminism.} CUDA training is not bit-reproducible:

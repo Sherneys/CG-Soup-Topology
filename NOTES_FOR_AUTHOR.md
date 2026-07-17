@@ -117,16 +117,20 @@ pass**; no rendered kinkin/TODO; anonymity intact.
    pre-registered flags: `--shapes double_torus --seeds 2 3 4
    --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 2000
    --loss_dims 1`).
-3. **Open-surface probe: pre-registered AND prepped** —
-   `OPEN_SURFACE_PROBE_PLAN.md`: bowls built + certified (disk
-   topology, 1 rim, χ=1), staircase executed — **both bowls read one
-   significant H2 void (narrow 3.79×, wide 2.34× floor at M=2048) and
-   the designed rim's H1 never clears (0.42–0.57×)**, so the floor
-   rule picks H2 @ M=2048 for both; the plan's bowl_wide expectation
-   (rim-H1 observable) was WRONG and the delta is recorded as a
-   finding. Shape wiring done (SHAPE_DIM + report target counts).
-   Remaining: scene renders + backface check (GPU was busy), then the
-   C-matrix runs (command in the plan file).
+3. **Open-surface probe: EXECUTED AND PASSED (2026-07-17/18)** —
+   `OPEN_SURFACE_PROBE_PLAN.md` end-to-end under the pre-registered
+   design: bowls certified (disk topology, 1 rim, χ=1); staircase
+   overruled our bowl_wide expectation (**both** bowls read one H2
+   void; the designed rim's H1 never clears — recorded delta);
+   backface check PASS (interior renders, no holes); C-matrix
+   verdicts: **narrow 4.2× (.0588→.0138), wide 4.1× (.0560→.0137),
+   both at better-than-baseline Chamfer with disjoint seed ranges;
+   the control erases the wide bowl's void in 2/3 seeds and pays
+   3.1–3.5× worse Chamfer.** In print: main §7's promise is now the
+   result + abstract scope updated ("closed surfaces plus a first
+   open-surface probe"); full account suppl §F (Tables S9/S10); audit
+   extended, all green; body still exactly p8. The double-torus seed
+   raise (item 2) also landed in print (n=5, saturation identical).
 4. Voice pass (unchanged TODO(human) markers), paper ID, 2027-kit swap.
 
 ## Draft message to อาจารย์ (round 4 — merges the unsent round-3 reply; SEND THIS)
@@ -165,10 +169,14 @@ pass**; no rendered kinkin/TODO; anonymity intact.
 >    มี material ครับ (หม้ออะลูมิเนียมอยู่ suppl Fig S7; Figure 1 ใช้
 >    เทาอ่อน studio ตามสเปคอาจารย์)
 >
-> **คิวถัดไป:** รูป pipeline diagram + กราฟ measurement floor เข้า
-> supplementary แล้ว (Fig S9/S10) ครับ ที่เหลือคือรัน double torus
-> เพิ่มเป็น 5 seeds และ open-surface stress test (ออกแบบ protocol
-> ไว้เรียบร้อย รอเครื่องพร้อม) ครับ
+> **อัปเดตเพิ่ม (ทำเสร็จแล้วทั้งหมดครับ):** รูป pipeline + กราฟ
+> measurement floor เข้า supplementary แล้ว (Fig S9/S10), double torus
+> รันเพิ่มเป็น 5 seeds แล้ว (ผลอิ่มตัวเท่าเดิมทุก seed — ปิดข้อท้วง
+> n=2), และ **open-surface stress test รันแล้ว ผ่านทั้งสองรูปทรง**:
+> ชามเปิดปากแคบ/กว้างที่ตัดจากทรงกลม loss ลด error ของ void
+> 4.2×/4.1× ที่ Chamfer ดีกว่า baseline โดย control ทำ void หายใน
+> 2/3 seeds — เข้าเปเปอร์แล้วครับ (§7 + suppl §F; เนื้อหายังจบหน้า 8
+> พอดี audit ผ่านหมด)
 >
 > **ค้างจากรอบก่อนครับ: SA 2026 poster (เดดไลน์ 31 ก.ค.)** อาจารย์
 > อยากให้ส่งคู่ขนานไปด้วยไหมครับ

@@ -87,8 +87,18 @@ report's target-count table (topo_loss_report.py) carry both bowls.
    re-certify — record whichever).
 3. ~~Staircase~~ **DONE** (table above); bundle builds automatically at
    run launch (`ensure_bundle`, M=2048 default).
-4. Runs: `topo_loss_eval.py --shapes bowl_narrow bowl_wide --seeds 0 1 2
-   --conditions C0 C1 C2 --rhos 0.1 --steps 2500 --max_faces 1200
-   --loss_dims 2` (PYTHONPATH=tools\gudhi311) + report regen +
-   range-based verdicts (n=3).
-5. Paper: §5.2 or §7 upgrade + suppl row; audit extensions.
+4. ~~Runs + report + verdicts~~ **EXECUTED 2026-07-17/18 — BOTH PASS.**
+   - bowl_narrow: C0 .0588±.0035 → C1 **.0138±.0013 (4.2×)** at 0.89×
+     baseline Chamfer, per-seed ranges disjoint; C2 pins the void at
+     .1249 (2.1× worse than baseline, sd 0) at 3.5× worse Chamfer.
+   - bowl_wide: C0 .0560±.0098 → C1 **.0137±.0003 (4.1×)** at 0.87×
+     Chamfer, ranges disjoint; C2 .0770 and **erases the void in 2/3
+     seeds** (β₂ 1→0) at 3.1× worse Chamfer.
+   - #sig H2 = 1 in every C0/C1 seed; effects inside the study's
+     2.1–10.4× span. (src: topo3/report/results.json, 2026-07-18.)
+5. ~~Paper~~ **DONE**: main §7's promise converted to the result
+   ("Synthetic, single-machine" item; scope wording updated in the
+   abstract); full account = **suppl §F** (appendix_probe.tex, Tables
+   S9 staircase + S10 C-matrix w/ per-seed rows); audit extended
+   (means/sds/reductions/parity/disjointness/per-seed triplets) — all
+   green; body still ends exactly p8.
