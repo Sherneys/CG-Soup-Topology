@@ -37,14 +37,24 @@ triangle soup (9 overlapping open shells, 232 non-manifold junction
 edges) with no trustworthy ground-truth topology --- the same defect
 that excluded ShapeNet. An ingest-and-certify pass (exact weld,
 offset-solidification into a thin closed shell, then \emph{certification
-by measurement}: exact simplicial homology, watertightness cross-check,
-bit-identical rebuilds) yields one body of genus 3, $\beta{=}(1,6,1)$
-exact, rendered and budgeted as a void-class shape ($N{=}1200$, 48
+by measurement}: exact simplicial homology cross-checked against
+per-component Euler characteristics, both independent of the loss's
+sampled alpha complex; watertightness; bit-identical rebuilds) yields
+one body of genus 3, $\beta{=}(1,6,1)$ exact,
+% Round-5 (revision list, minor "circular certification" item): the
+% independence of the certificate computations made explicit.
+% src: scripts/make_kinkin_asset.py steps 5b (euler_number -> genus,
+% chi cross-check) + 5c (gudhi exact mesh homology, asserted equal);
+% the alpha-complex staircase is the separate step-7 preflight. rendered and budgeted as a void-class shape ($N{=}1200$, 48
 views, 200\,px). This ingest pipeline is a test fixture here, not a
 claimed contribution. Where the benchmark trio's topology is known by
-construction, the pot's is known by \emph{certificate} --- what real
-scans will need (mechanics and challenge inventory: suppl.\ \S B,
-Table~S4).
+construction, the pot's is known by \emph{certificate} --- a controlled
+real-world proxy, not a blind test: what real scans will need
+(mechanics and challenge inventory: suppl.\ \S B, Table~S4).
+% Round-5 (revision list, Critical row 1): the advisor's "controlled
+% real-world proxy" label adopted verbatim here; the abstract's scope
+% caveat and §7's "Synthetic, single-machine" item already carry the
+% same honesty.
 % Round-4 trim: raw-soup counts (6,318 verts, quad/12-gon mix, 50
 % boundary edges, 804 dropped shells, distance-field/marching-cubes
 % detail, 190,990 certified verts) now live ONLY in suppl. Table S4 —

@@ -66,11 +66,32 @@
 
 % VERIFIED 2026-07-09: arxiv.org/abs/2505.19175 — title, year, and the
 % 10-author list match exactly (order included).
-@misc{held2025trianglesplatting,
-  author       = {Held, Jan and Vandeghen, Renaud and Deli{\`e}ge, Adrien and Hamdi, Abdullah and Giancola, Silvio and Cioppa, Anthony and Vedaldi, Andrea and Ghanem, Bernard and Tagliasacchi, Andrea and Van Droogenbroeck, Marc},
-  title        = {Triangle Splatting for Real-Time Radiance Field Rendering},
-  howpublished = {arXiv:2505.19175},
-  year         = {2025}
+% Round-5 venue upgrade verified 2026-07-19: 3DV 2026, pp. 1248-1257,
+% DOI 10.1109/3DV69130.2026.00123 (CrossRef + dblp + IEEE Xplore 11533199
+% agree). Author list = the 11-author CAMERA-READY (Daniel Rebain added
+% at position 6; Ghanem<->Vedaldi order differs from arXiv v1). The arXiv
+% abs page carries NO venue note and the project page's BibTeX is stale
+% (10 authors) — trust the proceedings record. Cite key kept as-is.
+@inproceedings{held2025trianglesplatting,
+  author    = {Held, Jan and Vandeghen, Renaud and Deli{\`e}ge, Adrien and Hamdi, Abdullah and Giancola, Silvio and Rebain, Daniel and Cioppa, Anthony and Ghanem, Bernard and Vedaldi, Andrea and Tagliasacchi, Andrea and Van Droogenbroeck, Marc},
+  title     = {Triangle Splatting for Real-Time Radiance Field Rendering},
+  booktitle = {Proceedings of the International Conference on 3D Vision (3DV)},
+  pages     = {1248--1257},
+  year      = {2026},
+  note      = {arXiv:2505.19175}
+}
+
+% Round-5 addition 2026-07-19: advisor-suggested cite VERIFIED REAL —
+% CVPR 2026 ORAL (cvpr.thecvf.com/virtual/2026/poster/38397; arXiv
+% 2512.06818 title+authors exact; project meshsplatting.github.io).
+% NOT the same paper as "Triangle Splatting+" (arXiv:2509.25122) —
+% deliberately parallel subtitles from the same author cluster.
+@inproceedings{held2026meshsplatting,
+  author    = {Held, Jan and Son, Sanghyun and Vandeghen, Renaud and Rebain, Daniel and Gadelha, Matheus and Zhou, Yi and Cioppa, Anthony and Lin, Ming C. and Van Droogenbroeck, Marc and Tagliasacchi, Andrea},
+  title     = {{MeshSplatting}: Differentiable Rendering with Opaque Meshes},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2026},
+  note      = {arXiv:2512.06818}
 }
 
 @article{nicolet2021largesteps,
@@ -528,6 +549,12 @@
 % [W 2026-07-16: https://arxiv.org/abs/2505.23642 — title/authors read off
 %  the arXiv abs page (no venue listed). Triangle-soup radiance primitives
 %  with geometric "soft connectivity forces"; no topological measurement.]
+% Round-5 note 2026-07-19: v2 (Oct 2025) re-checked — NO venue on the
+% arXiv abs page; ICLR-2026 acceptance NOT confirmable (dblp: CoRR only,
+% and it HAS ingested 3DV 2026, so it is current; OpenReview forum
+% unindexed + fetch-blocked). Cite arXiv-only; never print "ICLR 2026".
+% Since round 5 ALSO cited from main §2 (named soft-connectivity
+% contrast), no longer suppl-only.
 @misc{burgdorfer2025radiant,
   author       = {Burgdorfer, Nathaniel and Mordohai, Philippos},
   title        = {Radiant Triangle Soup with Soft Connectivity Forces for {3D} Reconstruction and Novel View Synthesis},

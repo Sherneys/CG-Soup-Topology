@@ -21,10 +21,9 @@ L \;=\; L_{\mathrm{photo}} \;+\; \lambda(t)\, L_{\mathrm{topo}}(V),
 where $V$ are the soup's vertex positions and $L_{\mathrm{topo}}$ compares the
 persistence diagram of the live surface to a fixed \emph{target bundle}
 $\mathcal{T}$: the significant finite bars of the ground-truth shape's
-diagram, computed once at the sampling density $M$ the loss will see
+diagram, computed once at the density $M$ the loss will see
 (alpha values shift with spacing: density matching is a correctness
-requirement), normalized by the target's bounding-box diagonal, and
-locked for all live evaluations.
+requirement), diagonal-normalized, and locked for all live evaluations.
 % Round-4: "significant" was used ~30x before its §6 definition — the
 % one-line definition now sits at first use; §6 keeps the scaling law.
 Throughout, a bar is \emph{significant} iff its lifetime exceeds the
@@ -55,7 +54,9 @@ R_{\mathrm{tet}}=\lVert y\rVert\quad\text{with}\quad
 A\,y=\tfrac12\operatorname{diag}\!\big(AA^{\!\top}\big),
 \end{gathered}
 \end{equation}
-where $u=p_1{-}p_0$, $v=p_2{-}p_0$, and $A$ stacks the rows $p_i{-}p_0$
+% Round-5 (revision list, minor item): p_i introduced explicitly.
+where $p_0,\dots,p_k$ are the $k$-simplex's sample positions,
+$u=p_1{-}p_0$, $v=p_2{-}p_0$, and $A$ stacks the rows $p_i{-}p_0$
 (the circumcenter is $p_0{+}y$). Edges carry H0 deaths and H1 births,
 triangles H1 deaths and H2 births, tetrahedra H2 deaths.
 % src: methods/topological_loss.py circumradius_{edge,triangle,tetra}
@@ -65,11 +66,10 @@ value (relative $10^{-6}$); a pair failing this Gabriel test is
 no gradient through that simplex, so an exactness failure can never inject
 a wrong gradient.
 In practice the gate never fires: 100\% of significant pairs are
-Gabriel-exact on all six shapes' clean clouds, and the logged
-per-refresh failure count is zero at every one of the $5{,}500{+}$
-logged refreshes (including all $2{,}400$ noisy ones,
-\S\ref{sec:results}) --- a constant $100\%$ pass rate, not an
-aggregate. Stronger fallbacks (dropping pairs, subgradients, locally
+Gabriel-exact on all six shapes' clean clouds, and the per-refresh
+failure count is zero at every one of the $5{,}500{+}$ logged refreshes
+(all $2{,}400$ noisy ones included, \S\ref{sec:results}) --- a constant
+pass rate, not an aggregate. Stronger fallbacks (dropping pairs, subgradients, locally
 raising $M$) remain available.
 % src: PHASE3_PLAN.md Appendix A (mapping + Gabriel gates, 22/22);
 % per-refresh sum recomputed 2026-07-17 over every topo_loss_log.json
@@ -78,7 +78,7 @@ raising $M$) remain available.
 The pairing is treated as locally constant --- the standard pair-frozen
 device~\citep{gabrielsson2020topologylayer,carriere2021optimizing} ---
 refreshed every $K{=}10$ steps and, necessarily, after every resampling
-event (which replaces the vertex and face tensors wholesale); $K{=}10$
+event (which replaces the primitive tensors wholesale); $K{=}10$
 is an amortization choice, not a tuned knob --- it bounds refresh cost
 ($174$\,ms each; the fixed ${\approx}46$\,s of \S\ref{sec:results})
 while the pairing stays local.
@@ -164,12 +164,11 @@ C0: baseline (photometric only). C1: $+L_{\mathrm{topo}}$. C2: $+$ a
 short-range repulsion on the \emph{same} frozen samples, calibrated with the
 \emph{same} $\rho$ --- the norm-matched control, the RH2 test (C2g: a
 gentler radius). C3: C1 without the ramp.
-(C4, a curvature-weighted variant, is deferred to follow-up work; the
-numbering gap keeps condition tags comparable across studies.)
+(C4, curvature-weighted, is deferred; the numbering gap keeps
+condition tags comparable across studies.)
 C5: C1 $+$ the best prior of our allocation study (the spread topological
 field B4; suppl.\ \S A) --- the RH3 test.
-C6: C1 with the recruitment term removed
-(pure matching $+$ diagonal, all else identical) --- does recruitment matter
-in-loop, or only for cold-start repair?
+C6: C1 without recruitment (pure matching $+$ diagonal) --- does the
+term matter in-loop, or only for cold-start repair?
 % src: PHASE3_PLAN.md Appendix B (cleanliness, revised criterion; the
 % one-loss-line hook / flag-off / rho=0-divergence note trimmed 2026-07-16)

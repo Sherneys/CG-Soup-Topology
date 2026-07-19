@@ -26,8 +26,8 @@ distance~\citep{mescheder2019occupancy,park2019deepsdf}, volume-rendered
 from NeRF~\citep{mildenhall2020nerf} through NeuS~\citep{wang2021neus} to
 Neuralangelo~\citep{li2023neuralangelo} --- are watertight and
 topologically consistent \emph{by construction} (the strongest
-counter-position to explicit soups), at dense-field-evaluation and
-post-hoc-extraction cost.
+counter-position to explicit soups), at field-evaluation and
+extraction cost.
 (ii)~\emph{Fixed-connectivity templates} deformed per
 scene~\citep{wang2018pixel2mesh,hanocka2020point2mesh} keep manifoldness
 but freeze topology at the template's genus.
@@ -36,30 +36,40 @@ volumetric scaffold at every
 step~\citep{shen2021dmtet,munkberg2022nvdiffrec,shen2023flexicubes}
 (Shape-as-Points bridges point soups to watertight
 implicits~\citep{peng2021sap}) --- topological freedom at grid cost.
+% Round-5 (advisor Related-Works doc): the 2025--26 return-to-triangles
+% beat made explicit inside position (iv), with the pipeline-compatibility
+% rationale; MeshSplatting verified (CVPR 2026 oral) and added as the
+% connected-side counterpoint sentence below — NOT inside the soup list,
+% which would misclassify it.
 (iv)~\emph{Connectivity-free primitive soups} --- point
 splatting~\citep{yifan2019dss}, patch atlases~\citep{groueix2018atlasnet},
 Gaussians~\citep{kerbl2023gaussians} and their surface-accurate
-variants~\citep{huang20242dgs,guedon2024sugar}, triangle
-splatting~\citep{held2025trianglesplatting,burgdorfer2025radiant}, and
-DiffSoup~\citep{tojo2026diffsoup} --- are the fastest and the easiest to
-budget, but even their surface-minded members regularize
+variants~\citep{huang20242dgs,guedon2024sugar}, and a 2025--26 return to
+native triangles (splatted~\citep{held2025trianglesplatting},
+soft-connected~\citep{burgdorfer2025radiant}, rasterized by
+DiffSoup~\citep{tojo2026diffsoup}) --- are the fastest and the easiest
+to budget, but even their surface-minded members regularize
 \emph{geometry} (alignment, flatness, connectivity forces), never a
 measured topology.
+MeshSplatting, conversely, differentiably renders
+\emph{already-connected} opaque meshes~\citep{held2026meshsplatting}
+--- connectivity as \emph{input}; ours stays a free soup with measured
+topology.
 (i) and (iii) solve topology representationally; (iv) had not addressed
 it. Cut by \emph{optimization philosophy} rather than representation,
-the decade collapses to two occupied families ---
-\emph{geometry-oriented} objectives (every method above) and
-\emph{sampling-oriented} steering of where a fixed objective spends
-primitives (below) --- and an empty third: \emph{topology-oriented}
-objectives that measure the property and differentiate through it
-(suppl.\ Table~S6). This paper
-fills the empty family at the soup's budget and speed.
+the decade holds \emph{geometry-oriented} objectives (every method
+above), \emph{sampling-oriented} steering of where a fixed objective
+spends primitives (below), and an empty third family ---
+\emph{topology-oriented} objectives that measure the property and
+differentiate through it (suppl.\ Table~S6). Prior work occupies every
+pairwise intersection of the section's axes --- explicit triangles,
+differentiable optimization, topology in the objective; this paper
+takes the three-way one, at the soup's budget and speed.
 We build on DiffSoup, whose in-loop
-prune/respawn resampler is exactly the mechanism our allocation-channel
-study (suppl.\ \S A) steered with importance priors; here the resampler
-stays untouched and the objective changes. Vertex-domain optimizers
-(large-steps preconditioning~\citep{nicolet2021largesteps}) are
-complementary: they change \emph{how} vertices move, we change \emph{why}.
+prune/respawn resampler is the very mechanism our allocation study
+(suppl.\ \S A) steered; here the resampler stays untouched and only the
+objective changes. Vertex-domain preconditioning~\citep{nicolet2021largesteps} is
+complementary: it changes \emph{how} vertices move, we change \emph{why}.
 
 \paragraph{The allocation channel: why priors alone fail.}
 % Round-2 self-containment: the three findings in the MAIN text (full
@@ -94,16 +104,20 @@ Persistent homology~\citep{edelsbrunner2002persistence} with its stability
 guarantees~\citep{cohensteiner2007stability} has been used as a trainable
 signal via differentiable sorting of filtration
 values~\citep{gabrielsson2020topologylayer}, for topology-preserving image
-segmentation~\citep{hu2019topopreserving,clough2022topoloss}, point-cloud and
-shape optimization~\citep{bruel2020toporecon,poulenard2018shapematching},
-3D volume prediction~\citep{waibel2022topological}, and
-diagram-metric optimization with convergence
+segmentation~\citep{hu2019topopreserving,clough2022topoloss}, point-cloud
+and shape optimization and 3D volume
+prediction~\citep{bruel2020toporecon,poulenard2018shapematching,waibel2022topological},
+and diagram-metric optimization with convergence
 analysis~\citep{carriere2021optimizing}; barcode-valued maps have since been
 given a general differential framework~\citep{leygonie2022framework}, and the
 per-step cost of persistence-guided descent attacked
-directly~\citep{nigmetov2024bigsteps}.
+directly~\citep{nigmetov2024bigsteps} --- yet never as the objective of
+an \emph{explicit triangle-based} reconstruction.
+% Round-5 (advisor Related-Works doc): the requested bridge — PH broadly
+% applied, the explicit-triangle objective slot open — adapted, not
+% pasted; merged into the survey sentence for the page budget.
 Nearest our setting, concurrent work brings persistence to
-reconstruction at other entry points: an image-space barcode term for
+reconstruction at other, complementary entry points: an image-space barcode term for
 Gaussian splatting~\citep{shen2025topologygs}, homology-guided camera
 placement~\citep{gao2026homology} or a genus-matched
 template~\citep{gao2025genus} in mesh inverse rendering, and a
@@ -121,11 +135,20 @@ pipeline forgoes renderer and budget (ii, iii); the template line
 \emph{assumes} the genus we measure (i). A head-to-head benchmark is
 therefore ill-posed (inputs, outputs, and cost regimes differ); our
 evaluation instead pits the loss against norm-matched controls through
-its own channel (\S\ref{sec:setup}). Our backward pass is in this family
+its own channel (\S\ref{sec:setup}).
+% Round-5 (advisor Related-Works doc): nearest connectivity-side work
+% named and contrasted — soft connectivity forces are the heuristic the
+% objective replaces (burgdorfer2025radiant: round-3-verified,
+% arXiv:2505.23642). Kept OUTSIDE the three-requirement partition above,
+% which scopes over the persistence neighbours only.
+The nearest soup-side neighbour regularizes coherence with \emph{soft
+connectivity forces}~\citep{burgdorfer2025radiant} --- local continuity
+pressure, no measured topology; we replace that heuristic with the
+measurement. Our backward pass is in the persistence family
 --- unlike work that back-propagates through filtration-value sorting or
 barcode coordinates in general position, we re-express each paired
-simplex's birth/death as a closed-form circumradius of live surface
-samples --- with three pipeline-specific ingredients.
+simplex's birth/death as a closed-form circumradius --- with three
+pipeline-specific ingredients.
 (i)~\emph{Alpha-complex pairing over $\alpha{\times}$area surface samples}
 of a live triangle soup --- not image grids or raw clouds --- couples
 the diagram to the geometry actually being trained.
@@ -148,3 +171,6 @@ budgeted remeshing has a long
 lineage~\citep{hoppe1996progressive,garland1997qem,alliez2003anisotropic,botsch2004remeshing,dunyach2013adaptive};
 our contribution is orthogonal --- the budget mechanics stay DiffSoup's,
 only the training signal becomes topology-aware.
+% Round-5 (advisor Related-Works doc): the requested three-axis gap
+% recut lives in ¶1's closing sentence (merged with the philosophy cut
+% to pay the page budget); ¶4 stays the classic-processing coda.

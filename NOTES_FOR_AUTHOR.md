@@ -1,3 +1,152 @@
+# PAPER 2 — ADVISOR ROUND 5 (Related Works + Revision list) — WRITING EXECUTED 2026-07-19; SCIENCE MENU AWAITING YOUR/ADVISOR CALL
+
+**What arrived (2026-07-19, Downloads):** `Related Works.docx` (Thai:
+§2-restructure table, a "thought tree" for the related-work narrative,
+a dictated Introduction paragraph, 3 citations to re-check, + a
+MeshSplatting suggestion) and `Revision list.docx` (Thai: 9-row
+prioritized review table Critical→Minor + a "mandatory datasets"
+section: DTU / Tanks-and-Temples / Objaverse).
+
+## Citation audit — the round's headline: ALL FOUR REFERENCES ARE REAL
+(first fully-grounded advisor round; contrast rounds 2–3)
+
+- **MeshSplatting: Differentiable Rendering with Opaque Meshes —
+  VERIFIED, CVPR 2026 ORAL** (arXiv:2512.06818; 10 authors Held, Son,
+  Vandeghen, Rebain, Gadelha, Zhou, Cioppa, Lin, Van Droogenbroeck,
+  Tagliasacchi; cvpr.thecvf.com/virtual/2026/poster/38397). Distinct
+  from "Triangle Splatting+" (arXiv:2509.25122) — parallel subtitles,
+  same author cluster; do not merge. ADDED to refs.bib
+  (`held2026meshsplatting`) + one §2 contrast sentence.
+- **Triangle Splatting — advisor RIGHT about 3DV 2026.** Bib upgraded
+  @misc→@inproceedings: pp. 1248–1257, DOI 10.1109/3DV69130.2026.00123
+  (CrossRef+dblp+Xplore agree); camera-ready has **11 authors** (Daniel
+  Rebain added at position 6; Ghanem↔Vedaldi order differs from arXiv
+  v1). The project page's BibTeX is stale — never copy it.
+- **Radiant Triangle Soup** — real (in refs.bib since round 3,
+  arXiv:2505.23642), but the advisor's "ICLR 2026 (submitted)" is NOT
+  confirmable (dblp: CoRR-only and current through 3DV-2026 ingestion;
+  OpenReview forum unindexed + fetch-blocked). Cited arXiv-only; NOW
+  NAMED in main §2 with a description verified against the paper
+  itself: soft connectivity forces = pairwise matched-edge vertex pulls
+  + normal alignment (local continuity); no global topology measured;
+  watertight extraction is their own stated limitation.
+- **DiffSoup** — CVPR 2026 confirmed (virtual-site poster page; CVF
+  page exists but bot-blocked). No proceedings page numbers anywhere
+  yet — entry unchanged.
+
+## Related-Works doc — EXECUTED (all writing; zero numbers touched)
+
+- Intro ¶2 opens with the requested 2025–26 triangle-turn context
+  (native graphics-pipeline fit, 3 cites) as a clause; the requested
+  "our work addresses this gap" echo was already ¶3's closing sentence.
+- §2 ¶1 position (iv): the return-to-native-triangles beat (splatted /
+  soft-connected / rasterized by DiffSoup) + MeshSplatting as the
+  *connected-side* counterpoint (deliberately NOT placed inside the
+  soup list — that would misclassify it).
+- §2 ¶3 (persistence): survey now closes "— yet never as the objective
+  of an explicit triangle-based reconstruction" (his opening-sentence
+  ask, merged for the page budget); "other, **complementary** entry
+  points" (his tone item); named Radiant contrast sentence before the
+  backward-pass paragraph, kept OUTSIDE the three-requirement partition
+  (which scopes persistence neighbours only).
+- Gap statement recut on his three axes (explicit triangles ×
+  differentiable optimization × topology in the objective; pairwise
+  intersections occupied, three-way one ours) — REPLACES the old
+  punchline per his own instruction, merged with round-3's philosophy
+  cut; suppl. Table S6 remains the matrix form.
+- The "thought tree" was interpreted as narrative structure (two
+  previously separate lineages meeting), not a printed figure — a
+  literal diagram does not fit the p8-exact budget; if he wants it
+  visual, offer a suppl. figure (S6 already maps the space as a table).
+- **Page budget:** paid by a document-wide micro-trim pass (~15 wording
+  trims, see git diff; every number + % src kept verbatim). Rebuild:
+  **body ends EXACTLY p8**, refs pp9–11, zero overfull, suppl 12 pp
+  rebuilt, `audit_paper2.py` ALL GREEN, zero rendered kinkin/TODO (the
+  one suppl "ICLR" token = the legit ICLR-2024 survey cite).
+
+## Revision list — claim-by-claim verdict (style of the round-3 table)
+
+| # | Claim | Verdict | State |
+|---|---|---|---|
+| R1 | all-synthetic; pot "not blind" | half-true / garbled | Scope caveat already in abstract+§7 headline; protocol IS blind (frozen config), but the target certificate is inherent to a fixed-target method. **ADOPTED verbatim**: pot = "a controlled real-world proxy, not a blind test" (§4). Datasets → memo below. |
+| R2 | "fails on open boundaries, hallucinates H2 void" | mischaracterization | That is OUR pre-registered §F delta, in print since round 4: the mouth caps at working α (the pot's mechanism); designed-rim-vs-noise-born-bars distinction + bar-filtering next step already in §7/§F. Legit residue: misspecified-target robustness → memo. |
+| R3 | greedy lacks theory; C2 too aggressive; "add norm-matched control" | half-false | Matched term IS Hungarian-optimal; only recruitment is greedy and greedy≡optimal in every logged regime (single-bar missing set) + Lemma 1 — all in print. C2 IS the norm-matched control (same ρ, same channel) — the ask misreads the design; C2g gentler variant printed (§7). NEW & good: scrambled-target control → memo. |
+| R4 | no wall-clock; O(M log M) ignores baseline | half-false | §5 Overhead ¶: 33–41 s baselines, +46 s fixed, 174 ms refresh, 46/(T+46) projection ≈7% — the projection is exactly baseline-relative. Missing: GPU memory, timing-vs-M curve → cheap batch. M guidance = the floor rule itself (§4, pot ran it prospectively). |
+| R5 | Topology-GS missing; tone attacking; add implicit baselines | first two FALSE | Cited since round 3; partition promoted round 4; tone now literally "complementary". Implicit topology benchmark → recommend AGAINST this cycle (the §2 partition argument: inputs/outputs/cost regimes don't align; Table S6 positions them; right venue = the real-scan phase). |
+| R6 | 1.15× and 6·r_med arbitrary; failure analysis shallow | pre-answered / partly fair | Parity: "never did any work — every passing arm ≤ baseline" is in print (§4). Floor: derived + validated (M^(−1/2) law, S10). Fair residue: floor-multiplier sweep (4–8×) re-analysis + spot failure-case figure → cheap batch. |
+| R7 | pair-frozen stability unanalyzed; 3–5 seeds too few; i.i.d. noise unrealistic | partly fair | Refresh logs already record per-refresh matched/diag/recruit/unreached → pair-stability plot is FREE → cheap batch. Seeds n≥10 = real decision (below). §5 already says C7 ≠ scan realism; structured-noise C7d (region dropout) → memo. |
+| R8 | unreadable, no bullets; eq (2) unclear; certification circular | partly fair | **FIXED**: eq (2) now defines p_i; certification independence explicit (exact simplicial homology × per-component Euler, neither the sampled alpha complex — src: make_kinkin_asset.py 5b/5c). RH list IS a numbered list + bolded run-in contributions (round-4 trade); itemize costs ~4 lines — skipped, say so in reply. |
+| R9 | ratios mislead; no Wasserstein; no code | mostly false | Both tables print absolute mean±sd AND ×-ratios side by side. W₂ eval column → optional re-analysis. Code: release commitment printed §8; anonymized zip = your task before the Sep 2 suppl deadline. |
+
+## The datasets ask — DECISION MEMO (the one thing that needs a call)
+
+**The structural problem the AI table ignores: the method requires a
+target diagram** (known or certified topology). DTU objects are
+table-top scans with open bottoms and no GT topology; TnT scenes have
+no meaningful Betti targets ("the genus of Barn"?); Objaverse random
+50–100 is mostly non-watertight soup — the exact defect that excluded
+ShapeNet (§4).
+
+Feasible, honest versions (pre-registered-probe style, like §F):
+1. **DTU object probe** (1–2 scans with clear void/handle structure):
+   ingest→certify the reference surface exactly like the pot;
+   staircase decides observable+M; C0/C1/C2 × 3 seeds. ~1–2 GPU-days
+   incl. COLMAP glue. If certification of a noisy scan fails, that is
+   itself a reportable §7 result. **Recommended IF the advisor accepts
+   certified-target framing — it is his own "controlled real-world
+   proxy" label applied to DTU.** Kills the Critical-row objection.
+2. **Thingi10K genus sweep INSTEAD of Objaverse** (watertight subset,
+   genus metadata, already cited): ~50 meshes × C0/C1 × 3 seeds ≈ 300
+   toy-scale runs ≈ 1–2 GPU-days → the "topological error rate"
+   statistic he wants, with real ground truth. **Recommended as the
+   Objaverse replacement.**
+3. **TnT scene-level: push back** — no target diagram exists at scene
+   scale; defer to the dental/real-scan phase. Recommended: no.
+
+Other new-science menu (advisor to pick, 3DV deadline Aug 28):
+- **Scrambled/wrong-target control C8** (also answers R2's misspec
+  robustness): torus+1 external × 3 seeds ≈ 1–2 GPU-h. Recommended.
+- **Seeds n=10 on decisive shapes** (sphere, torus; all arms): ≈60 runs
+  ≈ 2–3 GPU-h; every tab:main number changes → audit re-run;
+  strengthens σ claims. Do only with advisor sign-off.
+- **Structured-noise C7d** (plan-cloud region dropout): small code +
+  ~1 GPU-h. Recommended over "SfM error" (needs a real pipeline).
+- Hungarian-vs-greedy A/B: skip — they provably coincide here (single
+  missing bar); Sinkhorn = different gradient design, future work.
+
+**Cheap batch (no new training, no main-number changes — can run on
+your word alone):** floor-multiplier sweep (re-threshold recorded
+diagrams), pair-stability plot (existing logs → suppl fig), GPU
+peak-memory + refresh-timing-vs-M staircase (loss-eval only, one §5
+sentence), optional W₂ eval column, spot failure-case figure.
+≈ half a day total.
+
+## For the Thai reply (fold into the UNSENT Gmail draft
+r-1323288373779606130 — it still carries round 4 + the SA-poster
+question, **deadline Jul 31, now 12 days away**)
+
+สรุปสำหรับอาจารย์ (draft, merge into the existing draft):
+- ตรวจ 4 อ้างอิงแล้ว **จริงทั้งหมด**: MeshSplatting = CVPR 2026 oral
+  (เพิ่มใน related work แล้ว); Triangle Splatting ตีพิมพ์ 3DV 2026 จริง
+  (อัปเดต bib เป็นฉบับ camera-ready 11 คนแล้ว); Radiant Triangle Soup
+  มีจริงและถูก cite อยู่แล้ว แต่สถานะ ICLR 2026 ยืนยันไม่ได้จากแหล่ง
+  ทางการ จึง cite เป็น arXiv; DiffSoup CVPR 2026 ยืนยันแล้ว
+- ปรับ Related Work ตามตารางของอาจารย์ครบ: ย่อหน้า triangle-turn ใน
+  Introduction, ประโยคเชื่อม persistence→triangle, ตั้งชื่อ Radiant
+  พร้อม contrast, ปิดท้าย section ด้วยช่องว่าง 3 มิติ (representation ×
+  optimization × objective) — ทั้งหมดยังจบหน้า 8 พอดี, audit ผ่านหมด
+- Revision list: หลายข้อมีในกระดาษอยู่แล้ว (ชี้ตำแหน่งให้ในตาราง NOTES);
+  แก้เพิ่มแล้ว: นิยามตัวแปรสมการ (2), ความเป็นอิสระของ certificate,
+  ป้าย "controlled real-world proxy" ตามคำของอาจารย์
+- เรื่องชุดข้อมูล: DTU/TnT/Objaverse ติดปัญหาเชิงโครงสร้าง (วิธีเราต้องมี
+  target topology) — เสนอทางที่ทำได้จริงก่อนเดดไลน์: (1) DTU probe แบบ
+  ingest→certify 1–2 ฉาก (2) Thingi10K genus sweep แทน Objaverse
+  (มี ground truth จริง) (3) TnT ขอเลื่อนไปเฟส dental — ขอให้อาจารย์
+  เลือกรายการที่จะให้รัน (รายละเอียด+ต้นทุนใน NOTES)
+- ย้ำคำถามโปสเตอร์ SA 2026 (เดดไลน์ 31 ก.ค.)
+
+---
+
 # PAPER 2 — ADVISOR ROUND 4 (mock review + figure specs) — EXECUTED 2026-07-17
 
 **What arrived (2026-07-17, Downloads):**

@@ -10,23 +10,30 @@
 
 Differentiable rasterization reconstructs a triangle soup from images by
 following photometric gradients~\citep{tojo2026diffsoup}, periodically
-resampling triangles under a fixed budget. Photometric losses are
+resampling under a fixed budget. Photometric losses are
 topologically blind: reconstructions that differ in genus, connectivity, or
 enclosed-void structure can be indistinguishable to Chamfer and Hausdorff
 while the bottleneck distance between persistence diagrams separates them
 $35$--$40\times$ on probes whose Chamfer is equal \emph{by construction}
 (\S\ref{sec:related}; suppl.\ Table~S1). Fig.~\ref{fig:matrix} previews
 the consequence: identical budgets, equal-or-better Chamfer, topology
-standing or falling with the objective alone.
+standing or falling with the objective.
 % src: figures/summary.md (Phase 1); h2_unified + crossover reports (suppl. §A)
 
-A decade of
-connectivity-free reconstruction --- point splats, Gaussians, triangle
-soups --- has treated topology errors as symptoms of geometric
+% Round-5 (2026-07-19, advisor Related-Works doc): the 2025--26
+% triangle-turn context woven in as a clause (graphics-pipeline
+% compatibility) per the requested Introduction paragraph — adapted, not
+% pasted; cites long-verified. The requested "our work addresses this
+% gap" echo is ¶3's existing closing sentence (unchanged).
+A decade of connectivity-free reconstruction --- point splats,
+Gaussians, and lately a return to triangle soups for their native
+graphics-pipeline
+fit~\citep{held2025trianglesplatting,burgdorfer2025radiant,tojo2026diffsoup}
+--- has treated topology errors as symptoms of geometric
 under-provision: represent the surface better, or allocate the budget
 more wisely, and topology should follow. The allocation half is
-directly testable, and we tested it first, biasing where the
-resampler spends triangles in a controlled prior study (suppl.\ \S A).
+directly testable, and we tested it first, in a controlled study of
+where the resampler spends triangles (suppl.\ \S A).
 It fails: a topological prior helps enclosed voids, but any equally-wide
 \emph{non-topological} prior reproduces most of the gain, and no prior
 shape repairs loops --- concentrating manufactures phantom handles,
@@ -37,9 +44,9 @@ The null result relocates the root cause: not \emph{where} triangles are
 spent, but \emph{what the objective measures} --- a photometric loss is
 a local, pixel-space signal; a loop or an enclosed void is a global,
 categorical property of the surface. This paper therefore moves topology
-into the \emph{objective}: a differentiable persistence term in the
-training loss, so gradients act directly on features' birth/death
-values rather than on where triangles respawn.
+into the \emph{objective}: a differentiable persistence term whose
+gradients act directly on features' birth/death values rather than on
+where triangles respawn.
 
 % Round-4 restructure: the review asked for the RHs as a visually
 % distinct numbered list; paid for by running the contribution bullets
@@ -60,15 +67,13 @@ pre-designed condition:
 \end{enumerate}
 Concretely, we contribute \textbf{a matched persistence loss with a
 pair-frozen backward} (\S\ref{sec:method}): exact persistence forward
-(GUDHI alpha complex), backward through closed-form circumradii of live
-surface samples --- Gabriel-exact for 100\% of significant pairs in
-practice;
+(GUDHI alpha complex), backward through closed-form circumradii ---
+Gabriel-exact for 100\% of significant pairs in practice;
 % src: PHASE3_PLAN.md Appendix A (22/22 gate)
 \textbf{a recruitment term for missing features}: optimal matching
-yields exactly zero gradient when a target feature has no live
-counterpart, recruitment attaches the nearest live bar instead, and
-removing it collapses the loop-class win to baseline
-(\S\ref{sec:results}); \textbf{one calibrated knob}: $\lambda$ set by a
+yields zero gradient when a target feature has no live counterpart;
+recruitment attaches the nearest live bar, and removing it collapses
+the loop-class win to baseline (\S\ref{sec:results}); \textbf{one calibrated knob}: $\lambda$ set by a
 gradient-norm ratio $\rho$, flat over a $10\times$ range, no curriculum
 needed --- an ablation, not an assumption;
 % src: PHASE3_PLAN.md Appendix C (rho sweep), Appendix D (C3)
@@ -84,5 +89,5 @@ The loss proves topology-specific on the class no allocation prior ever
 won --- loops, with zero phantom handles --- confirming RH2; the two
 channels compose (RH3); and the H0 component class is matched by the
 generic control, sharpening RH1: topological guidance earns its keep
-exactly where geometry and topology decouple.
+where geometry and topology decouple.
 % src: PHASE3_PLAN.md Appendix D / topo3/report/results.json
