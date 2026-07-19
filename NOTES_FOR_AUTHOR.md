@@ -67,9 +67,12 @@ results.json independently, seedlists, disjointness, pin identities).
 
 ## Still owed by you (unchanged + one addition)
 
-1. Send the Thai reply (Gmail draft r-1323288373779606130 still unsent
-   — now ALSO fold in the group-wave outcome below; **SA-2026 poster
-   question, deadline Jul 31**).
+1. Send the Thai reply — **CONSOLIDATED Gmail draft
+   r-4435680882078772474 created 2026-07-19** (covers rounds 4 + 5 +
+   the group wave + the **SA-2026 poster question, deadline Jul 31**).
+   Before sending: add your name at the bottom, and DELETE the two
+   superseded drafts (r-1323288373779606130 and r-648741549389595318)
+   so the wrong one can't go out.
 2. Voice pass; OpenReview paper ID; 2027 kit swap; anonymized-code zip
    before the Sep 2 suppl deadline.
 3. Optional (advisor may ask): a suppl render strip of the four new
