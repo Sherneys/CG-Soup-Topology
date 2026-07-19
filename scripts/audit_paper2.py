@@ -350,6 +350,44 @@ for shape, key, idx, exp_pin in [("eight", "top_H1", 2, .0249),
     check(f"{shape} C0 pin == GT half-life", mean(shape, "C0"), half, tol=2e-4)
     check(f"{shape} pin as printed", half, exp_pin, tol=1e-4)
 
+# ---- round-5 leftovers: suppl §H (floor window / stability / cost) ----
+print("\n---- suppl §H robustness (floor window + timing) ----")
+FS = load(os.path.join(T, "output", "floor_sensitivity.json"))
+gw = FS["global_window"]
+check("floor window lower 5.12", gw[0], 5.12, tol=0.005)
+check("floor window upper 6.77", gw[1], 6.77, tol=0.005)
+print("         window binders:", FS["window_binders"])
+def fs_margins(shape):
+    ins = [d["margin_at_6"] for d in FS["shapes"][shape]["decisions"]
+           if d["status"] == "in"]
+    outs = [d["margin_at_6"] for d in FS["shapes"][shape]["decisions"]
+            if d["status"] == "out"]
+    return (min(ins) if ins else None), (max(outs) if outs else None)
+for shape, exp_in, exp_out in [
+        ("sphere", 3.86, None), ("cube", 2.71, None),
+        ("torus", 1.33, 0.83), ("two_spheres", 2.61, None),
+        ("double_torus", 2.23, 0.85), ("spot", 1.87, None),
+        ("fandisk", 1.50, None), ("bob", 1.13, None),
+        ("kinkin", 1.22, 0.46), ("rockerarm", 1.52, 0.74),
+        ("eight", 1.69, None), ("armadillo", 1.68, None),
+        ("horse", 1.42, None), ("bowl_narrow", 3.79, 0.47),
+        ("bowl_wide", 2.34, 0.42)]:
+    got_in, got_out = fs_margins(shape)
+    check(f"S13 {shape} tightest-in", got_in, exp_in, tol=0.005)
+    if exp_out is not None:
+        check(f"S13 {shape} largest-out", got_out, exp_out, tol=0.005)
+tm = FS["timing_torus"]
+check("timing 2048 = 174 ms", tm["2048"]["warm_s"] * 1000, 174, tol=1.0)
+check("timing 4096 = 388 ms", tm["4096"]["warm_s"] * 1000, 388, tol=1.0)
+check("timing 8192 = 740 ms", tm["8192"]["warm_s"] * 1000, 740, tol=1.0)
+check("timing 20000 = 1.92 s", tm["20000"]["warm_s"], 1.92, tol=0.005)
+check("timing ratio 11.0x", tm["20000"]["warm_s"] / tm["2048"]["warm_s"],
+      11.0, tol=0.06)
+MP = load(os.path.join(T, "output", "mem_probe.json"))
+check("mem C0 peak 3649 MiB", MP["torus_C0_peak_mib"], 3649, tol=0.5)
+check("mem C1 peak 4035 MiB", MP["torus_C1_peak_mib"], 4035, tol=0.5)
+check("mem delta +386 MiB", MP["delta_C1_minus_C0_mib"], 386, tol=0.5)
+
 print("\n---- appendix A: h2_unified + crossover + blindness ----")
 hk = sorted(next(iter(H2U["summary"]["sphere"].values())).keys())
 print("h2_unified arm keys:", hk)

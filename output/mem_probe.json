@@ -1,0 +1,9 @@
+{
+  "date": "2026-07-20",
+  "method": "nvidia-smi --query-gpu=memory.used polled every 400 ms for the whole lifetime of each run (whole-GPU used memory, RTX 4070 Ti); single seed; runs under output/synth/mem_probe (dentistry repo), tags torus_C0_r0.1_s0 / torus_C1_r0.1_s0, exact protocol flags (--steps 2500 --max_faces 700 --loss_dims 1 --rhos 0.1)",
+  "baseline_used_mib_before_runs": 2170,
+  "torus_C0_peak_mib": 3649,
+  "torus_C1_peak_mib": 4035,
+  "delta_C1_minus_C0_mib": 386,
+  "note": "values transcribed verbatim from the probe log (scratchpad mem_probe.ps1, session 36b8d183, task buf0eysm2); polling at 400 ms can miss sub-400ms spikes"
+}

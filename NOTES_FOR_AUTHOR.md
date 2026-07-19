@@ -65,6 +65,35 @@ before submission, the audit does not catch prose fragments).
 audit_paper2.py extended: group-wave block (means recomputed from
 results.json independently, seedlists, disjointness, pin identities).
 
+## Round-5 leftovers CLOSED (2026-07-20): suppl §H "Robustness of the
+## reporting choices" — re-analysis only, main untouched (still p8)
+
+- **R6 (floor "arbitrary")**: every documented bundle decision recomputed
+  from recorded GT clouds → unchanged for multiplier **k ∈ (5.12, 6.77)**
+  (binders = the two features the paper already flags: double-torus tube
+  0.85×, bob void 1.13×); Table S13 lists per-shape margins; the verdict
+  metric itself is threshold-free. src: output/floor_sensitivity.json
+  (scripts/floor_sensitivity.py).
+- **R7 (pair-frozen stability)**: Fig S11 from the RECORDED refresh logs
+  (no new runs): torus C6 = chronic 1-matched/1-unreached (the collapse
+  mechanism, visualized); eight C1 = recruitment claims the two
+  sub-threshold loops then hands them to matched as they turn
+  significant; pot C1 = stable 1-bar plan. gabriel_fail = 0 in all
+  three logs. Note: refresh schema exists only in runs from 2026-07-09
+  (C6/C7 wiring) — original 3d C1 arms predate it.
+- **R4 (cost/memory)**: persistence-step staircase 174 ms@2048
+  (reproduces §3.2's recorded figure exactly) / 388 / 740 / 1,918 ms
+  @20k = 11.0× cost for 9.8× points (≈ O(M log M)); GPU probe: whole-GPU
+  peak 3,649 MiB (C0) vs 4,035 MiB (C1), **+386 MiB**, persistence on
+  CPU. src: floor_sensitivity.json timing + output/mem_probe.json
+  (mem_probe runs additive under output/synth/mem_probe).
+- Skipped deliberately: W₂ eval column (bottleneck is the principled
+  stability-backed choice; say so if a reviewer asks), contribution
+  bullets (run-in kept — page budget), Hungarian A/B (provably
+  coincides — already in print).
+- audit_paper2.py extended again (§H window/margins/timing/memory);
+  ALL GREEN. Suppl now 15 pp.
+
 ## Still owed by you (unchanged + one addition)
 
 1. Send the Thai reply — **CONSOLIDATED Gmail draft

@@ -1,0 +1,106 @@
+\section{Robustness of the reporting choices}
+\label{app:robustness}
+
+% Round-5 revision-list leftovers (R4 cost, R6 thresholds, R7 matching
+% stability), all answered by RE-ANALYSIS of recorded artifacts — no new
+% training. Placed after §G so every earlier S-number is untouched
+% (this section's table is S13, its figure S11).
+% src: output/floor_sensitivity.json (scripts/floor_sensitivity.py);
+%      topo3/_train/*/topo_loss_log.json "refreshes" (2026-07-09 schema);
+%      paper2/figures/pairstability.png (make_pairstability_figure.py);
+%      mem-probe runs output/synth/mem_probe (2026-07-20).
+
+\paragraph{The floor multiplier is not load-bearing.}
+The significance floor $k\,r_{\mathrm{med}}(M)$ uses $k{=}6$ throughout.
+Recomputing every documented bundle decision from the recorded
+ground-truth clouds (protocol densities, bundle seed) gives each
+feature's flip point --- the $k$ at which an included feature would
+leave the bundle or an excluded one would enter --- and \emph{every
+decision in the study is unchanged for
+$k \in (5.12,\, 6.77)$} (Table~\ref{tab:floorwin}). The two binding
+features are exactly the ones the paper already flags as marginal: the
+double torus's sub-floor tube loops ($0.85\times$ the $k{=}6$ floor)
+bound it below, bob's fat-tube void ($1.13\times$) bounds it above.
+The verdict metric itself (bottleneck to the target diagram) contains
+no threshold; $k$ only gates which bars enter bundles and counts.
+% src: floor_sensitivity.json global_window [5.1224..., 6.7676...],
+% window_binders lower="double_torus tube loop 3", upper="bob void"
+
+\begin{table}[t]
+\centering
+\caption{Floor-multiplier windows per shape (recorded GT clouds at the
+protocol bundle density): the tightest included margin and, where the
+protocol excludes sub-floor features, the largest excluded margin ---
+each decision holds while $k$ stays below/above $6\times$ that margin.
+Global window: $k \in (5.12, 6.77)$.}
+\label{tab:floorwin}
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lcc}
+\toprule
+shape & tightest IN ($\times$ floor) & largest OUT ($\times$ floor) \\
+\midrule
+% src: floor_sensitivity.json shapes[*].decisions margin_at_6 (min over
+% "in", max over "out"); dashes = no excluded feature documented
+sphere / cube    & 3.86 / 2.71 & --- \\
+torus            & 1.33 (loop 2) & 0.83 (void) \\
+two spheres      & 2.61 & --- \\
+double torus     & 2.23 & 0.85 (tube loops) \\
+spot / fandisk   & 1.87 / 1.50 & --- \\
+bob              & 1.13 (void) & --- \\
+tom-yum pot      & 1.22 & 0.46 (loops) \\
+rocker-arm       & 1.52 & 0.74 (void) \\
+eight            & 1.69 (loop 4) & --- \\
+armadillo / horse & 1.68 / 1.42 & --- \\
+bowls (narrow/wide) & 3.79 / 2.34 & 0.47 / 0.42 (rims) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The pair-frozen plan is stable across refreshes
+(Fig.~\ref{fig:pairstab}).}
+Every run since the refresh-log schema records the plan's composition
+(matched / diagonal / recruited / target-unreached, per dimension) at
+each of its ${\sim}200$ refreshes. Three regimes cover the study:
+the torus without recruitment (C6) shows the chronic gap the ablation
+collapses on --- one matched loop and one unreached target at
+\emph{every} refresh; on the genus-2 eight, recruitment claims the two
+sub-threshold loops from the first active refresh and \emph{hands them
+over} to the matched set as training makes them significant (matched
+$2{\to}3$--$4$ late, recruited $2{\to}1$--$0$, unreached $0$
+throughout); the tom-yum pot settles to a stable one-bar matched plan
+within the first ${\sim}250$ active steps. No plan oscillation beyond
+single-bar hand-overs is observed, and the per-refresh Gabriel-failure
+count is zero in all three runs, as everywhere (main \S3.2).
+% src: topo3/_train/{torus_C6,eight_C1,kinkin_C1}_r0.1_s0/
+% topo_loss_log.json (200 refreshes each; gabriel_fail_total=0)
+
+\paragraph{Cost scaling, measured.}
+The persistence step --- the refresh's dominant cost --- measured on
+the torus cloud: $174$\,ms at $M{=}2048$ (reproducing \S3.2's recorded
+refresh figure), $388$\,ms at $4096$, $740$\,ms at $8192$, $1.92$\,s at
+$20{,}000$ --- an $11.0\times$ cost for $9.8\times$ the points,
+consistent with the near-linear $O(M\log M)$ scaling.
+% src: floor_sensitivity.json timing_torus (warm: 173.7/388.3/740.4/
+% 1918.1 ms; 1918.1/173.7 = 11.04; 20000/2048 = 9.77)
+GPU memory: a single-seed probe (torus, $2{,}500$ steps, whole-GPU used
+memory sampled at $400$\,ms) peaks at $3{,}649$\,MiB for the baseline
+and $4{,}035$\,MiB with the loss ($+386$\,MiB); the persistence
+computation itself runs on the CPU (GUDHI), off the GPU budget.
+% src: output/mem_probe.json (2026-07-20; nvidia-smi polling; runs
+% output/synth/mem_probe torus_C{0,1}_r0.1_s0, exact protocol flags)
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{pairstability.png}
+\caption{Per-refresh plan composition from the recorded refresh logs
+(seed 0; ${\sim}200$ refreshes each; no new runs). \emph{Left}: torus
+without recruitment (C6) --- one loop matched, one target unreached at
+every refresh: the chronic gap behind the C6 collapse (main \S5.1).
+\emph{Middle}: eight (C1) --- recruitment claims the two sub-threshold
+loops early and hands them to the matched set as training makes them
+significant. \emph{Right}: the tom-yum pot (C1) --- a stable one-bar
+matched plan after the first ${\sim}250$ active steps. Dashed gray =
+target count; in the right panel it coincides with the matched line.}
+\label{fig:pairstab}
+\end{figure*}
