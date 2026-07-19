@@ -9,15 +9,14 @@
 % the observations ¶ (they repeated each other); prose + captions
 % tightened. Every number and % src kept.
 
-A gate first: the loss alone (no photometric term, Adam on point
-positions) repairs all four controlled probes --- a punctured sphere's
-void closes ($8.8\times$), a spurious handle dies at the diagonal,
-mis-spaced components separate ($1229\times$), and a bridged merge with
-\emph{no} significant live H0 bar --- the case of
-Lemma~\ref{lem:zerograd} --- is severed ($450\times$,
-$\beta_0\,1{\to}2$); the predicted location-blind pathology did not
-materialize (suppl.\ \S C, Fig.~S5) --- sanity toys on raw clouds, not
-the image pipeline; multipliers not comparable to training results.
+A gate first: the loss alone (no photometric term, Adam on points)
+repairs all four controlled probes --- a punctured void closes
+($8.8\times$), a spurious handle dies at the diagonal, mis-spaced
+components separate ($1229\times$), a bridged merge with \emph{no}
+significant live H0 bar (Lemma~\ref{lem:zerograd}'s case) is severed
+($450\times$, $\beta_0\,1{\to}2$); the predicted location-blindness did
+not materialize (suppl.\ \S C, Fig.~S5). Raw-cloud sanity toys;
+multipliers not comparable to training.
 % src: figures/phase3_toy/t{1..4}.json (PHASE3_PLAN.md Appendix A)
 
 \subsection{The C-matrix}
@@ -31,11 +30,10 @@ suppl.\ Fig.~S6 (line = seed mean, band = seed min--max).
 
 \begin{table*}[t]
 \centering\small
-\caption{Tail bottleneck to target (mean$\pm$sd over seeds; tail = last
-three dumps; lower is better); $\times$ = reduction vs C0; verdict: C1
-$<$ C0 and $<$ every control at Chamfer parity. Seeds: 5 (sphere,
-torus, double torus --- the latter saturated identically), 3 (cube,
-two spheres). C6 = no recruitment.}
+\caption{Tail bottleneck to target (mean$\pm$sd; lower is better);
+$\times$ = vs C0; verdict: C1 $<$ C0 and $<$ every control at Chamfer
+parity. Seeds: 5 (sphere, torus, double torus --- saturated
+identically), 3 (cube, two spheres). C6 = no recruitment.}
 \label{tab:main}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -55,18 +53,17 @@ double torus (H1)& .0264$\pm$.0000 & .0264$\pm$.0000 (saturated)           & .02
 \end{table*}
 
 \paragraph{Voids (H2): topology-specific, large.} Sphere $4.0\times$
-($16.2\sigma$ Welch vs C0, five seeds), cube $7.9\times$ (three seeds,
-per the reporting policy: ranges disjoint, C1 $.0064$--$.0086$ vs C0
-$.0551$--$.0636$), both at
+($16.2\sigma$ Welch vs C0, five seeds), cube $7.9\times$ (three seeds:
+ranges disjoint, C1 $.0064$--$.0086$ vs C0 $.0551$--$.0636$), both at
 equal-or-better Chamfer (sphere $0.46$ vs $0.50$; cube $0.92$ vs $1.05$).
 % src: topo3/report/results.json cube tails C1 .006370/.007109/.008617,
 % C0 .055129/.056018/.063560 (18.5-sigma print retired at n=3, round 4)
 The
-norm-matched control is \emph{destructive}, not merely weaker: it
-pins the void's death at its repulsion equilibrium ($2.2\times$ worse,
-identical across seeds) and erases the cube's void outright; no tested
-strength reproduces any gain --- C1 $<$ C0 $<$ C2g $<$ C2
-(\S\ref{sec:limitations}; per-seed spread: suppl.\ Fig.~S3; mechanism:
+norm-matched control is \emph{destructive}, not merely weaker: it pins
+the void's death at its repulsion equilibrium ($2.2\times$ worse,
+seed-identical) and erases the cube's void outright; no tested strength
+reproduces any gain --- C1 $<$ C0 $<$ C2g $<$ C2
+(\S\ref{sec:limitations}; spread: suppl.\ Fig.~S3; mechanism:
 \S\ref{sec:discussion}).
 % src: topo3/report/results.json (sphere: C2g 0.0972+-0.0169; the
 % number itself is printed in the Limitations "Control strength" item)
@@ -81,17 +78,17 @@ on birth/death values suits 1-D features in a way budget allocation does
 not (mechanism: \S\ref{sec:discussion}).
 
 \paragraph{Components (H0): not topological --- third channel, same answer.}
-C1 reduces the (already small) baseline error $9.5\times$, but the generic
-control matches it on the diagram metric (.0008 vs .0007); the topological
-increment appears only in Chamfer ($0.54$ vs $1.94$). Three channels now
-agree: $\beta_0$ structure is carried by shell count and separation.
+C1 reduces the (already small) baseline error $9.5\times$, but the
+generic control matches it (.0008 vs .0007); the increment appears only
+in Chamfer ($0.54$ vs $1.94$). Three channels agree: $\beta_0$ is
+carried by shell count and separation.
 
 \paragraph{Composition (C5).} Loss $+$ spread prior is best everywhere
 tested --- sphere $.0082$ ($7.6\times$ vs C0, ${\approx}2\times$ vs C1 alone,
 ${\approx}4.4\times$ below the prior alone
 % src: h2_unified/report/results.json (B4 sphere .0357; .0357/.0082 = 4.37)
-), torus $.0133$ --- with the best sphere Chamfer; its torus Chamfer
-($.502$) trails only C3's ($.495$). Allocation and value-tuning are
+), torus $.0133$ --- with the best sphere Chamfer (torus $.502$,
+trailing only C3's $.495$). Allocation and value-tuning are
 complementary, not substitutes.
 % src: topo3/report/results.json (chamfer_mean per arm)
 
@@ -113,40 +110,35 @@ ${\approx}46$\,s per 2{,}500-step run (refresh $174$\,ms at $M{=}2048$
 every 10 steps) --- more than the $33$--$41$\,s photometric baseline on
 these deliberately tiny scenes, but the cost scales $O(M\log M)$ per
 refresh, not with scene or image complexity, so its share of a run whose
-photometric cost is $T$ is $46/(T{+}46)$ --- an arithmetic projection,
-${\approx}7\%$ of a ten-minute rendering-dominated run --- independent
-of image count and resolution; no trainable parameters are added.
+photometric cost is $T$ is $46/(T{+}46)$ --- an arithmetic projection, ${\approx}7\%$ of a ten-minute run ---
+independent of image count and resolution; no parameters are added.
 % src: PHASE3_PLAN.md Appendices B-D; wall-clock from dump mtimes
 % (sphere C0 33s / C1 79s; torus C0 41s / C1 88s, 5 seeds each)
 
 \paragraph{Recruitment is load-bearing for loops (C6).} Removing the
-recruitment term (pure matching $+$ diagonal, all else identical) collapses
-the torus win entirely: $.0411\pm.0038$, statistically baseline
-($0.6\sigma$ from C0, $12.4\sigma$ worse than C1) at baseline Chamfer ---
-though the loops still \emph{exist} ($\#$sig H1 $= 2$ every seed;
-suppl.\ Fig.~S6: C6 rides the baseline). The
-logs locate the mechanism: one torus loop is significant at every refresh,
-the other chronically \emph{below} threshold (all five seeds, all 200
-refreshes) --- recruitment is the sole gradient path to the second loop;
-on this class it \emph{is} the mechanism, not a cold-start device. On
-the sphere recruitment never fires (0 of 200 refreshes, all seeds): C6
-is loss-identical to C1, and its tail gap ($.0166$ vs $.0156$,
-$1.5\sigma$) measures pure run-to-run noise (\S\ref{sec:limitations}).
+recruitment term (pure matching $+$ diagonal) collapses the torus win
+entirely: $.0411\pm.0038$, statistically baseline ($0.6\sigma$ from C0,
+$12.4\sigma$ worse than C1) at baseline Chamfer, though both loops
+still \emph{exist} ($\#$sig H1 $= 2$ every seed; suppl.\ Fig.~S6). The
+logs locate the mechanism: one torus loop is significant at every
+refresh, the other chronically \emph{below} threshold (all five seeds,
+all 200 refreshes) --- recruitment is the second loop's sole gradient
+path; on this class it \emph{is} the mechanism, not a cold-start
+device. On the sphere it never fires (0 of 200, all seeds): C6 is
+loss-identical to C1, and the $1.5\sigma$ tail gap ($.0166$ vs $.0156$)
+measures pure run-to-run noise (\S\ref{sec:limitations}).
 % src: topo3/report/results.json (C6 arms) + topo3/_train/*_C6_*/
 % topo_loss_log.json ("refreshes": per-refresh matched/target_unreached)
 
-\paragraph{Sensor-noise stress (C7/C7h).} C7 probes the loss's noise
-response; it is not a scan-realism claim (structured scan noise:
-\S\ref{sec:limitations}). With the plan's cloud perturbed
-at every refresh ($\sigma = 0.5\%$/$1\%$ of the diagonal ${\approx}$
-$0.5$/$1.0$ median sample spacings, \S\ref{sec:setup}), the loss degrades
+\paragraph{Sensor-noise stress (C7/C7h).} With the plan's cloud
+perturbed at every refresh ($\sigma = 0.5\%$/$1\%$ of the diagonal
+${\approx}0.5$/$1.0$ spacings, \S\ref{sec:setup}), the loss degrades
 gradually and never harms: torus $.0210{\pm}.0018$ / $.0259{\pm}.0022$
 ($2.0\times$/$1.6\times$ below baseline, vs C1's $2.3\times$), sphere
 $.0235{\pm}.0009$ / $.0328{\pm}.0013$ ($2.7\times$/$1.9\times$, vs
-$4.0\times$) --- at equal-or-better Chamfer, with the correct
-significant-feature count in every run (suppl.\ Fig.~S6) and zero
-Gabriel-gate failures in all $2{,}400$ noisy refreshes (further
-internals: suppl.\ \S B).
+$4.0\times$), at equal-or-better Chamfer, correct counts in every run
+(suppl.\ Fig.~S6), zero Gabriel failures in all $2{,}400$ noisy
+refreshes (internals: suppl.\ \S B).
 % src: topo3/report/results.json (C7/C7h arms) + topo3/_train/*_C7*/
 % topo_loss_log.json ("refreshes": n_gabriel_fail / recruit /
 % target_unreached per refresh; lam_peak per run)
@@ -155,19 +147,19 @@ internals: suppl.\ \S B).
 \label{sec:generality}
 Everything above is on one analytic family, so we repeat the verdict
 protocol --- C0/C1/C2, three seeds, class budgets, $\rho$ and ramp
-unchanged, density fixed by the floor rule (\S\ref{sec:setup}) --- on
-four external genus-known meshes --- \emph{spot} (0, organic), \emph{bob}
-(1, organic), \emph{fandisk} (0, CAD), the \emph{tom-yum pot}
-(3, artist-authored, certified by ingest; \S\ref{sec:setup}) --- with no
-per-shape tuning of any kind.
-% src: topo3/report/results.json (spot/bob/fandisk aggregates + verdicts);
-% tom-yum pot = internal shape key kinkin: topo3/quicklook.json (per-seed
-% tails/chamfer/nsig, 2026-07-10)
-All four \textbf{pass} the verdict rule at equal-or-\emph{better} Chamfer
-(Table~\ref{tab:gen}; trajectories in suppl.\ Fig.~S2), and the control's
-failure modes replicate exactly: the void erased on all three H2 shapes
-($\beta_2\,1{\to}0$, all seeds; the pot at $1.36\times$ worse Chamfer),
-a loop collapsed on the genus-1 shape ($\beta_1\,2{\to}1$, all seeds).
+unchanged, density fixed by the floor rule --- on the eight external
+genus-known meshes of \S\ref{sec:setup}'s two groups, with no
+per-shape tuning.
+% src: topo3/report/results.json (all eight aggregates + verdicts);
+% tom-yum pot = internal shape key kinkin (quicklook cross-checked);
+% group wave 2026-07-19: GROUP_WAVE_PLAN.md + group_wave_stats.json
+Seven of eight \textbf{pass} the verdict rule at equal-or-\emph{better}
+Chamfer (Table~\ref{tab:gen}; original-wave trajectories in suppl.\
+Fig.~S2); the eighth, rocker-arm, is a \emph{no-headroom null}, not a
+counterexample (obs.~5). The control replicates its failure modes: all
+five voids erased ($\beta_2\,1{\to}0$, every seed; the pot at
+$1.36\times$ worse Chamfer), a bob loop collapsed ($\beta_1\,2{\to}1$),
+eight's missing pair left missing.
 
 \begin{table}[t]
 \centering
@@ -176,60 +168,95 @@ a loop collapsed on the genus-1 shape ($\beta_1\,2{\to}1$, all seeds).
 % rest on disjoint per-seed ranges (suppl. Table S7). Round-4 fit pass:
 % single-column float; the all-PASS verdict column folded into the
 % caption.
-\caption{Generality wave: tail bottleneck (mean$\pm$sd, 3 seeds);
-$\times$ = reduction vs C0. All four \textbf{pass} the verdict rule of
-Table~\ref{tab:main}. No Welch $\sigma$ at three seeds
-(\S\ref{sec:setup}): every shape's C0/C1 per-seed ranges are disjoint
-(suppl.\ Table~S7).}
+% Round-5 group wave (2026-07-19): grouped rows + the advisor's group
+% means; pre-registered statistic = mean +- sd over member shapes of
+% UNROUNDED per-shape reductions (GROUP_WAVE_PLAN.md;
+% scripts/group_wave_stats.py -> output/group_wave_stats.json).
+\caption{Generality wave, two observable-class groups (mean$\pm$sd, 3
+seeds; $\times$ = vs C0; \emph{group mean} $\pm$ sd over member shapes,
+pre-registered). Seven of eight \textbf{pass} Table~\ref{tab:main}'s
+verdict rule; rocker-arm is a no-headroom null (counts intact in every
+arm). *seed-exact unmatched-target pins (\S\ref{sec:discussion}).
+Per-seed values: Table~S7; provenance, certificates, staircases:
+suppl.\ \S G.}
 \label{tab:gen}
 \scriptsize
 \setlength{\tabcolsep}{1.5pt}
-% resizebox: the natural width is 5.7pt (2.3%) over the column — an
-% imperceptible uniform shrink beats an overfull warning.
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{llll}
 \toprule
-shape (dim) & C0 & C1 loss & C2 control \\
+shape & C0 & C1 loss & C2 control \\
 \midrule
-% src: topo3/report/results.json tails; tom-yum pot row (internal key
-% kinkin): topo3/quicklook.json (kinkin_C{0,1,2}_* seeds 0-2, 2026-07-10)
-spot (H2)    & .0521$\pm$.0081 & \textbf{.0237$\pm$.0000} (2.2$\times$) & .0652 ($\beta_2\,1{\to}0$) \\
-bob (H1)     & .0426$\pm$.0012 & \textbf{.0208$\pm$.0008} (2.1$\times$) & .0437 ($\beta_1\,2{\to}1$) \\
-fandisk (H2) & .0538$\pm$.0022 & \textbf{.0052$\pm$.0008} (10.4$\times$) & .0571 ($\beta_2\,1{\to}0$) \\
-tom-yum pot\,(H2) & .0221$\pm$.0003 & \textbf{.0057$\pm$.0002} (3.9$\times$) & .0223 ($\beta_2\,1{\to}0$) \\
+% src: topo3/report/results.json tails/nsig_final; pot row cross-checked
+% against topo3/quicklook.json (kinkin, 2026-07-10)
+bob          & .0426$\pm$.0012 & \textbf{.0208$\pm$.0008} (2.1$\times$) & .0437 ($\beta_1\,2{\to}1$) \\
+rocker-arm   & .0083$\pm$.0004 & .0087$\pm$.0015 (0.96$\times$) & .0113 (counts intact) \\
+eight (genus 2) & .0249$\pm$.0000* & \textbf{.0162$\pm$.0017} (1.5$\times$) & .0249 (2 of 4 loops) \\
+% src: group_wave_stats.json loop group mean_reduction 1.5153 sd 0.5480
+\emph{loop group mean (H1, 3)} & & \textbf{1.52$\times$}$\,\pm\,$0.55 & \\
+\midrule
+spot         & .0521$\pm$.0081 & \textbf{.0237$\pm$.0000} (2.2$\times$) & .0652 ($\beta_2\,1{\to}0$) \\
+fandisk      & .0538$\pm$.0022 & \textbf{.0052$\pm$.0008} (10.4$\times$) & .0571 ($\beta_2\,1{\to}0$) \\
+tom-yum pot  & .0221$\pm$.0003 & \textbf{.0057$\pm$.0002} (3.9$\times$) & .0223 ($\beta_2\,1{\to}0$) \\
+armadillo    & .0511$\pm$.0000* & \textbf{.0124$\pm$.0001} (4.1$\times$) & .0511 ($\beta_2\,1{\to}0$) \\
+horse        & .0408$\pm$.0000* & \textbf{.0109$\pm$.0022} (3.8$\times$) & .0408 ($\beta_2\,1{\to}0$) \\
+% src: group_wave_stats.json void group mean_reduction 4.8677 sd 3.1741
+\emph{void group mean (H2, 5)} & & \textbf{4.87$\times$}$\,\pm\,$3.17 & \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
 % Round-4: fig:tomyum moved to suppl. §C (Fig. S7) — the pot's showcase
 % render returns to main inside the round-4 qualitative matrix.
-Four observations. \emph{The H1 claim survives the family change}: bob
-halves loop error with zero phantom handles in every seed (rendered:
-suppl.\ Fig.~S8), replicating torus. \emph{Sharp-featured CAD benefits most}: fandisk's
-$10.4\times$ exceeds every analytic-family effect. \emph{Complex organic
-geometry exposes a count-level limit}: spot's \emph{baseline} manufactures a
-phantom void in two of three seeds (final $\#$sig H2 $= 2,1,2$); the loss
-clears two, retains one spurious bar in the third ($1,2,1$)
---- value repair is reliable, count repair on sub-budget organic detail
-(legs, horns at $N{=}1200$) is not guaranteed; spot's C1
-tail pins at $.0237$ (sd $0$), a milder floor of the double-torus kind.
+Observations.
+(1)~\emph{The H1 claim survives the family change}: bob halves loop
+error, zero phantom handles every seed (suppl.\ Fig.~S8), replicating
+torus.
+(2)~\emph{The genus-2 ceiling was representational, not topological}:
+on the fat CGAL eight, baseline and control read only two of the four
+certified loops (value pinned at the unmatched bound, seed-exact); the
+loss \emph{restores the missing pair} ($\#$sig $4/3/4$) and cuts value
+error $1.5\times$ at $0.89\times$ Chamfer --- the double torus's
+saturation (\S\ref{sec:cmatrix}) was the representation's ceiling, not
+genus-2's.
+% src: results.json eight tails/nsig (C0 [2,2,2], C1 [4,3,4], C2
+% [2,2,2]); pin: eight_src_cert.json staircase top_H1@20000 .0498/2;
+% chamfer 0.7212/0.8062 = 0.894
+(3)~\emph{Sharp-featured CAD benefits most}: fandisk's $10.4\times$
+exceeds every analytic-family effect.
+(4)~\emph{Baselines can pin like controls}: armadillo and horse read
+the correct void count but pin its value at the same bound
+($.0511$/$.0408$, seed-exact); the loss unpins both
+($4.1\times$/$3.8\times$) at better Chamfer.
+% src: results.json armadillo/horse tails; cert staircases top_H2@20000
+% .1022/2, .0817/2; chamfer 0.7442/0.8469, 0.7944/0.8812
+(5)~\emph{No headroom, no effect --- and no harm}: rocker-arm's one
+measurable loop is already baseline-correct ($.0083$ vs the
+$.04$--$.05$ band): \S\ref{sec:setup}'s imperfection criterion is unmet
+and the loss stays inert ($0.96\times$, parity $1.00$, counts intact
+everywhere) --- the method's honest boundary.
+% src: results.json rockerarm (C0 .008298+-.000435, C1 .008666+-.001533,
+% chamfer parity 1.0029; nsig [1,1,1] all arms)
+(6)~\emph{Count-level limits persist on sub-budget organic detail}:
+spot's \emph{baseline} makes a phantom void in two of three seeds
+($\#$sig $=2,1,2$); the loss clears two, retains one ($1,2,1$) ---
+value repair reliable, count repair not guaranteed; its C1 tail pins at
+$.0237$ (sd $0$), a milder floor of the double-torus kind.
 % src: topo3/report/results.json (nsig_final; tails)
 \emph{And the pipeline reaches raw artist content}: the tom-yum pot
-(Fig.~\ref{fig:matrix}; suppl.\ Fig.~S7) extends the wave in input
-class (a raw Blender export, certified rather than constructed;
-\S\ref{sec:setup}) and observable (an H2 void clearing the floor only
-at $M{=}8192$), both chosen by the pre-registered rule --- the dress
-rehearsal for scan data. The loss cuts the void's
-value error $3.9\times$ at Chamfer parity ($0.99\times$ baseline), with
-the tightest seed spread of the study (C1 $.0056$--$.0059$ vs C0
-$.0218$--$.0223$; at $n{=}3$ a Welch $\sigma$ would inflate to a
-meaningless headline --- hence ranges), inside the study's
-$2.1$--$10.4\times$ span. The control \emph{destroys} the void ($\beta_2\,1{\to}0$ in all
-three seeds) at $1.36\times$ worse Chamfer; its bottleneck pins at the
-unmatched-target bound ($.0223$), so the count --- not the value gap ---
-is the verdict. Two caveats transfer: the baseline already reads the
+(Fig.~\ref{fig:matrix}; suppl.\ Fig.~S7), a raw Blender export
+certified rather than constructed and bundled at $M{=}8192$ by the same
+pre-registered rule (\S\ref{sec:setup}), cuts the void's value error
+$3.9\times$ at Chamfer parity ($0.99\times$), the study's tightest seed
+spread (C1 $.0056$--$.0059$ vs C0 $.0218$--$.0223$); the control
+destroys the void ($\beta_2\,1{\to}0$, all seeds), pinned at the
+unmatched bound ($.0223$) --- count, not value, is the verdict. Two caveats transfer: its baseline already reads the
 correct count (a value-accuracy win, like bob), and ground truth is
 certified, not constructed.
-% src: topo3/quicklook.json (internal key kinkin, C0/C1/C2 x seeds 0-2:
-% tails, chamfer, nsig; 2026-07-10); pin bound + staircase:
-% PHASE3_STATUS.md Post-3e
+% src: topo3/quicklook.json (kinkin, cross-checked vs results.json);
+% pin bound + staircase: PHASE3_STATUS.md Post-3e
+Group statistic (pre-registered): loops $1.52\times\pm0.55$ (2/3 pass),
+voids $4.87\times\pm3.17$ (5/5); the passing wave spans
+$1.5$--$10.4\times$ (suppl.\ \S G).
+% src: output/group_wave_stats.json (per-group mean/sd/min/max;
+% external span 0.96-10.38 including the null)

@@ -17,13 +17,25 @@ and genus-2 double torus as a stretch case ($(1,4,1)$, $N{=}2000$). Budgets
 are the allocation study's headroom points (suppl.\ \S A) --- tight
 enough that baseline topology is imperfect.
 % src: PHASE2B_CROSSOVER.md (headroom pilot); PHASE3_PLAN.md §6
-Four external, genus-known meshes probe generality beyond the analytic
-family (\S\ref{sec:generality}). Three are watertight benchmarks ---
-\emph{spot} (genus 0) and \emph{bob} (genus 1) from the Crane model
-repository (CC0), and the \emph{fandisk} CAD benchmark (genus 0) ---
-rendered with the same pipeline (48 views, 200\,px) at unchanged class
-budgets; a seed-0 C0 pilot confirms baseline imperfection (tails
-$.043$--$.054$, in the analytic band).
+% Round-5 group wave (2026-07-19): externals expanded 4 -> 8 in the two
+% observable-class groups the advisor asked for; selection/protocol
+% pre-registered (GROUP_WAVE_PLAN.md; suppl. §G has provenance,
+% certificates, staircases, and the honest exclusions).
+Eight external, genus-known meshes probe generality beyond the analytic
+family, organized as the study's two observable classes
+(\S\ref{sec:generality}): a \emph{loop group} --- \emph{bob} (genus 1),
+\emph{rocker-arm} (1), the CGAL \emph{eight} (2) --- and a \emph{void
+group} --- \emph{spot}, \emph{fandisk}, \emph{armadillo}, \emph{horse}
+(all genus 0), the \emph{tom-yum pot} (3, below); sources, licenses and
+certificates: suppl.\ \S G. Seven pass the mesh certificate below
+as-is; five further
+candidates failed it (open boundaries, non-manifold junctions) and were
+excluded, never repaired. Membership, observable class and density were fixed by the
+pre-registered staircase rule \emph{before} any training (rocker-arm:
+torus precedent, H1-restricted at $M{=}2048$; eight: the pot's, full
+$(1,4,1)$ bundle at $M{=}8192$). Scenes: the same pipeline (48 views,
+200\,px), unchanged class budgets (trio pilot: tails $.043$--$.054$,
+in the analytic band).
 % src: output/synth/{spot,bob,fandisk} scene builds; pilot tails = the
 % seed-0 entries of the topo3/report/results.json C0 aggregates
 % (.0429/.0429/.0540 — the pilot's 2026-07-09 quicklook.json was later
@@ -45,12 +57,18 @@ one body of genus 3, $\beta{=}(1,6,1)$ exact,
 % independence of the certificate computations made explicit.
 % src: scripts/make_kinkin_asset.py steps 5b (euler_number -> genus,
 % chi cross-check) + 5c (gudhi exact mesh homology, asserted equal);
-% the alpha-complex staircase is the separate step-7 preflight. rendered and budgeted as a void-class shape ($N{=}1200$, 48
-views, 200\,px). This ingest pipeline is a test fixture here, not a
-claimed contribution. Where the benchmark trio's topology is known by
-construction, the pot's is known by \emph{certificate} --- a controlled
-real-world proxy, not a blind test: what real scans will need
-(mechanics and challenge inventory: suppl.\ \S B, Table~S4).
+% the alpha-complex staircase is the separate step-7 preflight.
+rendered and budgeted as a void-class shape ($N{=}1200$). This ingest
+pipeline is a test fixture here, not a claimed contribution. Where the
+other externals arrive clean enough to certify as-is, the pot's
+topology exists only \emph{after} ingest --- a controlled real-world
+proxy, not a blind test: what real scans will need (mechanics and
+challenge inventory: suppl.\ \S B, Table~S4).
+% Round-5 fixes here: (a) REPAIRED a comment-swallowed sentence-start
+% ("rendered and budgeted…" had been appended to the src-comment line
+% by the earlier cert edit — the fragment was missing from the PDF,
+% incl. commit 3e829aa); (b) the construction-vs-certificate contrast
+% went stale once the whole wave is certificate-verified (suppl. §G).
 % Round-5 (revision list, Critical row 1): the advisor's "controlled
 % real-world proxy" label adopted verbatim here; the abstract's scope
 % caveat and §7's "Synthetic, single-machine" item already carry the
@@ -70,9 +88,12 @@ prospectively: every H1 loop of the certified shell sits below the
 $6\,r_{\mathrm{med}}$ floor at every working $M$, while the narrow flue
 mouth caps at small $\alpha$ --- an H2 void on the pot axis, first
 clearing the floor at $M{=}8192$ (margin $1.20$--$1.23\times$, five
-sampling seeds). The pre-registered rule builds the bundle there (the
-study's only protocol deviation; the loss samples at the same density):
-exactly one significant bar, stable to re-sampling (${\sim}10^{-5}$).
+sampling seeds). The pre-registered rule builds the bundle there (a
+floor-rule density deviation later repeated by eight; the loss samples
+at the same density): exactly one significant bar, stable to
+re-sampling (${\sim}10^{-5}$).
+% Round-5 accuracy fix: "the study's only protocol deviation" became
+% false when eight also bundled at 8192 (suppl. §G) — rephrased.
 % src: PHASE3_STATUS.md Post-3e (make_kinkin_asset.py preflight staircase:
 % (1,0,0)@2048/4096 -> (1,0,1)@8192/20000; margins recomputed live by
 % scripts/make_kinkin_brief_docx.py); floor rule: experiments/density_bound.py
@@ -87,32 +108,31 @@ none of the added code (no renderer or resampler edits).
 2{,}500 steps; resampling every 100 steps (untouched);
 $\rho{=}0.1$, ramp $0.2{:}0.5$, refresh $K{=}10$, $M{=}2048$; decisive shapes
 (sphere, torus) and the double torus run 5 seeds (the former with the
-full condition set C0/C1/C2/C3/C5 plus the recruitment ablation C6),
-replication shapes (cube, two spheres) 3 seeds (C0/C1/C2).
+full condition set incl.\ C6), replication shapes (cube, two spheres)
+3 seeds (C0/C1/C2).
 % Round-4: double torus raised 2 -> 5 seeds (2026-07-17, same
 % pre-registered flags, gudhi 3.11 verified equivalent); every arm
 % still returns exactly .026372 in every seed — the saturation claim
 % now carries five seeds. src: topo3/report/results.json A sensor-noise stress test
-(C7/C7h $=$ C1 $+$ noise; decisive shapes, 3 seeds) perturbs the cloud the
-loss \emph{plan} sees with i.i.d.\ Gaussian noise at every refresh,
-$\sigma = 0.5\%/1\%$ of the target diagonal (${\approx}0.5/1.0$ median
-sample spacings at $M{=}2048$): the plan decides on the noisy
-observation, the pulls apply to the true live positions.
+(C7/C7h $=$ C1 $+$ noise; decisive shapes, 3 seeds) perturbs the cloud
+the loss \emph{plan} sees with i.i.d.\ Gaussian noise at every refresh:
+the plan decides on the noisy observation, the pulls apply to the true
+live positions.
 % src: methods/topological_loss.py TopoLossState(noise=...); r_med at 2048:
 % experiments/density_bound.py (torus .0104, i.e. 1% of diag ~= 1 spacing)
 The torus restricts the loss to H1 (its own void bar is sub-threshold at
 $M{=}2048$ --- a loss must not act on features it cannot reliably
 measure); the double torus likewise targets its two measurable loops of
-four. The generality wave runs C0/C1/C2, three seeds; bob (fat tube) has
-both loops \emph{and} void significant at $M{=}2048$ and runs the full
-bundle; the pot runs at the floor-rule density above.
+four. The generality wave runs C0/C1/C2, three seeds, each shape at its
+staircase-fixed bundle (bob: full loops$+$void; rocker-arm: H1 only;
+eight and the pot: $M{=}8192$).
 % src: PHASE3_PLAN.md Appendix C (bundle preflights) + PHASE2B (2/4 loops);
 % spot/bob/fandisk bundle preflights 2026-07-09 (H bars printed at build)
 
-\paragraph{Metrics and verdict.} Primary: bottleneck distance to the target
-diagram in the shape's discriminating dimension, tail-averaged over the
-last three trajectory dumps (steps $2{,}300$--$2{,}500$), seed-averaged
-(20k evaluation samples, target-normalized).
+\paragraph{Metrics and verdict.} Primary: bottleneck to the target
+diagram in the discriminating dimension, tail-averaged (last three
+dumps, steps $2{,}300$--$2{,}500$), seed-averaged (20k eval samples,
+target-normalized).
 % src: experiments/topo_loss_report.py (--tail default 3; dumps every 100)
 Secondary: significant-feature counts (phantom check) and Chamfer parity.
 % Round-4 reporting policy (statistical-hygiene items): sigma only at
@@ -120,10 +140,9 @@ Secondary: significant-feature counts (phantom check) and Chamfer parity.
 Reporting policy: mean$\pm$sd over seeds; Welch $\sigma$ only where both
 arms ran five seeds; three-seed verdicts rest on disjoint per-seed
 ranges (suppl.\ Table~S7).
-\emph{Verdict rule} --- this study's core evaluation principle:
-C1 must beat C0 \textbf{and} every norm-matched control
-at Chamfer parity --- a topological win a dumb regularizer can match is not a
-topological win. \emph{Chamfer parity}, formally: the passing arm's
+\emph{Verdict rule}: C1 must beat C0 \textbf{and} every norm-matched
+control at Chamfer parity --- a topological win a dumb regularizer can
+match is not one. \emph{Chamfer parity}, formally: the passing arm's
 seed-mean Chamfer must satisfy
 $\mathrm{Ch}(\mathrm{C1})\le 1.15\,\mathrm{Ch}(\mathrm{C0})$; the $15\%$
 headroom absorbs seed variance and nondeterminism

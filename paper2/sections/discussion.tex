@@ -6,62 +6,61 @@
 % All numbers verbatim.
 
 \paragraph{A local signal cannot carry a global property --- sparse
-tugs can.} A pixel's photometric gradient reaches only the few vertices
-rasterizing to it; topology is global and categorical --- a wrong genus
-is not approached smoothly, and the blindness probes quantify the gap
-(\S\ref{sec:related}) --- no geometric proxy stands in. The persistence
+tugs can.} A pixel's photometric gradient reaches a few vertices;
+topology is global and categorical --- a wrong genus is not approached
+smoothly; the blindness probes quantify the gap (\S\ref{sec:related})
+--- no geometric proxy stands in. The persistence
 term supplies the measurement with a usable gradient: each significant
 pair back-propagates through the $3$--$7$ sample positions of its birth
-and death simplices --- \emph{precise but sparse} pulls, iterated by re-pairing (the toys
-show surgery ``walking'' around a defect); the resampling prior is the
-opposite --- broad, indirect, budget-limited. The results sort along this axis: loops respond to value
+and death simplices --- \emph{precise but sparse} pulls, iterated by re-pairing; the
+resampling prior is the opposite --- broad, indirect, budget-limited. The results sort along this axis: loops respond to value
 pressure (H1 win), wide shells to both channels (composition best),
-components to neither (H0 null).
+components to neither (H0 null) --- and nothing responds where nothing
+is broken (rocker-arm's no-headroom null, \S\ref{sec:generality}).
 
 \paragraph{Why the control damages topology.} The norm-matched repulsion
 imposes a length-scale floor on the sampled surface: the void's death
-pins at that equilibrium (identical across seeds) and drags while
+pins at that equilibrium (seed-identical) and drags while
 near-diagonal phantom bars accumulate (suppl.\ Fig.~S1) and thin
-structures collapse (the cube's $\beta_2$, the torus's $\beta_1$); the
-loss has no length scale --- it pulls the death coordinate itself. The
+structures collapse (cube $\beta_2$, torus $\beta_1$); the loss has no
+length scale --- it pulls the death coordinate itself. The
 same gradient budget through the same channel \emph{without}
 topological information is actively harmful: C1's wins cannot be
 extra-regularization artifacts.
 
-\paragraph{Measurability at the loss's density.} A persistence loss can only
-enforce features that clear the significance floor at its sampling density
-$M$: the torus void and the double torus's two tube loops do not, at
+\paragraph{Measurability at the loss's density.} A persistence loss can
+only enforce features that clear the significance floor at its density
+$M$: the torus void and two of the double torus's four loops do not, at
 $M{=}2048$. We treat this as a principle, not a nuisance: the bundle is
-built (and audited) at the same $M$, sub-floor features are excluded,
+built and audited at the same $M$, sub-floor features are excluded,
 and the double torus is evaluated against its two measurable loops ---
 all the soup can express at feasible budgets.
 
-The floor is quantifiable: a bar is significant iff its lifetime exceeds
-$6\,r_{\mathrm{med}}(M)$ ($r_{\mathrm{med}}$ = median nearest-neighbour
-spacing), and
-$r_{\mathrm{med}}$ follows the uniform-sampling law $\propto M^{-1/2}$
-(measured $.0090{\to}.0028$ over $M{=}2048{\to}20000$; ratio $3.16$ vs
-$\sqrt{9.77}{=}3.13$; visualized: suppl.\ Fig.~S10). The
+The floor is quantifiable: significance means lifetime
+$> 6\,r_{\mathrm{med}}(M)$, and $r_{\mathrm{med}}$ follows the
+uniform-sampling law $\propto M^{-1/2}$ (measured $.0090{\to}.0028$
+over $M{=}2048{\to}20000$; ratio $3.16$ vs $\sqrt{9.77}{=}3.13$;
+suppl.\ Fig.~S10). The
 double torus's tube loops live at lifetime $.045$--$.046$ on the clean
 surface: at $M{=}2048$ that is $0.83$--$0.85\times$ the floor --- invisible
 by a $15\%$ margin, clearing it only from $M\!\approx\!3{\times}10^{3}$ ---
-while at the evaluation density ($M{=}20000$, floor $.0171$) they clear it
-$3.1\times$; the binding constraint there is the \emph{representation}
+while at the evaluation density ($M{=}20000$, floor $.0171$) they clear
+it $3.1\times$; the binding constraint is the \emph{representation}
 (the soup never expresses the tubes): the \emph{measurement} floor
-recedes as $M^{-1/2}$, the \emph{representation} floor is set by the
-budget $N$ and no $M$ lowers it --- the double torus sits on the second. The torus quantifies the noise interaction: its second loop clears the
+recedes as $M^{-1/2}$, the \emph{representation} floor is set by $N$
+and no $M$ lowers it --- the double torus sits on the second. The torus quantifies the noise interaction: its second loop clears the
 clean floor by only $1.33\times$ --- a margin live-cloud noise consumes,
 leaving recruitment as its only gradient path (C6), the loss reaching
 below its own floor (suppl.\ \S C).
-Suppl.\ Table~S3 tabulates counts across $M$; the pot ran the rule
-\emph{prospectively} (\S\ref{sec:setup}), validated in-loop
-(Table~\ref{tab:gen}); adaptive density is the natural extension, at
-$O(M\log M)$.
+Suppl.\ Table~S3 tabulates counts across $M$; the pot and the group
+wave ran the rule \emph{prospectively} (\S\ref{sec:setup}; suppl.\
+\S G), validated in-loop (Table~\ref{tab:gen}); adaptive density is the
+natural extension.
 % src: kinkin staircase/margins: PHASE3_STATUS.md Post-3e (preflight of
 % scripts/make_kinkin_asset.py; live recompute in make_kinkin_brief_docx.py)
 % src: experiments/density_bound.py — persistence_from_target on the GT
 % meshes at M in {2048, 20000}, seed 0 (2026-07-09); M-sweep in suppl. §B
 
 \paragraph{Prescription.} Correct topology in the \emph{loss}; allocate
-with a \emph{wide} prior; combine --- no schedule needed once the loss
-is calibrated against the photometric gradient.
+\emph{wide}; combine --- no schedule needed once the loss is calibrated
+against the photometric gradient.

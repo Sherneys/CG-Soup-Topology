@@ -1,0 +1,128 @@
+\section{The group wave: expanding the external set to two groups}
+\label{app:groupwave}
+
+% Advisor round-5 follow-up (2026-07-19): "results lack shape diversity —
+% present two groups plus group means." Executed as a PRE-REGISTERED wave:
+% GROUP_WAVE_PLAN.md (release bundle) fixed the groups, the candidate pool,
+% the selection rule, the protocol and the group statistic BEFORE any
+% training. Placed AFTER §F so Tables S1-S10, cited from the main paper,
+% keep their numbers; this section's tables are S11-S12.
+% src: GROUP_WAVE_PLAN.md; scripts/make_group_assets.py;
+%      output/group_assets_summary.json;
+%      output/synth/_meshes/{rockerarm,eight,armadillo,horse}_src_cert.json;
+%      topo3/report/results.json; output/group_wave_stats.json
+%      (scripts/group_wave_stats.py — the pre-registered statistic).
+
+The generality wave of main \S5.2 grew from four external meshes to
+eight, organized as the study's two observable classes --- the
+\emph{loop group} (H1: bob, rocker-arm, eight) and the \emph{void
+group} (H2: spot, fandisk, the tom-yum pot, armadillo, horse) --- under
+a pre-registered plan (\texttt{GROUP\_WAVE\_PLAN.md}, shipped with the
+release bundle) that fixed the candidate pool, the selection rule, the
+run protocol, and the group statistic before any training run. Per-seed
+tails for the new shapes join suppl.\ Table~S7; this section records
+where the shapes came from and how they were selected.
+
+\paragraph{Pool, certificates, honest exclusions (Table~\ref{tab:gwdisp}).}
+Candidates were drawn from a standard test-model collection
+(\texttt{alecjacobson/common-3d-test-models}, pinned commit) plus the
+CGAL repository's genus-2 \emph{eight}; the release bundle ships fetch
+scripts with pinned commits and the certificates, not the meshes ---
+redistribution terms remain the original repositories'.
+% src: agent download report 2026-07-19 (commit 8a4f864; CGAL 47028cd);
+% provenance per the collection README (copy retained with the plan).
+Every candidate passed or failed the pot's mesh certificate (main \S4:
+exact simplicial homology cross-checked against per-component Euler
+characteristics, watertightness, orientation) as-is --- failures were
+excluded, never repaired, keeping the wave's class "watertight
+benchmark" (the pot remains the study's one ingest-and-solidify story).
+Five of eleven failed: open boundaries or non-manifold junctions in
+beast, cow, max-planck, ogre, and the Utah teapot.
+% src: output/group_assets_summary.json (status/reason per candidate)
+
+\paragraph{Staircase selection, before training (Table~\ref{tab:gwstair}).}
+The density staircase (the pot's pre-registered rule, unchanged) fixed
+each certified shape's observable class and working density:
+\emph{rocker-arm} (genus 1) enters the loop group on the torus
+precedent --- one of its two loops clears the $M{=}2048$ floor
+($0.0929$ vs $0.0613$), the second ($0.0204$) reaches only
+$1.15\times$ the floor even at $M{=}20{,}000$, and the void is
+sub-floor at 2048, so the loss is H1-restricted;
+\emph{eight} (genus 2) enters on the pot's precedent --- the full
+exact $(1,4,1)$ is significant from $M{=}4096$, and the bundle is
+built at $M{=}8192$ where the fourth loop clears $1.69\times$ and the
+void $2.6\times$; \emph{armadillo} and \emph{horse} (genus 0) read the
+exact $(1,0,1)$ at every tested density (voids $1.68\times$/$1.42\times$
+over the 2048 floor).
+% src: *_src_cert.json "staircase" rows (M / floor / sig_b / top lifetimes)
+Two certified candidates were set aside at this stage, before any
+training: \emph{cheburashka} qualifies at 2048 but grows a second
+significant capping H2 bar from $M{=}8192$ ($0.0300$ vs floor $0.0271$;
+$0.0312$ vs $0.0171$ at 20k) --- a pot-flue-type concavity reading that
+would make the evaluation-density phantom check ambiguous --- and a
+denser retessellation of eight (license unstated at its source) whose
+staircase independently corroborates the $(1,4,1)$ observable at
+$M{=}8192$.
+% src: cheburashka_src_cert.json + eightdirectional_src_cert.json
+
+\paragraph{Outcome identities behind the pins.}
+The three seed-exact baseline values of main Table~2 are unmatched-target
+bounds, not coincidences: eight's C0/C2 pin $0.0249 \approx$ half the
+third loop's ground-truth lifetime at the evaluation density
+($0.0498/2$), armadillo's $0.0511 = 0.1022/2$, horse's
+$0.0408 \approx 0.0817/2$ --- the bottleneck cost of leaving that
+target bar unmatched (main \S6's pin mechanism, previously seen in the
+pot's control arm).
+% src: *_src_cert.json staircase top_H1/top_H2 at M=20000 vs
+% results.json C0/C2 tails (identical across seeds)
+
+\begin{table}[t]
+\centering
+\caption{Group-wave staircases (seed 0): significant Betti counts vs
+sampling density for the four selected shapes; bold = the pre-registered
+working density. rocker-arm's second loop and 2048-density void never
+clear the floor (loss H1-restricted, torus precedent); eight's full
+$(1,4,1)$ holds from 4096 (bundle at 8192, pot precedent).}
+\label{tab:gwstair}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+sig $(\beta_0,\beta_1,\beta_2)$ & $M{=}2048$ & $4096$ & $8192$ & $20000$ \\
+\midrule
+% src: {shape}_src_cert.json "staircase" sig_b rows
+rocker-arm & \textbf{(1,1,0)} & (1,1,1) & (1,1,2) & (1,2,2) \\
+eight      & (1,2,1) & (1,4,1) & \textbf{(1,4,1)} & (1,4,1) \\
+armadillo  & \textbf{(1,0,1)} & (1,0,1) & (1,0,1) & (1,0,1) \\
+horse      & \textbf{(1,0,1)} & (1,0,1) & (1,0,1) & (1,0,1) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Candidate disposition (selection fixed before training;
+plan file in the release bundle). Certificate failures are excluded,
+never repaired.}
+\label{tab:gwdisp}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llll}
+\toprule
+candidate & origin & certificate & decision \\
+\midrule
+% src: output/group_assets_summary.json + download-agent provenance
+rocker-arm & INRIA / AIM@SHAPE & pass, genus 1 & loop group \\
+eight & CGAL data (CC0-class) & pass, genus 2 & loop group \\
+armadillo & Stanford scan rep. & pass, genus 0 & void group \\
+horse & CyberWare / GaTech & pass, genus 0 & void group \\
+cheburashka & I.~Baran (Pinocchio) & pass, genus 0 & excluded: 2nd capping H2 bar \\
+eight (dense) & Directional (lib.) & pass, genus 2 & excluded: license; corroborates \\
+beast & Autodesk & \textbf{fail}: non-manifold & --- \\
+cow & Viewpoint/Sun & \textbf{fail}: odd $\chi$ & --- \\
+max-planck & MPI & \textbf{fail}: 161 open edges & --- \\
+ogre & K.~Ritchie & \textbf{fail}: 200 open edges & --- \\
+teapot & M.~Newell & \textbf{fail}: 160 open edges & --- \\
+\bottomrule
+\end{tabular}
+\end{table}

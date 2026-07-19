@@ -11,11 +11,11 @@
 Differentiable rasterization reconstructs a triangle soup from images by
 following photometric gradients~\citep{tojo2026diffsoup}, periodically
 resampling under a fixed budget. Photometric losses are
-topologically blind: reconstructions that differ in genus, connectivity, or
-enclosed-void structure can be indistinguishable to Chamfer and Hausdorff
-while the bottleneck distance between persistence diagrams separates them
-$35$--$40\times$ on probes whose Chamfer is equal \emph{by construction}
-(\S\ref{sec:related}; suppl.\ Table~S1). Fig.~\ref{fig:matrix} previews
+topologically blind: reconstructions differing in genus, connectivity,
+or enclosed voids can be indistinguishable to Chamfer and Hausdorff
+while persistence diagrams separate them $35$--$40\times$ in bottleneck
+distance on Chamfer-equal probes (\S\ref{sec:related}; suppl.\
+Table~S1). Fig.~\ref{fig:matrix} previews
 the consequence: identical budgets, equal-or-better Chamfer, topology
 standing or falling with the objective.
 % src: figures/summary.md (Phase 1); h2_unified + crossover reports (suppl. §A)
@@ -31,9 +31,7 @@ graphics-pipeline
 fit~\citep{held2025trianglesplatting,burgdorfer2025radiant,tojo2026diffsoup}
 --- has treated topology errors as symptoms of geometric
 under-provision: represent the surface better, or allocate the budget
-more wisely, and topology should follow. The allocation half is
-directly testable, and we tested it first, in a controlled study of
-where the resampler spends triangles (suppl.\ \S A).
+more wisely, and topology should follow. We tested the allocation half first (suppl.\ \S A).
 It fails: a topological prior helps enclosed voids, but any equally-wide
 \emph{non-topological} prior reproduces most of the gain, and no prior
 shape repairs loops --- concentrating manufactures phantom handles,
@@ -77,17 +75,16 @@ the loop-class win to baseline (\S\ref{sec:results}); \textbf{one calibrated kno
 gradient-norm ratio $\rho$, flat over a $10\times$ range, no curriculum
 needed --- an ablation, not an assumption;
 % src: PHASE3_PLAN.md Appendix C (rho sweep), Appendix D (C3)
-and \textbf{channel-controlled evaluation}: every claim tested against a
+and \textbf{channel-controlled evaluation}: every claim must beat a
 norm-matched \emph{non-topological} control through the identical
-channel (a repulsion on the same surface samples) --- the allocation
-study's discipline, inherited.
+channel (\S\ref{sec:conditions}).
 
 % Round-4 trim: multipliers live in the abstract + §5; the intro preview
 % keeps only the two claims unique to it (RH2 loop win; RH1 sharpened by
 % the H0 null).
-The loss proves topology-specific on the class no allocation prior ever
-won --- loops, with zero phantom handles --- confirming RH2; the two
-channels compose (RH3); and the H0 component class is matched by the
-generic control, sharpening RH1: topological guidance earns its keep
-where geometry and topology decouple.
+The loss proves topology-specific on the class no prior ever won ---
+loops, zero phantom handles --- confirming RH2; the channels compose
+(RH3); the H0 class is matched by the generic control, sharpening RH1:
+topological guidance earns its keep where geometry and topology
+decouple.
 % src: PHASE3_PLAN.md Appendix D / topo3/report/results.json

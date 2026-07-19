@@ -8,53 +8,51 @@
 
 \textbf{Synthetic, single-machine.} All quantitative claims are on
 synthetic renders with known topology: an
-analytic family plus four external genus-known meshes
+analytic family plus eight external genus-known meshes in two groups
 (\S\ref{sec:generality}; one a certified raw artist mesh, the intended
-scan path), short of a public benchmark. All surfaces
+scan path), drawn from public repositories, not a curated benchmark
+suite. All surfaces
 are closed except a first \emph{open-surface} probe, pre-registered
 and passed: two bowls cut from the sphere (openings $0.14R$/$0.50R$,
 certified disk topology) still read one significant void (the designed
 rim's H1 never clears the floor); the loss cuts its error
-$4.2\times$/$4.1\times$ at better-than-baseline Chamfer, ranges
-disjoint, while the control erases the wide bowl's void in two of
-three seeds (suppl.\ \S F).
+$4.2\times$/$4.1\times$ at better-than-baseline Chamfer (ranges
+disjoint); the control erases the wide bowl's void in 2/3 seeds
+(suppl.\ \S F).
 % src: topo3/report/results.json bowl_narrow/bowl_wide (2026-07-18);
 % design pre-registered in OPEN_SURFACE_PROBE_PLAN.md
-C7's Gaussian
-probe bounds the loss's noise response, not scan realism (real noise
-brings outliers, missing regions, registration error). Real scans
-remain future work: their boundaries add \emph{noise-born} H1 bars
-(unlike a designed rim); bar-filtering them is the near-term step.
+C7's Gaussian probe bounds noise
+response, not scan realism (outliers, missing regions, registration
+error). Real scans remain future work: their boundaries add
+\emph{noise-born} H1 bars (unlike a designed rim); bar-filtering is the
+near-term step.
 
-\textbf{Density floor.} The loss cannot see features below the significance
-floor at its density (torus void; two of four double-torus loops at
-$M{=}2048$) --- audited visibly, but a real ceiling. Count-level repair
-of sub-budget detail is likewise out of scope (spot: the baseline's
-phantom void is cleared in two of three seeds, not guaranteed away;
+\textbf{Density floor.} The loss cannot see features below the
+significance floor at its density (torus void; two of four double-torus
+loops at $M{=}2048$) --- audited, but a real ceiling. Count-level repair
+of sub-budget detail is likewise out of scope (spot,
 \S\ref{sec:generality}).
 
 \textbf{Fixed target diagram.} The target bundle presumes known ground-truth
 topology (a prior scan or template --- not blind capture); template-free
-designs (total-persistence minimization; a target-\emph{genus} penalty,
-our first candidate; class-level diagram priors) are untested.
+designs (total-persistence minimization, a target-\emph{genus} penalty,
+class-level diagram priors) are untested.
 
-\textbf{Control strength.} The repulsion control is aggressive (it destroys
-topology at calibrated magnitude); a gentler variant at half radius is
-still $1.6\times$ worse (sphere: $.0972$ vs $.0623$), so verdicts do not
+\textbf{Control strength.} The repulsion control is aggressive (it
+destroys topology at calibrated magnitude); a half-radius variant is
+still $1.6\times$ worse (sphere $.0972$ vs $.0623$): verdicts do not
 hinge on control tuning.
 % src: topo3/report/results.json
 
-\textbf{Nondeterminism.} CUDA training is not bit-reproducible:
-divergence enters at resampling, where borderline prune/split decisions
-flip under float drift; tail CVs run $7$--$10\%$ for baseline and loss
-arms alike, and a loss-identical re-run pair (sphere C6 $\equiv$ C1)
-landed $6\%$ apart --- pure noise; statements follow
-\S\ref{sec:setup}'s reporting policy.
+\textbf{Nondeterminism.} CUDA training is not bit-reproducible
+(borderline prune/split decisions flip under float drift at
+resampling); tail CVs run $7$--$10\%$ for baseline and loss arms alike,
+a loss-identical re-run pair (sphere C6 $\equiv$ C1) landed $6\%$ apart
+--- pure noise; statements follow \S\ref{sec:setup}'s reporting policy.
 % src: topo3/report/results.json (sd/mean per arm); C6-vs-C1 sphere
 % ("Deferred arms" removed 2026-07-09 per advisor revision item 5.)
 
 \textbf{Recruitment guarantees.} The zero-gradient pathology it repairs
-is provable (Lemma~\ref{lem:zerograd}); recruitment's own
-self-correction premise is empirical, not proven (suppl.\ \S C) ---
-pathological geometries could defeat it; a failure-case study is future
-work.
+is provable (Lemma~\ref{lem:zerograd}); its own self-correction premise
+is empirical (suppl.\ \S C) --- pathological geometries could defeat
+it; a failure-case study is future work.

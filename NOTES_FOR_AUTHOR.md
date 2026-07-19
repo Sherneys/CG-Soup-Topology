@@ -1,3 +1,94 @@
+# PAPER 2 — ROUND 5b: THE GROUP WAVE — ADVISOR'S PICK EXECUTED SAME DAY (2026-07-19)
+
+**The advisor's verdict on round 5 (relayed in Thai):** overall the
+paper looks good; the one remaining criticism is result diversity
+("มีแค่รูปโดนัทกับหม้อต้มยำ") — fix by presenting **two groups + group
+means**. That resolves the round-5 science menu: not DTU/TnT/Objaverse,
+but a broader external wave in the study's own two observable classes.
+
+## What was run (all pre-registered BEFORE training: GROUP_WAVE_PLAN.md)
+
+- **Pool**: 10 meshes from alecjacobson/common-3d-test-models @ 8a4f864
+  + CGAL eight.off @ 47028cd (agent-downloaded with provenance; the
+  release bundle will ship fetch scripts + pins, not foreign meshes).
+- **Certificates** (the pot's chain, scripts/make_group_assets.py):
+  PASS armadillo/horse/cheburashka (g0), rocker-arm (g1), eight (g2,
+  both tessellations); **FAIL — excluded, never repaired**: beast, cow,
+  max-planck, ogre, Utah teapot (open boundaries / non-manifold).
+- **Staircase selection, pre-training**: loop group += rocker-arm
+  (torus precedent: 1 of 2 loops clears @2048, H1-restricted) + eight
+  (pot precedent: full (1,4,1) @8192, margins 1.69×/2.6×); void group
+  += armadillo + horse ((1,0,1) at every M). Set aside with reasons on
+  record: cheburashka (2nd capping H2 bar from 8192 → phantom-check
+  ambiguity), eight-dense (license unstated; staircase corroborates).
+- **36 runs** (C0/C1/C2 × 3 seeds × 4 shapes, blind config, additive
+  tags), zero failures; report + quicklook regenerated.
+
+## Results (pre-registered statistic; sources: results.json + group_wave_stats.json)
+
+| group | members | mean ± sd | pass |
+|---|---|---|---|
+| loop (H1) | bob 2.05×, **rocker-arm 0.96× (null)**, **eight 1.54×** | **1.52× ± 0.55** | 2/3 |
+| void (H2) | spot 2.19×, fandisk 10.38×, pot 3.88×, armadillo 4.12×, horse 3.76× | **4.87× ± 3.17** | 5/5 |
+
+- **eight is the wave's headline**: baseline AND control read only 2 of
+  the 4 certified loops (value pinned at .0249 = half loop-3's GT
+  lifetime, seed-exact); the loss **restores the missing pair**
+  (#sig 4/3/4) at 0.89× Chamfer — the analytic double torus's
+  saturation was the representation's ceiling, not genus-2's.
+- **rocker-arm is an honest no-headroom null, not a counterexample**:
+  its one measurable loop is already baseline-correct (.0083 vs the
+  .04–.05 band); the loss lands within noise (0.96×, parity 1.00),
+  counts intact in every arm. Printed as observation 5 + the discussion
+  axis ("nothing responds where nothing is broken").
+- **armadillo/horse**: clean 4.1×/3.8× at better Chamfer; their C0
+  pins (.0511/.0408, sd 0) are unmatched-target bounds = half the GT
+  top-H2 lifetime — identities verified in the audit.
+- External span 0.96–10.38 over 8 shapes; passing span 1.5–10.4.
+
+## In print (body ends EXACTLY p8 again; audits ALL GREEN)
+
+Grouped Table 2 with per-group mean rows (the advisor's ค่าเฉลี่ย);
+§5.2 rewritten as six observations + group statistic; setup wave ¶
+(certificate failures + pre-registration stated); abstract carries the
+group means AND the honest null; suppl **§G** (provenance/staircases/
+disposition, Tables S11/S12 — placed last so S1–S10 numbering is
+untouched); Table S7 +4 per-seed rows; discussion/limitations counts
+updated; teaser 0.78→0.74\textwidth to pay part of the page bill.
+Accuracy fixes found on the way: the pot's "only protocol deviation"
+claim (now shared with eight), the stale construction-vs-certificate
+contrast, the probe §F span (2.1–10.4 → 1.5–10.4), and a
+**comment-swallowed sentence-start** in setup.tex introduced by the
+round-5 cert edit (the "rendered and budgeted…" fragment was missing
+from the PDF in commit 3e829aa — repaired; re-check this bug class
+before submission, the audit does not catch prose fragments).
+audit_paper2.py extended: group-wave block (means recomputed from
+results.json independently, seedlists, disjointness, pin identities).
+
+## Still owed by you (unchanged + one addition)
+
+1. Send the Thai reply (Gmail draft r-1323288373779606130 still unsent
+   — now ALSO fold in the group-wave outcome below; **SA-2026 poster
+   question, deadline Jul 31**).
+2. Voice pass; OpenReview paper ID; 2027 kit swap; anonymized-code zip
+   before the Sep 2 suppl deadline.
+3. Optional (advisor may ask): a suppl render strip of the four new
+   shapes (make_matrix_figure.py extension) — visual diversity.
+
+**Thai addition for the reply (append to the round-5 block):**
+ตามที่อาจารย์แนะนำ ได้ขยายชุดทดลองเป็น **2 กลุ่มพร้อมค่าเฉลี่ย** แล้ว
+(pre-registered ก่อนรันทั้งหมด): กลุ่ม loop (bob, rocker-arm, eight
+genus-2) เฉลี่ย 1.52×±0.55 และกลุ่ม void (spot, fandisk, หม้อต้มยำ,
+armadillo, horse) เฉลี่ย 4.87×±3.17 — ผ่าน verdict 7/8 รูป โดย
+rocker-arm เป็น null ที่ตรงไปตรงมา (baseline ถูกต้องอยู่แล้ว ไม่มี
+headroom; loss ไม่ทำอันตราย) และ **eight เป็นไฮไลต์**: baseline เห็น
+loop แค่ 2 จาก 4 แต่ loss กู้คืนครบ (4/3/4) — ตอบข้อกังขาเรื่อง double
+torus ที่อิ่มตัวด้วย (เพดานอยู่ที่ representation ไม่ใช่ genus)
+ตัวเลขทั้งหมดอยู่ใน Table 2 (จัดกลุ่ม + mean rows) และ suppl §G
+กระดาษยังจบหน้า 8 พอดี audit ผ่านทุกข้อครับ
+
+---
+
 # PAPER 2 — ADVISOR ROUND 5 (Related Works + Revision list) — WRITING EXECUTED 2026-07-19; SCIENCE MENU AWAITING YOUR/ADVISOR CALL
 
 **What arrived (2026-07-19, Downloads):** `Related Works.docx` (Thai:

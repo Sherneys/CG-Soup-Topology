@@ -74,7 +74,28 @@ SHAPE_DIM = {"torus": 1, "two_spheres": 0, "sphere": 2, "cube": 2, "cylinder": 2
              # M=2048) with the rim H1 sub-floor (0.42-0.57x) at every
              # tested M — the floor rule picks H2 @ M=2048 (default).
              # H2 class => N=1200.
-             "bowl_narrow": 2, "bowl_wide": 2}
+             "bowl_narrow": 2, "bowl_wide": 2,
+             # Group wave (GROUP_WAVE_PLAN.md, pre-registered 2026-07-19 —
+             # advisor round 5: two observable-class groups + group means).
+             # Selection was staircase-only, before any training
+             # (scripts/make_group_assets.py; certs at _meshes/*_src_cert.json):
+             # rockerarm (INRIA/AIM@SHAPE, genus 1, exact b=(1,2,1)): one of
+             #   two loops clears the floor at M=2048 (0.0929 vs 0.0613; the
+             #   second, 0.0204, is sub-floor at every feasible M) and the
+             #   void is sub-floor at 2048 -> torus precedent: H1 class,
+             #   --loss_dims 1, N=700, bundle 2048.
+             "rockerarm": 1,
+             # eight (CGAL Data/data/meshes/eight.off @ 47028cd, genus 2,
+             #   exact b=(1,4,1)): the staircase reads the FULL (1,4,1) from
+             #   M=4096; at the floor-rule bundle M=8192 the 4th loop clears
+             #   1.72x and the void 2.6x -> kinkin precedent: bundle_n 8192,
+             #   full bundle, H1 class (4 loops), N=700. The fat genus-2
+             #   counterpoint to the saturated thin analytic double torus.
+             "eight": 1,
+             # armadillo (Stanford) / horse (GaTech-CyberWare): genus 0,
+             #   exact (1,0,1) significant at EVERY tested M (voids clear the
+             #   2048 floor 1.68x / 1.42x) -> H2 class, N=1200, bundle 2048.
+             "armadillo": 2, "horse": 2}
 
 ENV = dict(os.environ, PYTHONUTF8="1", DIFFSOUP_ROOT=DIFFSOUP_ROOT, TOPO_ROOT=_TOPO_ROOT)
 

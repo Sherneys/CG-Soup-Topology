@@ -280,6 +280,76 @@ print("         bowl nsig:", {s: {c: agg(s, c)["nsig_final"]
                                   for c in ("C0", "C1", "C2")}
                               for s in ("bowl_narrow", "bowl_wide")})
 
+# ---- round-5 group wave (2026-07-19): grouped tab:gen + means + §G ----
+print("\n---- round-5 group wave (grouped tab:gen + group means + suppl §G) ----")
+for shape, exp in [("rockerarm", (.0083, .0004, .0087, .0015, .0113)),
+                   ("eight",     (.0249, .0000, .0162, .0017, .0249)),
+                   ("armadillo", (.0511, .0000, .0124, .0001, .0511)),
+                   ("horse",     (.0408, .0000, .0109, .0022, .0408))]:
+    c0m, c0s, c1m, c1s, c2m = exp
+    check(f"{shape} C0 mean", mean(shape, "C0"), c0m)
+    check(f"{shape} C0 sd", sd(shape, "C0"), c0s)
+    check(f"{shape} C1 mean", mean(shape, "C1"), c1m)
+    check(f"{shape} C1 sd", sd(shape, "C1"), c1s)
+    check(f"{shape} C2 mean", mean(shape, "C2"), c2m)
+check("eight reduction (1.5x)", red("eight"), 1.5, tol=0.06)
+check("armadillo reduction (4.1x)", red("armadillo"), 4.1, tol=0.06)
+check("horse reduction (3.8x)", red("horse"), 3.8, tol=0.06)
+check("rockerarm null (0.96x)", red("rockerarm"), 0.96, tol=0.006)
+check("rockerarm chamfer parity 1.00",
+      cham("rockerarm", "C1") / cham("rockerarm", "C0"), 1.00, tol=0.006)
+check("eight chamfer 0.89", cham("eight", "C1") / cham("eight", "C0"), 0.89, tol=0.006)
+check("armadillo chamfer 0.88",
+      cham("armadillo", "C1") / cham("armadillo", "C0"), 0.88, tol=0.006)
+check("horse chamfer 0.90", cham("horse", "C1") / cham("horse", "C0"), 0.90, tol=0.006)
+for s in ("eight", "armadillo", "horse"):        # rockerarm = null, overlap by design
+    check_disjoint(f"{s} ranges disjoint", tails(s, "C1"), tails(s, "C0"))
+check_seedlist("S7 rockerarm C0", tails("rockerarm", "C0"), [.0088, .0082, .0079])
+check_seedlist("S7 rockerarm C1", tails("rockerarm", "C1"), [.0090, .0070, .0100])
+check_seedlist("S7 rockerarm C2", tails("rockerarm", "C2"), [.0112, .0112, .0115])
+check_seedlist("S7 eight C0", tails("eight", "C0"), [.0249] * 3)
+check_seedlist("S7 eight C1", tails("eight", "C1"), [.0169, .0175, .0142])
+check_seedlist("S7 eight C2", tails("eight", "C2"), [.0249] * 3)
+check_seedlist("S7 armadillo C0", tails("armadillo", "C0"), [.0511] * 3)
+check_seedlist("S7 armadillo C1", tails("armadillo", "C1"), [.0124, .0125, .0123])
+check_seedlist("S7 armadillo C2", tails("armadillo", "C2"), [.0511] * 3)
+check_seedlist("S7 horse C0", tails("horse", "C0"), [.0408] * 3)
+check_seedlist("S7 horse C1", tails("horse", "C1"), [.0124, .0083, .0118])
+check_seedlist("S7 horse C2", tails("horse", "C2"), [.0408] * 3)
+print("         eight nsig C0/C1/C2:", agg("eight", "C0")["nsig_final"],
+      agg("eight", "C1")["nsig_final"], agg("eight", "C2")["nsig_final"],
+      "(paper: [2,2,2]/[4,3,4]/[2,2,2])")
+print("         rockerarm nsig all arms:",
+      {c: agg("rockerarm", c)["nsig_final"] for c in ("C0", "C1", "C2")})
+print("         armadillo/horse C2 nsig (beta2 1->0):",
+      agg("armadillo", "C2")["nsig_final"], agg("horse", "C2")["nsig_final"])
+# pre-registered group means, recomputed from results.json (ddof=1),
+# independently of output/group_wave_stats.json
+loop_reds = [red(s) for s in ("bob", "rockerarm", "eight")]
+void_reds = [red(s) for s in ("spot", "fandisk", "kinkin", "armadillo", "horse")]
+lm = sum(loop_reds) / len(loop_reds)
+ls = (sum((x - lm) ** 2 for x in loop_reds) / (len(loop_reds) - 1)) ** 0.5
+vm = sum(void_reds) / len(void_reds)
+vs = (sum((x - vm) ** 2 for x in void_reds) / (len(void_reds) - 1)) ** 0.5
+check("loop group mean 1.52x", lm, 1.52, tol=0.005)
+check("loop group sd 0.55", ls, 0.55, tol=0.005)
+check("void group mean 4.87x", vm, 4.87, tol=0.005)
+check("void group sd 3.17", vs, 3.17, tol=0.005)
+passing = [red(s) for s in ("bob", "eight", "spot", "fandisk", "kinkin",
+                            "armadillo", "horse")]
+check("passing span low 1.5x", min(passing), 1.5, tol=0.06)
+check("passing span high 10.4x", max(passing), 10.4, tol=0.06)
+# pin-bound identities (main §5.2 obs 2/4; suppl §G): C0 mean equals half
+# the GT top lifetime at the eval density (cert staircase M=20000)
+for shape, key, idx, exp_pin in [("eight", "top_H1", 2, .0249),
+                                 ("armadillo", "top_H2", 0, .0511),
+                                 ("horse", "top_H2", 0, .0408)]:
+    cert = load(os.path.join(D, "_meshes", f"{shape}_src_cert.json"))
+    row = [r for r in cert["staircase"] if r["M"] == 20000][0]
+    half = row[key][idx] / 2
+    check(f"{shape} C0 pin == GT half-life", mean(shape, "C0"), half, tol=2e-4)
+    check(f"{shape} pin as printed", half, exp_pin, tol=1e-4)
+
 print("\n---- appendix A: h2_unified + crossover + blindness ----")
 hk = sorted(next(iter(H2U["summary"]["sphere"].values())).keys())
 print("h2_unified arm keys:", hk)

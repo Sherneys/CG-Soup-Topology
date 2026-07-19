@@ -15,9 +15,11 @@ separations only where both arms ran five seeds; every three-seed
 verdict instead rests on disjoint per-seed ranges.
 Table~\ref{tab:perseed} lists the underlying per-seed tail bottlenecks
 for the generality wave and the three-seed analytic shapes. In every
-row the largest C1 seed is well below the smallest C0 seed; C2's
-identical values across seeds are genuine (the repulsion equilibrium
-pins the diagram, main paper \S 6), not rounding.
+row except rocker-arm's (the no-headroom null, main \S5.2) the largest
+C1 seed is well below the smallest C0 seed; identical values across
+seeds --- C2's, and the group wave's pinned C0s --- are genuine
+(the unmatched-target bound, main paper \S\S5.2, 6; suppl.\ \S G), not
+rounding.
 
 \begin{table*}[t]
 \centering
@@ -38,6 +40,13 @@ bob (H1)     & .0429 / .0413 / .0437 & .0200 / .0207 / .0216 & .0437 $\times$3 \
 fandisk (H2) & .0540 / .0515 / .0559 & .0058 / .0055 / .0042 & .0571 $\times$3 \\
 % src: topo3/quicklook.json (kinkin seeds 0/1/2)
 tom-yum pot (H2) & .0218 / .0223 / .0223 & .0059 / .0056 / .0056 & .0223 $\times$3 \\
+% Round-5 group wave (2026-07-19): src topo3/report/results.json tails
+% (run order) for rockerarm/eight/armadillo/horse. The seed-identical
+% C0 values are unmatched-target pins (main §5.2; suppl. §G), like C2's.
+rocker-arm (H1) & .0088 / .0082 / .0079 & .0090 / .0070 / .0100 & .0112 / .0112 / .0115 \\
+eight (H1)   & .0249 $\times$3 & .0169 / .0175 / .0142 & .0249 $\times$3 \\
+armadillo (H2) & .0511 $\times$3 & .0124 / .0125 / .0123 & .0511 $\times$3 \\
+horse (H2)   & .0408 $\times$3 & .0124 / .0083 / .0118 & .0408 $\times$3 \\
 % src: topo3/report/results.json cube + two_spheres tails (run order)
 cube (H2)    & .0560 / .0551 / .0636 & .0071 / .0064 / .0086 & .1346 $\times$3 \\
 two spheres (H0) & .0060 / .0074 / .0062 & .0007 / .0009 / .0005 & .0009 / .0009 / .0006 \\

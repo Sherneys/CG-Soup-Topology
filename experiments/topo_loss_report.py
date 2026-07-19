@@ -173,7 +173,13 @@ def make_plots(shape: str, series: dict, agg: dict, out_dir: str) -> None:
              "double_torus": 2, "spot": 1, "bob": 2, "fandisk": 1,
              # open-surface probe bowls: staircase-certified 1 significant
              # H2 bar each (OPEN_SURFACE_PROBE_PLAN.md, 2026-07-17)
-             "bowl_narrow": 1, "bowl_wide": 1}.get(shape)
+             "bowl_narrow": 1, "bowl_wide": 1,
+             # group wave (GROUP_WAVE_PLAN.md, 2026-07-19): expected counts
+             # in the disc dim per the pre-registered staircases — rockerarm
+             # 1 measurable loop of 2 (torus precedent), eight all 4 loops
+             # at bundle M=8192, armadillo/horse 1 void each.
+             "rockerarm": 1, "eight": 4,
+             "armadillo": 1, "horse": 1}.get(shape)
     if tgt_n is not None:
         ax.axhline(tgt_n, color="k", ls="--", lw=0.8, alpha=0.6)
     # The random-init transient (hundreds of sub-scale bars at step 0) swamps

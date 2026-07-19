@@ -84,23 +84,24 @@
 \twocolumn[{%
   \@maketitle
   \centering
-  \vspace{-1.2em}
+  \vspace{-1.9em}
   \captionsetup{type=figure}
-  \includegraphics[width=0.78\textwidth]{matrix.png}
+  % Round-5 fit: 0.78 -> 0.74 textwidth (the group wave's table rows +
+  % observations must fit; content unchanged, ~5% smaller cells).
+  \includegraphics[width=0.74\textwidth]{matrix.png}
   \captionof{figure}{Geometry cannot carry the verdict --- measurement
   can. Final reconstructions (seed 0), identical budgets: ground truth;
-  photometric baseline (C0); a norm-matched \emph{non-topological}
-  repulsion control through the same gradient channel (C2); the
-  persistence loss (C1, ours), at equal-or-better Chamfer on every row
-  (\S\ref{sec:generality}). A topological error need not be visible in a
-  render, so each cell is badged with its \emph{measured}
-  significant-feature count (blue outline = correct, filled orange =
-  wrong; identical across seeds): the control erases both enclosed voids
-  --- and collapses a loop on bob (suppl.\ Fig.~S8) --- while the loss
-  reads correct everywhere and cuts tail error $2.1$--$10.4\times$
-  (Tables~\ref{tab:main}--\ref{tab:gen}).}%
+  baseline (C0); the norm-matched \emph{non-topological} repulsion
+  control (C2); the persistence loss (C1, ours) --- equal-or-better
+  Chamfer on every row (\S\ref{sec:generality}). A topological error need not be visible, so
+  each cell is badged with its \emph{measured} significant-feature
+  count (blue outline = correct, filled orange = wrong; identical
+  across seeds): the control erases both voids --- and collapses a loop
+  on bob (suppl.\ Fig.~S8) --- while the loss reads correct everywhere,
+  cutting tail error up to $10.4\times$ (group means
+  $1.5\times$/$4.9\times$; Tables~\ref{tab:main}--\ref{tab:gen}).}%
   \label{fig:matrix}
-  \vspace{-0.5em}
+  \vspace{-0.9em}
 }]
 \makeatother
 
@@ -118,10 +119,10 @@ reconstruction with a collapsed loop or a punctured enclosed void can
 score exactly as well as a correct one (on Chamfer-equal probes the
 diagrams differ $35$--$40\times$ in bottleneck distance).
 % src: figures/summary.md / blindness_results.json (suppl. Table S1)
-The implicit standard remedy --- steer \emph{where} the resampler spends
-its triangle budget --- does not repair this: in a controlled study of
-that allocation channel, a topology-informed prior is largely matched by
-an equally wide random one, and no prior shape repairs loops.
+The standard implicit remedy --- steer \emph{where} the resampler
+spends its budget --- does not repair this: in a controlled allocation
+study, a topology-informed prior is largely matched by an equally wide
+random one, and no prior shape repairs loops.
 % src: h2_unified + crossover reports (suppl. §A)
 We therefore move topology into the objective: a differentiable
 persistence term compares the evolving surface's diagram, measured on
@@ -139,10 +140,12 @@ topology-specific for enclosed voids ($4.0$--$7.9\times$ lower error) and
 --- the class every allocation prior failed --- for loops ($2.3\times$,
 zero phantom handles, while the control collapses one); loss and prior
 compose; component counts (H0) are an honest null, matched by the
-generic control. All verdicts replicate without per-shape tuning on four
-external genus-known meshes ($2.1$--$10.4\times$; one a raw artist mesh,
-ingested and \emph{certified}), degrading gracefully under sensor
-noise.
+generic control. The verdicts replicate without per-shape tuning on eight external
+genus-known meshes in two observable-class groups (pre-registered group
+means: loops $1.52\times$, voids $4.87\times$; one a raw artist mesh,
+ingested and \emph{certified}; the one non-pass is a no-headroom null,
+its already-correct baseline left unharmed), degrading gracefully under
+sensor noise.
 % src: PHASE3_PLAN.md Appendix D / topo3/report/results.json +
 % topo3/quicklook.json (kinkin, 2026-07-10)
 Scope: all evidence is synthetic and single-machine --- closed surfaces

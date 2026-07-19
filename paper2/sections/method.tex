@@ -40,8 +40,7 @@ $X$ is recomputed from live $V$ every step, so gradients reach vertices while
 the combinatorics stay fixed. The alpha complex of
 $X$~\citep{edelsbrunner1994alphashapes}, computed exactly with
 GUDHI~\citep{maria2014gudhi}, yields persistence
-pairs (birth simplex, death simplex) per dimension (pipeline:
-suppl.\ Fig.~S9). For a Gabriel simplex the
+pairs (birth simplex, death simplex) per dimension (suppl.\ Fig.~S9). For a Gabriel simplex the
 alpha filtration value is its squared circumradius, so each paired bar's
 coordinates are closed-form functions of a few sample positions, all
 exactly differentiable:
@@ -62,9 +61,9 @@ triangles H1 deaths and H2 births, tetrahedra H2 deaths.
 % src: methods/topological_loss.py circumradius_{edge,triangle,tetra}
 We verify, per pairing, that the re-expressed value matches the filtration
 value (relative $10^{-6}$); a pair failing this Gabriel test is
-\emph{detached} --- it keeps its (correct) value in the loss but propagates
-no gradient through that simplex, so an exactness failure can never inject
-a wrong gradient.
+\emph{detached} --- it keeps its (correct) value in the loss but
+propagates no gradient, so an exactness failure can never inject a
+wrong one.
 In practice the gate never fires: 100\% of significant pairs are
 Gabriel-exact on all six shapes' clean clouds, and the per-refresh
 failure count is zero at every one of the $5{,}500{+}$ logged refreshes
@@ -97,9 +96,9 @@ L_{\mathrm{topo}} = \!\!\sum_{(i,j)\,\mathrm{matched}}\!\!\!
  \;+\; L_{\mathrm{recruit}} .
 \end{split}
 \end{equation}
-The first term pulls matched features to their target coordinates; the second
-pushes spurious features to the diagonal. The third exists because optimal
-matching has a blind spot that is provable, not merely observed:
+The first term pulls matched features to their targets; the second
+pushes spurious features to the diagonal; the third exists because
+optimal matching has a provable blind spot:
 % Round-4: stated as a lemma (the review asked the provable fact to be
 % separated cleanly from recruitment's *empirical* self-correction, §7).
 \begin{lemma}\label{lem:zerograd}
@@ -132,9 +131,9 @@ k(j) &= \operatorname*{arg\,min}_{k\,\in\,\mathcal{A}_j}
 where $\mathcal{A}_j$ is the pool remaining after earlier recruitments;
 recruited bars are excluded from the diagonal term and back-propagate
 through the same circumradius machinery.
-This deliberately departs from a metric-faithful $W_2$;
-\S\ref{sec:results} probes its known pathology (location-blindness)
-directly, and the C6 ablation shows the term is load-bearing in training.
+This deliberately departs from metric-faithful $W_2$;
+\S\ref{sec:results} probes its location-blindness pathology directly,
+and C6 shows the term is load-bearing.
 % src: methods/topological_loss.py plan_topo_loss (greedy recruit loop)
 % Round-4: greedy-vs-optimal justification, grounded in the refresh logs
 % (torus profile: exactly one unreached target at every refresh, all
