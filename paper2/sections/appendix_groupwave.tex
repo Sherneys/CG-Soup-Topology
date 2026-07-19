@@ -21,7 +21,32 @@ a pre-registered plan (\texttt{GROUP\_WAVE\_PLAN.md}, shipped with the
 release bundle) that fixed the candidate pool, the selection rule, the
 run protocol, and the group statistic before any training run. Per-seed
 tails for the new shapes join suppl.\ Table~S7; this section records
-where the shapes came from and how they were selected.
+where the shapes came from and how they were selected, and
+Fig.~\ref{fig:gwmatrix} renders all four under the front-page
+convention.
+
+% Renders: scripts/make_groupwave_figure.py (same raycast machinery,
+% material and badge convention as make_matrix_figure.py; seed-0
+% final_params.pt; badge counts = results.json nsig_final, audited).
+% Sized by width so the tall 4-row strip stays inside the text height.
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.72\textwidth]{groupwave_matrix.png}
+\caption{The group wave, rendered (ground truth / C0 / C2 / C1; seed-0
+final soups; material, per-row camera and badge convention of main
+Fig.~1). \emph{rocker-arm}: the no-headroom null --- every arm reads
+the one measurable loop correctly (all badges blue; the control's
+damage here is value-only). \emph{eight}: baseline and control read
+only two of the four certified loops while the loss restores all four
+(per-seed C1 counts $4/3/4$; seed 0 shown) --- and the missing pair is
+invisible in the render, both holes being open in every cell: the
+deficit is a sub-floor diagram reading, exactly the blindness the
+paper measures. \emph{armadillo}/\emph{horse}: correct-count baselines
+whose void \emph{value} pins at the unmatched bound (main Table~2);
+the control erases both voids (reads 0) with no visible geometric
+collapse.}
+\label{fig:gwmatrix}
+\end{figure*}
 
 \paragraph{Pool, certificates, honest exclusions (Table~\ref{tab:gwdisp}).}
 Candidates were drawn from a standard test-model collection

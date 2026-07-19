@@ -74,7 +74,8 @@ results.json independently, seedlists, disjointness, pin identities).
   0.85×, bob void 1.13×); Table S13 lists per-shape margins; the verdict
   metric itself is threshold-free. src: output/floor_sensitivity.json
   (scripts/floor_sensitivity.py).
-- **R7 (pair-frozen stability)**: Fig S11 from the RECORDED refresh logs
+- **R7 (pair-frozen stability)**: Fig **S12** (renumbered from S11 when
+  the group-wave render strip below took S11) from the RECORDED refresh logs
   (no new runs): torus C6 = chronic 1-matched/1-unreached (the collapse
   mechanism, visualized); eight C1 = recruitment claims the two
   sub-threshold loops then hands them to matched as they turn
@@ -112,8 +113,14 @@ results.json independently, seedlists, disjointness, pin identities).
    so the wrong one can't go out.
 2. Voice pass; OpenReview paper ID; 2027 kit swap; anonymized-code zip
    before the Sep 2 suppl deadline.
-3. Optional (advisor may ask): a suppl render strip of the four new
-   shapes (make_matrix_figure.py extension) — visual diversity.
+3. ~~Optional render strip~~ **DONE 2026-07-20 (user-requested): suppl
+   Fig S11** — GT/C0/C2/C1 rows for rocker-arm/eight/armadillo/horse
+   (scripts/make_groupwave_figure.py, front-page convention, seed-0
+   soups, audited badge counts; armadillo re-rendered upright — its
+   native frame is y-up). The eight row is the money shot: both holes
+   visibly open in EVERY cell while badges read 2/2/4 — the blindness
+   thesis in one row. Pair-stability fig is now S12 (auto-renumbered;
+   no cross-doc S-number references existed).
 
 **Thai addition for the reply (append to the round-5 block):**
 ตามที่อาจารย์แนะนำ ได้ขยายชุดทดลองเป็น **2 กลุ่มพร้อมค่าเฉลี่ย** แล้ว
