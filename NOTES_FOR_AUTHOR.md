@@ -93,6 +93,14 @@ results.json independently, seedlists, disjointness, pin identities).
   coincides — already in print).
 - audit_paper2.py extended again (§H window/margins/timing/memory);
   ALL GREEN. Suppl now 15 pp.
+- **⚠ p1 LAYOUT BUG found by the author 2026-07-20 and fixed:** the fit
+  rounds' `\vspace` squeeze under the Figure-1 caption (−0.5em → −0.9em)
+  pulled the Abstract heading ONTO the caption's last line — present in
+  the pushed PDFs of commits 3e829aa..99bbd2d. Settled at −0.1em,
+  verified on the RENDERED page. **Second audit-blind bug class this
+  round** (with the comment-swallowed sentence): numeric audits cannot
+  see prose fragments or layout overlap — before submission, EYEBALL a
+  full page-by-page render of both PDFs.
 
 ## Still owed by you (unchanged + one addition)
 
