@@ -10,6 +10,25 @@
 %      paper2/figures/pairstability.png (make_pairstability_figure.py);
 %      mem-probe runs output/synth/mem_probe (2026-07-20).
 
+% Figure placed at the SECTION HEAD so the [t] dbl-float lands on the
+% section's first full page instead of deferring past the pre-bib
+% \clearpage onto a lonely float page (the [b] variant never placed —
+% the style's dbl-float params reject bottom placement).
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{pairstability.png}
+\caption{Per-refresh plan composition from the recorded refresh logs
+(seed 0; ${\sim}200$ refreshes each; no new runs). \emph{Left}: torus
+without recruitment (C6) --- one loop matched, one target unreached at
+every refresh: the chronic gap behind the C6 collapse (main \S5.1).
+\emph{Middle}: eight (C1) --- recruitment claims the two sub-threshold
+loops early and hands them to the matched set as training makes them
+significant. \emph{Right}: the tom-yum pot (C1) --- a stable one-bar
+matched plan after the first ${\sim}250$ active steps. Dashed gray =
+target count; in the right panel it coincides with the matched line.}
+\label{fig:pairstab}
+\end{figure*}
+
 \paragraph{The floor multiplier is not load-bearing.}
 The significance floor $k\,r_{\mathrm{med}}(M)$ uses $k{=}6$ throughout.
 Recomputing every documented bundle decision from the recorded
@@ -89,18 +108,3 @@ and $4{,}035$\,MiB with the loss ($+386$\,MiB); the persistence
 computation itself runs on the CPU (GUDHI), off the GPU budget.
 % src: output/mem_probe.json (2026-07-20; nvidia-smi polling; runs
 % output/synth/mem_probe torus_C{0,1}_r0.1_s0, exact protocol flags)
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{pairstability.png}
-\caption{Per-refresh plan composition from the recorded refresh logs
-(seed 0; ${\sim}200$ refreshes each; no new runs). \emph{Left}: torus
-without recruitment (C6) --- one loop matched, one target unreached at
-every refresh: the chronic gap behind the C6 collapse (main \S5.1).
-\emph{Middle}: eight (C1) --- recruitment claims the two sub-threshold
-loops early and hands them to the matched set as training makes them
-significant. \emph{Right}: the tom-yum pot (C1) --- a stable one-bar
-matched plan after the first ${\sim}250$ active steps. Dashed gray =
-target count; in the right panel it coincides with the matched line.}
-\label{fig:pairstab}
-\end{figure*}
